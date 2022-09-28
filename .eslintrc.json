@@ -1,3 +1,18 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/strict"
+  ],
+  "rules": {
+    "@typescript-eslint/array-type": "warn",
+    "@typescript-eslint/await-thenable": "error",
+    "@typescript-eslint/consistent-indexed-object-style": ["error", "record"],
+    "@typescript-eslint/consistent-type-exports": "warn",
+    "@typescript-eslint/consistent-type-imports": "warn",
+    "@typescript-eslint/explicit-function-return-type": "warn"
+  },
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  }
 }
