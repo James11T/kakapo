@@ -8,6 +8,8 @@ interface TextInputProps {
   placeholder?: string;
   type?: React.HTMLInputTypeAttribute;
   autocomplete?: "off" | "on";
+  defaultValue?: string;
+  disabled?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
@@ -19,6 +21,8 @@ const TextInput = ({
   placeholder,
   type = "text",
   autocomplete = "off",
+  defaultValue,
+  disabled = false,
   onChange,
   onFocus,
   onBlur
@@ -46,6 +50,8 @@ const TextInput = ({
         onBlur={onBlur}
         placeholder={placeholder ?? ""}
         autoComplete={autocomplete}
+        defaultValue={defaultValue}
+        disabled={disabled}
       />
       {hasLabel && <span className={styles["text-input__label"]}>{label}</span>}
     </div>

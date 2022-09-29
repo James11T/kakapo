@@ -1,16 +1,21 @@
 import React from "react";
 import styles from "./Button.module.scss";
 import cn from "classnames";
+import type { ColorValue } from "../../src/types";
+import { handleColor } from "../../src/color";
 
 const buttonClasses = {
   primary: styles["button--primary"],
   secondary: styles["button--secondary"],
-  destructive: styles["button--destructive"]
+  destructive: styles["button--destructive"],
+  custom: styles["button--custom"],
+  plain: undefined
 };
 
 interface ButtonProps {
   id: string;
   type?: keyof typeof buttonClasses;
+  color?: ColorValue;
   disabled?: boolean;
   submit?: boolean;
   fullWidth?: boolean;
@@ -22,7 +27,8 @@ interface ButtonProps {
 
 const Button = ({
   id,
-  type = "primary",
+  type = "plain",
+  color,
   disabled = false,
   submit,
   fullWidth = false,
@@ -35,9 +41,10 @@ const Button = ({
     <div
       className={cn(
         styles["button"],
-        buttonClasses[type],
+        buttonClasses[color ? "custom" : type],
         fullWidth && styles["button--full-width"]
       )}
+      style={{ "--band-color": handleColor(color) } as React.CSSProperties}
     >
       <button
         type={submit ? "button" : "submit"}

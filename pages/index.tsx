@@ -1,26 +1,40 @@
 import React from "react";
 import Head from "next/head";
 import { TextInput, PasswordInput, Button, Card } from "../components";
+import { useTitle } from "../hooks/useTitle";
+import { Title } from "../components";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
-  const handleClick = (): void => console.log("click");
+  const { incrementAlerts } = useTitle();
 
+  const handleClick = (): void => incrementAlerts();
   return (
     <div style={{ width: 500, marginInline: "auto", marginTop: 200 }}>
+      <Title title="Home" />
       <Head>
-        <title>Kakapo | Home</title>
         <meta name="description" content="Kakapo UI" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Card className={{ a: true }} flexDirection="col">
-        <TextInput id="email" label="Email" />
+      <Card
+        flex={true}
+        flexDirection="col"
+        type="raised"
+        padding={10}
+        spacing={4}
+      >
+        <TextInput
+          id="email"
+          label="Email"
+          defaultValue="hello"
+          disabled={true}
+        />
         <PasswordInput id="password" label="Password" />
         <Button
           id="password1"
           fullWidth={true}
-          type="primary"
           onClick={handleClick}
+          type="primary"
         >
           Primary Button
         </Button>
