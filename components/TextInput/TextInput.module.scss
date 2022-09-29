@@ -1,0 +1,35 @@
+@use "../../styles/variables";
+$padding-x: 0.6em;
+
+.text-input {
+  position: relative;
+
+  input {
+    display: block;
+    margin: 0;
+    border: 1px solid rgba(150, 150, 150, 1);
+    border-radius: variables.$border-radius;
+    padding: 1.4em $padding-x 0.3em;
+    width: 100%;
+    font-size: 1em;
+  }
+
+  .text-input__label {
+    $transition-time: 75ms;
+    position: absolute;
+    top: 50%;
+    translate: $padding-x -50%;
+    pointer-events: none;
+    color: rgba(80, 80, 80, 1);
+    transition: font-size $transition-time, translate $transition-time,
+      top $transition-time;
+  }
+
+  &:focus-within .text-input__label,
+  input:not(:placeholder-shown) + .text-input__label,
+  &.text-input--has-placeholder .text-input__label {
+    top: 0;
+    translate: $padding-x 0.2em;
+    font-size: 0.8em;
+  }
+}

@@ -1,0 +1,17 @@
+@use "../../styles/variables";
+
+.card {
+  border: 1px solid red;
+  border-radius: variables.$border-radius;
+  padding: 0.5em;
+
+  &.card--flex,
+  &.card--flex-row,
+  &.card--flex-col {
+    display: flex;
+  }
+
+  &.card--flex-col {
+    flex-direction: column;
+  }
+}
