@@ -4,6 +4,15 @@ import styles from "./Toast.module.scss";
 import { handleColor } from "../../../src/color";
 import type { ColorValue } from "../../../src/types";
 
+/**
+ * This component works by "self ejecting"
+ * If a parent component wishes to remove the toast
+ *   then it should set the "dismissed" prop to true.
+ *   This then triggers the exit animation and then
+ *   calls the eject callback once animated off the
+ *   screen, the component can then be cleanly unmounted.
+ */
+
 const cardTypeClasses = {
   raised: styles["toast--raised"],
   outlined: styles["toast--outlined"],
@@ -42,6 +51,7 @@ const Toast = ({
   React.useEffect(() => {
     if (!animating) return;
 
+    // Call eject after animation finishes
     const timeout = window.setTimeout(() => {
       eject();
     }, animationTime);
@@ -50,17 +60,21 @@ const Toast = ({
   }, [animating]);
 
   const handleClick = (): void => {
+    // Start animation if component is dismissible
     if (dismissible) setAnimating(true);
   };
 
   React.useEffect(() => {
     if (!dismissed) return;
+    // Start animation if dismissed prop is set
     setAnimating(true);
   }, [dismissed]);
 
   React.useEffect(() => {
     if (!timeToLive) return;
+    // Start auto eject timer for time to live
     const timeout = window.setTimeout(() => setAnimating(true), timeToLive);
+
     return () => window.clearTimeout(timeout);
   }, [timeToLive]);
 

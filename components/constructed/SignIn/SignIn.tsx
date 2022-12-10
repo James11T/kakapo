@@ -15,24 +15,27 @@ const APIClient = new Client("http://172.30.124.18:5000/");
 
 const SignIn = (): JSX.Element => {
   const [data, setData] = React.useState({ email: "", password: "" });
-  const { createNotification } = useToasts();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const toasts = useToasts();
 
   const handleSignIn = async (): Promise<void> => {
-    createNotification("Signing in...", {
-      color: "#000000",
-      timeToLive: 2000
+    const signInId = toasts.create("Signing in...", {
+      color: "_primary"
     });
+
+    setIsLoading(true);
     const res = await APIClient.authenticate(data.email, data.password);
+    setIsLoading(false);
+
+    toasts.dismiss(signInId);
 
     if (res.err) {
-      createNotification(res.val.text(), {
-        color: "_destructive",
-        timeToLive: 5000
+      toasts.create(res.val.text(), {
+        color: "_destructive"
       });
     } else {
-      createNotification(`Signed in as ${res.val.data.user.id}`, {
-        color: "_primary",
-        timeToLive: 5000
+      toasts.create(`Signed in as ${res.val.data.user.id}`, {
+        color: "_success"
       });
     }
   };
@@ -70,6 +73,7 @@ const SignIn = (): JSX.Element => {
           variant="outlined"
           submit={true}
           color="rgb(220, 220, 220)"
+          loading={isLoading}
           onClick={handleSignIn}
         >
           Sign In

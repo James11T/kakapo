@@ -51,7 +51,7 @@ class Client {
       console.error(err);
       return Err(new NetworkError());
     } finally {
-      window.clearTimeout(timeout);
+      window.clearTimeout(timeout); // Clear abort timer
     }
 
     const json = await response.json();

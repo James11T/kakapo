@@ -25,40 +25,47 @@ const defaultConfig: ToastConfig = {
 interface Notification extends ToastConfig {
   id: string;
   text: string;
+  dismissed: boolean;
 }
 
 interface ToastContext {
-  createNotification: (text: string, config: Partial<ToastConfig>) => string;
+  notifications: readonly Notification[];
+  create: (text: string, config?: Partial<ToastConfig>) => string;
+  dismiss: (id: string) => void;
+  dismissAll: () => void;
 }
 
 const toastContext = React.createContext<ToastContext>({} as ToastContext);
 
 interface ToastProviderProps {
+  config?: Partial<ToastConfig>;
+  position?: "tr" | "tl" | "bl" | "br";
   children?: React.ReactNode;
-  providerConfig?: Partial<ToastConfig>;
 }
 
 const ToastProvider = ({
-  children,
-  providerConfig
+  config: providerConfig,
+  position,
+  children
 }: ToastProviderProps): JSX.Element => {
   const [notifications, setNotifications] = React.useState<Notification[]>([]);
 
-  const createNotification = React.useCallback(
-    (text: string, config: Partial<ToastConfig>) => {
+  const create = React.useCallback(
+    (text: string, config: Partial<ToastConfig> = {}) => {
       const combinedConfig: ToastConfig = {
-        ...defaultConfig,
-        ...providerConfig,
-        ...config
+        ...defaultConfig, // Default values
+        ...providerConfig, // Config set at provider level
+        ...config // Config set at individual toast level
       };
 
-      const id = randomId();
+      const id = randomId(); // Used to dismiss toast
 
       setNotifications((old) => [
         ...old,
         {
           id: id,
           text,
+          dismissed: false,
           ...combinedConfig
         }
       ]);
@@ -68,22 +75,43 @@ const ToastProvider = ({
     [JSON.stringify(providerConfig)]
   );
 
+  const dismiss = React.useCallback((id: string) => {
+    setNotifications((old) => {
+      const changed = old.find((notification) => notification.id === id);
+      if (!changed) return old;
+      const unchanged = old.filter((notification) => notification.id !== id);
+      return [...unchanged, { ...changed, dismissed: true }];
+    });
+  }, []);
+
+  const dismissAll = React.useCallback(() => {
+    setNotifications((old) =>
+      old.map((notification) => ({ ...notification, dismissed: true }))
+    );
+  }, []);
+
   const removeId = (id: string): void =>
     setNotifications((old) =>
       old.filter((oldNotification) => oldNotification.id !== id)
     );
 
   return (
-    <toastContext.Provider value={{ createNotification }}>
+    <toastContext.Provider
+      value={{
+        notifications,
+        create,
+        dismiss,
+        dismissAll
+      }}
+    >
       {children}
-      <ToastContainer>
+      <ToastContainer position={position}>
         {notifications.map((notification) => (
           <Toast
             eject={(): void => removeId(notification.id)}
             key={notification.id}
             band={notification.color}
-            dismissible={notification.dismissible}
-            timeToLive={notification.timeToLive}
+            {...notification}
           >
             {notification.text}
           </Toast>

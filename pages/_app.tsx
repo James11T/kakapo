@@ -8,7 +8,7 @@ import type { AppProps } from "next/app";
 const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (
     <TitleProvider prefix="Kakapo" head={Head}>
-      <ToastProvider>
+      <ToastProvider config={{ timeToLive: 5000 }}>
         <URLStateProvider>
           <Head>
             <meta name="description" content="Kakapo UI" />
