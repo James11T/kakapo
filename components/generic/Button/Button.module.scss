@@ -1,0 +1,86 @@
+@use "../../../styles/variables";
+@use "../../../styles/colors";
+@use "../../../styles/styles";
+
+$padding-y: 0.8em;
+$padding-x: 1.5em;
+$band-width: 4px;
+
+.button {
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: variables.$unit * 2;
+    padding: $padding-y $padding-x;
+    border-radius: variables.$border-radius;
+    font-weight: 400;
+    transition: filter 50ms;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  &--raised button {
+    @extend .raised;
+  }
+
+  &--outlined button {
+    @extend .outlined;
+  }
+
+  &--flat button {
+    @extend .flat;
+  }
+
+  &--primary button,
+  &--secondary button,
+  &--destructive button,
+  &--positive button,
+  &--custom button {
+    border-top: $band-width solid rgba(50, 50, 50, 1);
+    padding: $padding-y $padding-x;
+    padding-top: calc($padding-y - $band-width);
+  }
+
+  &--primary button {
+    border-top-color: colors.$primary;
+  }
+
+  &--secondary button {
+    border-top-color: colors.$secondary;
+  }
+
+  &--destructive button {
+    border-top-color: colors.$destructive;
+  }
+
+  &--positive button {
+    border-top-color: colors.$success;
+  }
+
+  &--custom button {
+    border-top-color: var(--band-color, black);
+  }
+
+  &--full-width button {
+    width: 100%;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    background: rgba(230, 230, 230, 1);
+    border-top-color: rgba(160, 160, 160, 1);
+    color: rgba(160, 160, 160, 1);
+    box-shadow: none;
+  }
+
+  button:not(:disabled) {
+    &:hover {
+      filter: brightness(0.95);
+    }
+
+    &:active {
+      filter: brightness(0.9);
+    }
+  }
+}

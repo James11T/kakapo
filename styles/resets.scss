@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+
+  &::after {
+    box-sizing: border-box;
+  }
+
+  &::before {
+    box-sizing: border-box;
+  }
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Lato, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-size: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: normal;
+  font-family: Raleway, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    sans-serif;
+}

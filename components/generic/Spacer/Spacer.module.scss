@@ -1,0 +1,17 @@
+@use "../../../styles/variables";
+
+.spacer {
+  --size: calc(var(--spacing) * #{variables.$unit});
+  width: var(--size);
+  margin: 0;
+
+  &--x {
+    height: 0;
+    width: var(--size);
+  }
+
+  &--y {
+    width: 0;
+    height: var(--size);
+  }
+}

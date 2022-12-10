@@ -1,8 +1,8 @@
 import React from "react";
+import cn from "clsx";
+import { handleColor } from "../../../src/color";
 import styles from "./Card.module.scss";
-import cn from "classnames";
-import { handleColor } from "../../src/color";
-import type { ColorValue } from "../../src/types";
+import type { ColorValue } from "../../../src/types";
 
 const cardTypeClasses = {
   raised: styles["card--raised"],
@@ -12,7 +12,7 @@ const cardTypeClasses = {
 };
 
 interface CardProps {
-  className?: cn.ArgumentArray | string | Record<string, unknown>;
+  className?: string;
   children?: React.ReactNode;
   flex?: boolean;
   flexDirection?: "col" | "column" | "row";
@@ -35,8 +35,7 @@ const Card = ({
   const classes = {
     [styles["card--flex"]]: flex,
     [styles["card--flex-row"]]: flexDirection === "row",
-    [styles["card--flex-col"]]:
-      flexDirection === "col" || flexDirection === "column",
+    [styles["card--flex-col"]]: flexDirection?.startsWith("col") ?? false,
     [styles["card--banded"]]: Boolean(band)
   };
 

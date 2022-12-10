@@ -1,25 +1,35 @@
 import React from "react";
 import styles from "./Button.module.scss";
-import cn from "classnames";
-import type { ColorValue } from "../../src/types";
-import { handleColor } from "../../src/color";
+import cn from "clsx";
+import { handleColor } from "../../../src/color";
+import WaitingSpinner from "../WaitingSpinner/WaitingSpinner";
+import type { ColorValue } from "../../../src/types";
 
-const buttonClasses = {
+const buttonStyleClasses = {
   primary: styles["button--primary"],
   secondary: styles["button--secondary"],
   destructive: styles["button--destructive"],
+  positive: styles["button--positive"],
   custom: styles["button--custom"],
   plain: undefined
 };
 
+const buttonVariantClasses = {
+  raised: styles["button--raised"],
+  outlined: styles["button--outlined"],
+  flat: styles["button--flat"]
+};
+
 interface ButtonProps {
-  id: string;
-  type?: keyof typeof buttonClasses;
+  id?: string;
+  style?: keyof typeof buttonStyleClasses;
+  variant?: keyof typeof buttonVariantClasses;
   color?: ColorValue;
   disabled?: boolean;
   submit?: boolean;
   fullWidth?: boolean;
-  children: string;
+  loading?: boolean;
+  children?: React.ReactNode;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onFocus?: (event: React.FocusEvent<HTMLButtonElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLButtonElement>) => void;
@@ -27,11 +37,13 @@ interface ButtonProps {
 
 const Button = ({
   id,
-  type = "plain",
+  style = "plain",
+  variant = "raised",
   color,
   disabled = false,
   submit,
   fullWidth = false,
+  loading = false,
   children,
   onClick,
   onFocus,
@@ -41,7 +53,8 @@ const Button = ({
     <div
       className={cn(
         styles["button"],
-        buttonClasses[color ? "custom" : type],
+        buttonStyleClasses[color ? "custom" : style],
+        buttonVariantClasses[variant],
         fullWidth && styles["button--full-width"]
       )}
       style={{ "--band-color": handleColor(color) } as React.CSSProperties}
@@ -54,6 +67,7 @@ const Button = ({
         onBlur={onBlur}
         disabled={disabled}
       >
+        {loading && <WaitingSpinner />}
         {children}
       </button>
     </div>

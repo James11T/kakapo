@@ -7,13 +7,14 @@
   ],
   "rules": {
     "@typescript-eslint/await-thenable": "error",
-    "@typescript-eslint/consistent-indexed-object-style": ["error", "record"],
     "@typescript-eslint/consistent-type-exports": "warn",
     "@typescript-eslint/consistent-type-imports": "warn",
     "@typescript-eslint/explicit-function-return-type": "warn",
-    "@typescript-eslint/no-unused-vars": "error"
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@next/next/no-img-element": "off"
   },
   "parserOptions": {
-    "project": ["./tsconfig.json"]
+    "project": "./tsconfig.json"
   }
 }

@@ -1,0 +1,47 @@
+@use "../../../styles/variables";
+@use "../../../styles/styles";
+
+.card {
+  $padding: 0.5em;
+  $band-width: 6px;
+
+  position: relative;
+  border-radius: variables.$border-radius;
+  padding: calc(variables.$unit * var(--padding, 2));
+
+  &--flex {
+    display: flex;
+
+    & > * {
+      margin-top: calc(variables.$unit * var(--spacing, 0));
+
+      &:first-of-type {
+        margin-top: none;
+      }
+    }
+  }
+
+  &--flex-row {
+    flex-direction: row;
+  }
+
+  &--flex-col {
+    flex-direction: column;
+  }
+
+  &--raised {
+    @extend .raised;
+  }
+
+  &--outlined {
+    @extend .outlined;
+  }
+
+  &--flat {
+    background-color: lighten(styles.$flat-background-color, 3%);
+  }
+
+  &--banded {
+    border-left: $band-width solid var(--band-color, "black");
+  }
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { useTitle } from "../../hooks/useTitle";
+import { useTitle } from "../../../hooks/useTitle";
 
 interface TitleProps {
   title: string;

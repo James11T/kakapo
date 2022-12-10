@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./TextInput.module.scss";
-import cn from "classnames";
+import cn from "clsx";
 
 interface TextInputProps {
   id: string;
@@ -10,6 +10,7 @@ interface TextInputProps {
   autocomplete?: "off" | "on";
   defaultValue?: string;
   disabled?: boolean;
+  children?: React.ReactNode;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
@@ -23,6 +24,7 @@ const TextInput = ({
   autocomplete = "off",
   defaultValue,
   disabled = false,
+  children,
   onChange,
   onFocus,
   onBlur
@@ -54,6 +56,7 @@ const TextInput = ({
         disabled={disabled}
       />
       {hasLabel && <span className={styles["text-input__label"]}>{label}</span>}
+      {children}
     </div>
   );
 };

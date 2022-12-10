@@ -1,0 +1,21 @@
+@use "../../../styles/variables";
+
+.toast-container {
+  position: absolute;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  bottom: 0;
+  right: 0;
+  gap: variables.$unit * 2;
+  margin-bottom: variables.$unit * 2;
+
+  @media only screen and (min-width: variables.$breakpoint-s) {
+    & {
+      margin: variables.$unit * 2;
+      width: 350px;
+    }
+  }
+}

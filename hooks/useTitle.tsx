@@ -1,5 +1,4 @@
 import React from "react";
-import Head from "next/head";
 
 interface TitleState {
   prefix: string;
@@ -19,8 +18,9 @@ interface TitleContext extends TitleState {
 interface ProviderProps {
   prefix: string;
   title?: string;
-  alerts?: number;
+  alerts?: number; // Notifications
   children?: React.ReactNode;
+  head: React.ComponentType<{ children: React.ReactNode }>; // Pass in head provider
 }
 
 const titleContext = React.createContext<TitleContext>({} as TitleContext);
@@ -28,11 +28,12 @@ const Provider = titleContext.Provider;
 
 const TitleProvider = ({
   prefix,
+  head: Head,
   title,
   alerts = 0,
   children
 }: ProviderProps): JSX.Element => {
-  const [titleState, setTitleState] = React.useState<TitleState>({
+  const [titleState, setTitleState] = React.useState({
     prefix,
     title,
     alerts
@@ -71,7 +72,7 @@ const TitleProvider = ({
 
   const titleString =
     (titleState.alerts ? `(${titleState.alerts}) ` : "") +
-    prefix +
+    titleState.prefix +
     (titleState.title ? ` | ${titleState.title}` : "");
 
   return (

@@ -1,0 +1,72 @@
+@use "../../../styles/variables";
+@use "../../../styles/colors";
+
+@mixin color-pair($color) {
+  $desaturated-color: desaturate($color, 12%);
+  --color: #{$desaturated-color};
+  --color-dark: #{darken($desaturated-color, 3%)};
+}
+
+.progress-bar {
+  position: relative;
+  width: 100%;
+  height: variables.$unit * 6;
+  background: colors.$muted-bg;
+  border-radius: variables.$border-radius;
+  overflow: hidden;
+
+  &::after {
+    position: absolute;
+    content: "";
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: var(--prog, 0);
+    background-image: repeating-linear-gradient(
+      130deg,
+      var(--color),
+      var(--color) 20px,
+      var(--color-dark) 20px,
+      var(--color-dark) 40px
+    );
+    background-size: 200% 200%;
+    border-right: 5px outset var(--color-dark);
+
+    transition: width 100ms;
+  }
+
+  &--normal {
+    @include color-pair(colors.$success);
+  }
+
+  &--waiting {
+    @include color-pair(colors.$muted-bg);
+  }
+
+  &--error {
+    @include color-pair(colors.$destructive);
+  }
+
+  &--stall {
+    @include color-pair(colors.$warning);
+  }
+
+  & > &__label {
+    position: absolute;
+    left: variables.$unit;
+    top: 50%;
+    translate: 0 -50%;
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 500;
+    z-index: 1;
+  }
+}
+
+@keyframes scroll-background-image {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}

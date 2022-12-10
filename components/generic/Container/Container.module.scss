@@ -1,0 +1,59 @@
+@use "../../../styles/variables";
+
+.container {
+  margin: 0 auto;
+  padding: 0 variables.$unit * 1;
+
+  &--xs {
+    width: min(100%, variables.$breakpoint-xs);
+  }
+
+  &--s {
+    width: min(100%, variables.$breakpoint-s);
+  }
+
+  &--m {
+    width: variables.$breakpoint-s;
+  }
+
+  &--l {
+    width: variables.$breakpoint-m;
+  }
+
+  &--xl {
+    width: variables.$breakpoint-l;
+  }
+
+  &--responsive {
+    @media only screen and (max-width: variables.$breakpoint-s) {
+      & {
+        width: min(100%, variables.$breakpoint-s);
+        padding: 0;
+      }
+    }
+
+    @media only screen and (min-width: variables.$breakpoint-s) {
+      & {
+        width: variables.$breakpoint-s;
+      }
+    }
+
+    @media only screen and (min-width: variables.$breakpoint-m) {
+      & {
+        width: variables.$breakpoint-s;
+      }
+    }
+
+    @media only screen and (min-width: variables.$breakpoint-l) {
+      & {
+        width: variables.$breakpoint-m;
+      }
+    }
+
+    @media only screen and (min-width: variables.$breakpoint-xl) {
+      & {
+        width: variables.$breakpoint-l;
+      }
+    }
+  }
+}

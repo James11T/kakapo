@@ -1,4 +1,4 @@
-@use "../../styles/variables";
+@use "../../../styles/variables";
 $padding-x: 0.6em;
 
 .text-input {
@@ -15,11 +15,11 @@ $padding-x: 0.6em;
 
     &:disabled {
       cursor: not-allowed;
-      background: rgba(230, 230, 230, 1);
+      background: rgb(230, 230, 230);
     }
   }
 
-  .text-input__label {
+  &__label {
     $transition-time: 75ms;
     position: absolute;
     top: 50%;
@@ -30,9 +30,9 @@ $padding-x: 0.6em;
       top $transition-time;
   }
 
-  &:focus-within .text-input__label,
-  input:not(:placeholder-shown) + .text-input__label,
-  &.text-input--has-placeholder .text-input__label {
+  &:focus-within &__label,
+  input:not(:placeholder-shown) + &__label,
+  &--has-placeholder &__label {
     top: 0;
     translate: $padding-x 0.2em;
     font-size: 0.8em;

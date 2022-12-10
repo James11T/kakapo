@@ -1,0 +1,101 @@
+@use "../../../styles/variables";
+@use "../../../styles/styles";
+@use "../../../styles/colors";
+
+.toast {
+  $timer-height: 4px;
+  $default-animation-time: 200ms;
+
+  position: relative;
+  width: 100vw;
+  min-height: 3.5em;
+  display: flex;
+  align-items: center;
+  background-color: rgb(245, 245, 245);
+  padding: variables.$unit * 2;
+  transition: translate var(--animation-time, $default-animation-time),
+    opacity var(--animation-time, $default-animation-time);
+  overflow: hidden;
+  cursor: pointer;
+  animation: enter var(--animation-time, $default-animation-time) ease-in-out
+    forwards;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+
+  &--raised {
+    @extend .raised;
+  }
+
+  &--outlined {
+    @extend .outlined;
+  }
+
+  &--flat {
+    background-color: lighten(styles.$flat-background-color, 3%);
+  }
+
+  &--banded {
+    border-left: 6px solid var(--band-color, black);
+    padding-left: variables.$unit * 2;
+  }
+
+  &--dismissed {
+    animation: exit var(--animation-time, $default-animation-time) ease-in-out
+      forwards;
+  }
+
+  &--has-timer {
+    padding-bottom: calc(#{variables.$unit * 2} + #{$timer-height});
+  }
+
+  @media only screen and (min-width: variables.$breakpoint-s) {
+    & {
+      border-radius: variables.$border-radius;
+      width: 350px;
+    }
+  }
+
+  & &__timer {
+    position: absolute;
+    height: $timer-height;
+    background-color: rgba(0, 0, 0, 0.25);
+    bottom: 0;
+    left: 0;
+
+    animation: shrink var(--ttl) linear forwards;
+  }
+}
+
+@keyframes enter {
+  from {
+    translate: 100% 0;
+    opacity: 0;
+  }
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+
+@keyframes exit {
+  from {
+    translate: 0 0;
+    opacity: 1;
+  }
+  to {
+    translate: 100% 0;
+    opacity: 0;
+  }
+}
+
+@keyframes shrink {
+  from {
+    width: 100%;
+  }
+
+  to {
+    width: 0%;
+  }
+}

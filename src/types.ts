@@ -1,5 +1,20 @@
 import type Color from "color";
 
-type ColorValue = string | Color;
+type ColorValue =
+  | "_primary"
+  | "_success"
+  | "_secondary"
+  | "_destructive"
+  | string
+  | Color;
 
-export type { ColorValue };
+type SetStateBasedOnPrevious<T> = (previousValue: T) => T;
+type SetStateParameter<T> = T | SetStateBasedOnPrevious<T>;
+type SetStateAction<T> = (value: SetStateParameter<T>) => void;
+
+export type {
+  ColorValue,
+  SetStateAction,
+  SetStateParameter,
+  SetStateBasedOnPrevious
+};

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Under Construction</title>
+    <style>
+      @import url(https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;900);
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Lato", Arial, Helvetica, sans-serif;
+        margin: 0;
+        text-align: center;
+        height: 100vh;
+      }
+
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 0;
+        padding: 0;
+        font-weight: normal;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 0;
+        gap: 20px;
+        height: 100%;
+      }
+
+      .header-img {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .subtitle {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        font-size: 1.5em;
+        color: rgb(80, 80, 80);
+      }
+
+      .subtitle > span {
+        position: relative;
+        animation: jump 2s ease-in-out calc(var(--index) * 50ms) infinite;
+      }
+
+      .whitespace {
+        width: 4px;
+      }
+
+      @keyframes jump {
+        0% {
+          translate: 0 0;
+        }
+        10% {
+          translate: 0 -2px;
+        }
+        20% {
+          translate: 0 2px;
+        }
+        30% {
+          translate: 0 0;
+        }
+        100% {
+          translate: 0 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        src="http://media.kakaposocial.com/static/two-tone-banner.png"
+        alt="Header"
+        class="header-img"
+      />
+      <div class="subtitle" id="subtitle"></div>
+    </div>
+    <script>
+      const addLetter = (parent, letter, index) => {
+        const newSpan = document.createElement("span");
+        newSpan.innerText = letter;
+        if (letter === " ") newSpan.classList.add("whitespace");
+        newSpan.style.setProperty("--index", index);
+        parent.appendChild(newSpan);
+      };
+
+      const subtitle = document.getElementById("subtitle");
+
+      "This site is under construction"
+        .split("")
+        .forEach((letter, index) => addLetter(subtitle, letter, index));
+    </script>
+  </body>
+</html>
