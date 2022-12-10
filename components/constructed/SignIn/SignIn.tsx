@@ -17,7 +17,7 @@ const SignIn = (): JSX.Element => {
   const [data, setData] = React.useState({ email: "", password: "" });
   const { createNotification } = useToasts();
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (): Promise<void> => {
     createNotification("Signing in...", {
       color: "#000000",
       timeToLive: 2000
@@ -37,7 +37,7 @@ const SignIn = (): JSX.Element => {
     }
   };
 
-  const handleChange = (key: keyof typeof data, value: string) => {
+  const handleChange = (key: keyof typeof data, value: string): void => {
     setData((old) => ({ ...old, [key]: value }));
   };
 

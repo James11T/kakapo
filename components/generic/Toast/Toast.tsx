@@ -49,7 +49,7 @@ const Toast = ({
     return () => window.clearTimeout(timeout);
   }, [animating]);
 
-  const handleClick = () => {
+  const handleClick = (): void => {
     if (dismissible) setAnimating(true);
   };
 

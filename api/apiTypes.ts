@@ -30,7 +30,7 @@ class APIError {
     return this.type === "network";
   }
 
-  public text() {
+  public text(): string {
     return "Unknown error";
   }
 }
@@ -42,7 +42,7 @@ class NetworkError extends APIError {
     super("network");
   }
 
-  public text() {
+  public text(): string {
     return "Unexpected network error";
   }
 }
@@ -61,7 +61,7 @@ class HTTPError extends APIError {
     this.details = details;
   }
 
-  public text() {
+  public text(): string {
     return `HTTP ${this.code}: ${status[this.code]}`;
   }
 }

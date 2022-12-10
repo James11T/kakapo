@@ -18,11 +18,11 @@ const PasswordInput = ({
 
   const Icon = contentShown ? VisibilityOffIcon : VisibilityIcon;
 
-  const handleVisibilityClick = () => {
+  const handleVisibilityClick = (): void => {
     if (revealMode === "toggle") setContentShown((old) => !old);
   };
 
-  const handleVisibilityDown = () => {
+  const handleVisibilityDown = (): void => {
     if (revealMode === "hold") setContentShown(true);
   };
 

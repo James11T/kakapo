@@ -4,7 +4,7 @@ interface ToastContainerProps {
   children?: React.ReactNode;
 }
 
-const ToastContainer = ({ children }: ToastContainerProps) => {
+const ToastContainer = ({ children }: ToastContainerProps): JSX.Element => {
   return <div className={styles["toast-container"]}>{children}</div>;
 };
 
