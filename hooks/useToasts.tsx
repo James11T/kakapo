@@ -28,7 +28,7 @@ interface Notification extends ToastConfig {
 }
 
 interface ToastContext {
-  createNotification: (text: string, config: Partial<ToastConfig>) => void;
+  createNotification: (text: string, config: Partial<ToastConfig>) => string;
 }
 
 const toastContext = React.createContext<ToastContext>({} as ToastContext);
@@ -38,7 +38,10 @@ interface ToastProviderProps {
   providerConfig?: Partial<ToastConfig>;
 }
 
-const ToastProvider = ({ children, providerConfig }: ToastProviderProps) => {
+const ToastProvider = ({
+  children,
+  providerConfig
+}: ToastProviderProps): JSX.Element => {
   const [notifications, setNotifications] = React.useState<Notification[]>([]);
 
   const createNotification = React.useCallback(
@@ -49,19 +52,23 @@ const ToastProvider = ({ children, providerConfig }: ToastProviderProps) => {
         ...config
       };
 
+      const id = randomId();
+
       setNotifications((old) => [
         ...old,
         {
-          id: randomId(),
+          id: id,
           text,
           ...combinedConfig
         }
       ]);
+
+      return id;
     },
-    []
+    [JSON.stringify(providerConfig)]
   );
 
-  const removeId = (id: string) =>
+  const removeId = (id: string): void =>
     setNotifications((old) =>
       old.filter((oldNotification) => oldNotification.id !== id)
     );
@@ -72,7 +79,7 @@ const ToastProvider = ({ children, providerConfig }: ToastProviderProps) => {
       <ToastContainer>
         {notifications.map((notification) => (
           <Toast
-            eject={() => removeId(notification.id)}
+            eject={(): void => removeId(notification.id)}
             key={notification.id}
             band={notification.color}
             dismissible={notification.dismissible}
@@ -86,7 +93,7 @@ const ToastProvider = ({ children, providerConfig }: ToastProviderProps) => {
   );
 };
 
-const useToasts = () => React.useContext(toastContext);
+const useToasts = (): ToastContext => React.useContext(toastContext);
 
 export { ToastProvider, useToasts };
 export default useToasts;
