@@ -9,32 +9,31 @@ import {
 } from "../../generic";
 import useToasts from "../../../hooks/useToasts";
 import styles from "./SignIn.module.scss";
-import Client from "../../../api/client";
-
-const APIClient = new Client("http://172.30.124.18:5000/");
+import useAPI from "../../../hooks/useAPI";
 
 const SignIn = (): JSX.Element => {
   const [data, setData] = React.useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = React.useState(false);
   const toasts = useToasts();
+  const API = useAPI();
 
   const handleSignIn = async (): Promise<void> => {
-    const signInId = toasts.create("Signing in...", {
-      color: "_primary"
-    });
-
     setIsLoading(true);
-    const res = await APIClient.authenticate(data.email, data.password);
+    const res = await API.authenticate(data.email, data.password);
     setIsLoading(false);
 
-    toasts.dismiss(signInId);
-
     if (res.err) {
-      toasts.create(res.val.text(), {
-        color: "_destructive"
-      });
+      if (res.http) {
+        toasts.create(res.details?.error ?? res.text(), {
+          color: "_destructive"
+        });
+      } else {
+        toasts.create(res.text(), {
+          color: "_destructive"
+        });
+      }
     } else {
-      toasts.create(`Signed in as ${res.val.data.user.id}`, {
+      toasts.create(`Signed in as ${res.data.user.username}`, {
         color: "_success"
       });
     }
