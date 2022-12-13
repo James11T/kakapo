@@ -1,6 +1,11 @@
 import React from "react";
 import { HTTPError, NetworkError, APISuccess } from "../api/types";
-import type { AuthenticateResponse, APIResponse, User } from "../api/types";
+import type {
+  AuthenticateResponse,
+  APIResponse,
+  User,
+  StatusResponse
+} from "../api/types";
 
 const API_VERSION = 1;
 
@@ -45,9 +50,10 @@ interface APIContext extends APIState {
     email: string,
     password: string
   ) => Promise<APIResponse<AuthenticateResponse>>;
+  status: () => Promise<APIResponse<StatusResponse>>;
 }
 
-const apiContext = React.createContext<APIContext>({} as APIContext);
+const apiContext = React.createContext({} as APIContext);
 
 interface ClientConfig {
   timeout: number;
@@ -84,7 +90,7 @@ const APIProvider = ({ children, config }: APIProviderProps): JSX.Element => {
 
   const send = async <T,>(
     url: string,
-    config: Partial<ClientRequestConfig>
+    config?: Partial<ClientRequestConfig>
   ): Promise<APIResponse<T>> => {
     const mergedConfig: ClientRequestConfig = {
       ...defaultRequestConfig,
@@ -132,35 +138,35 @@ const APIProvider = ({ children, config }: APIProviderProps): JSX.Element => {
 
   const get = <T,>(
     url: string,
-    config: Partial<BodylessConfig>
+    config?: Partial<BodylessConfig>
   ): Promise<APIResponse<T>> => {
     return send(url, { ...config, method: "GET" });
   };
 
   const post = <T,>(
     url: string,
-    config: Partial<MethodlessConfig>
+    config?: Partial<MethodlessConfig>
   ): Promise<APIResponse<T>> => {
     return send(url, { ...config, method: "POST" });
   };
 
   const put = <T,>(
     url: string,
-    config: Partial<MethodlessConfig>
+    config?: Partial<MethodlessConfig>
   ): Promise<APIResponse<T>> => {
     return send(url, { ...config, method: "PUT" });
   };
 
   const patch = <T,>(
     url: string,
-    config: Partial<MethodlessConfig>
+    config?: Partial<MethodlessConfig>
   ): Promise<APIResponse<T>> => {
     return send(url, { ...config, method: "PATCH" });
   };
 
   const del = <T,>(
     url: string,
-    config: Partial<BodylessConfig>
+    config?: Partial<BodylessConfig>
   ): Promise<APIResponse<T>> => {
     return send(url, { ...config, method: "DELETE" });
   };
@@ -180,9 +186,24 @@ const APIProvider = ({ children, config }: APIProviderProps): JSX.Element => {
     return response;
   };
 
+  const status = async (): Promise<APIResponse<StatusResponse>> => {
+    const response = await get<StatusResponse>("/status");
+    return response;
+  };
+
   return (
     <apiContext.Provider
-      value={{ send, get, post, put, patch, del, authenticate, ...apiState }}
+      value={{
+        send,
+        get,
+        post,
+        put,
+        patch,
+        del,
+        authenticate,
+        status,
+        ...apiState
+      }}
     >
       {children}
     </apiContext.Provider>

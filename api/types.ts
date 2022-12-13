@@ -1,10 +1,5 @@
 import status from "http-status";
 
-interface AuthenticateResponse {
-  refreshToken: string;
-  user: AuthenticatedUser;
-}
-
 interface User {
   id: string;
   email: string;
@@ -13,6 +8,18 @@ interface User {
 
 interface AuthenticatedUser extends User {
   refreshToken: string;
+}
+
+interface AuthenticateResponse {
+  refreshToken: string;
+  user: AuthenticatedUser;
+}
+
+interface StatusResponse {
+  status: string;
+  version: string;
+  country: string;
+  memoryUsage?: string;
 }
 
 class APISuccess<T> {
@@ -47,13 +54,13 @@ type HTTPErrorDetails = { error: string; [key: string]: any } | null;
 
 class HTTPError {
   public readonly code: number;
-  public readonly details: HTTPErrorDetails | null = null;
+  public readonly details: HTTPErrorDetails = null;
   public readonly network = false;
   public readonly http = true;
   public readonly ok = false;
   public readonly err = true;
 
-  constructor(code: number, details: HTTPErrorDetails | null = null) {
+  constructor(code: number, details: HTTPErrorDetails = null) {
     this.code = code;
     this.details = details;
   }
@@ -66,4 +73,10 @@ class HTTPError {
 type APIResponse<T> = APISuccess<T> | HTTPError | NetworkError;
 
 export { NetworkError, HTTPError, APISuccess };
-export type { AuthenticateResponse, User, AuthenticatedUser, APIResponse };
+export type {
+  AuthenticateResponse,
+  User,
+  AuthenticatedUser,
+  APIResponse,
+  StatusResponse
+};

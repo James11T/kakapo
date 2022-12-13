@@ -60,7 +60,7 @@ const URLStateProvider = ({
       Boolean(keysState[key])
     ); // Filter out nullables
 
-    if (keys.length === 0) return "?"; // No query if no keys
+    if (keys.length === 0) return ""; // No query if no keys
 
     const queryKeys = keys.map((key) => `${key}=${keysState[key]}`).join("&"); // "key=x,key=y"
 
@@ -128,3 +128,4 @@ const useURLStateKey = (
 };
 
 export { URLStateProvider, useURLState, useURLStateKey };
+export default useURLState;
