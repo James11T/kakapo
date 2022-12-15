@@ -5,14 +5,18 @@ import {
   Container,
   PasswordInput,
   TextInput,
-  Spacer
+  Checkbox
 } from "../../generic";
 import useToasts from "../../../hooks/useToasts";
 import styles from "./SignIn.module.scss";
 import useAPI from "../../../hooks/useAPI";
 
 const SignIn = (): JSX.Element => {
-  const [data, setData] = React.useState({ email: "", password: "" });
+  const [data, setData] = React.useState({
+    email: "",
+    password: "",
+    remember: false
+  });
   const [isLoading, setIsLoading] = React.useState(false);
   const toasts = useToasts();
   const API = useAPI();
@@ -39,44 +43,55 @@ const SignIn = (): JSX.Element => {
     }
   };
 
-  const handleChange = (key: keyof typeof data, value: string): void => {
+  const handleChange = <T extends keyof typeof data>(
+    key: T,
+    value: typeof data[T]
+  ): void => {
     setData((old) => ({ ...old, [key]: value }));
+  };
+
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    handleSignIn();
   };
 
   return (
     <Container size="xs" className={styles["sign-in-container"]}>
-      <Card
-        flex={true}
-        flexDirection="col"
-        type="raised"
-        padding={6}
-        spacing={4}
-      >
+      <Card flex={true} flexDirection="col" type="raised" padding={6}>
         <h1>Sign In</h1>
-        <TextInput
-          id="email"
-          label="Email"
-          type="email"
-          onChange={(e): void => handleChange("email", e.target.value)}
-        />
-        <PasswordInput
-          id="password"
-          label="Password"
-          revealMode="hold"
-          onChange={(e): void => handleChange("password", e.target.value)}
-        />
-        <Spacer spacing={3} axis="y" />
-        <Button
-          id="sign-in-button"
-          fullWidth={true}
-          variant="outlined"
-          submit={true}
-          color="rgb(220, 220, 220)"
-          loading={isLoading}
-          onClick={handleSignIn}
-        >
-          Sign In
-        </Button>
+        <form action="" onSubmit={handleFormSubmit}>
+          <TextInput
+            id="email"
+            label="Email"
+            type="email"
+            value={data.email}
+            onChange={(e): void => handleChange("email", e.target.value)}
+          />
+          <PasswordInput
+            id="password"
+            label="Password"
+            revealMode="hold"
+            value={data.password}
+            onChange={(e): void => handleChange("password", e.target.value)}
+          />
+          <Checkbox
+            checked={data.remember}
+            style="outlined"
+            onChange={(e): void => handleChange("remember", e.target.checked)}
+          >
+            Stay signed in
+          </Checkbox>
+          <Button
+            id="sign-in-button"
+            fullWidth={true}
+            style="outlined"
+            submit={true}
+            loading={isLoading}
+            onClick={handleSignIn}
+          >
+            Sign In
+          </Button>
+        </form>
       </Card>
     </Container>
   );

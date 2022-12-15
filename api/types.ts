@@ -15,6 +15,10 @@ interface AuthenticateResponse {
   user: AuthenticatedUser;
 }
 
+interface CreateUserResponse {
+  id: string;
+}
+
 interface StatusResponse {
   status: string;
   version: string;
@@ -78,5 +82,6 @@ export type {
   User,
   AuthenticatedUser,
   APIResponse,
-  StatusResponse
+  StatusResponse,
+  CreateUserResponse
 };

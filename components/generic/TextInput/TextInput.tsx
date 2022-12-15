@@ -5,6 +5,7 @@ import cn from "clsx";
 interface TextInputProps {
   id: string;
   label?: string;
+  value?: string;
   placeholder?: string;
   type?: React.HTMLInputTypeAttribute;
   autocomplete?: "off" | "on";
@@ -17,8 +18,9 @@ interface TextInputProps {
 }
 
 const TextInput = ({
-  label,
   id,
+  label,
+  value,
   placeholder,
   type = "text",
   autocomplete = "off",
@@ -47,6 +49,7 @@ const TextInput = ({
         type={type}
         name={id}
         id={id}
+        value={value}
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}

@@ -1,6 +1,5 @@
 import React from "react";
 import { Title } from "../components/generic";
-import { NavBar, SignIn } from "../components/constructed";
 import useToasts from "../hooks/useToasts";
 import useAPI from "../hooks/useAPI";
 import type { NextPage } from "next";
@@ -26,8 +25,6 @@ const Home: NextPage = () => {
   return (
     <>
       <Title title="Home" />
-      <NavBar />
-      <SignIn />
     </>
   );
 };

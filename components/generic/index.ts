@@ -4,6 +4,7 @@ export { default as Toast } from "./Toast/Toast";
 export { default as Button } from "./Button/Button";
 export { default as TopBar } from "./TopBar/TopBar";
 export { default as Spacer } from "./Spacer/Spacer";
+export { default as Checkbox } from "./Checkbox/Checkbox";
 export { default as Container } from "./Container/Container";
 export { default as TextInput } from "./TextInput/TextInput";
 export { default as FlexPusher } from "./FlexPusher/FlexPusher";

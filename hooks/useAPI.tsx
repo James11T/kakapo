@@ -1,11 +1,13 @@
 import React from "react";
 import { HTTPError, NetworkError, APISuccess } from "../api/types";
 import type {
-  AuthenticateResponse,
-  APIResponse,
   User,
-  StatusResponse
+  APIResponse,
+  AuthenticateResponse,
+  StatusResponse,
+  CreateUserResponse
 } from "../api/types";
+import useStorageKey from "./useStorageState";
 
 const API_VERSION = 1;
 
@@ -19,6 +21,8 @@ type BodylessConfig = Omit<MethodlessConfig, "body">;
 
 interface APIState {
   user: User | null;
+  refreshToken: string | null;
+  accessToken: string | null;
 }
 
 interface APIContext extends APIState {
@@ -48,8 +52,14 @@ interface APIContext extends APIState {
   ) => Promise<APIResponse<T>>;
   authenticate: (
     email: string,
-    password: string
+    password: string,
+    staySignedIn?: boolean
   ) => Promise<APIResponse<AuthenticateResponse>>;
+  createUser: (
+    username: string,
+    email: string,
+    password: string
+  ) => Promise<APIResponse<CreateUserResponse>>;
   status: () => Promise<APIResponse<StatusResponse>>;
 }
 
@@ -76,8 +86,19 @@ interface APIProviderProps {
   config?: Partial<ClientConfig>;
 }
 
+interface AuthTokens {
+  refreshToken: string | null;
+  accessToken: string | null;
+}
+
 const APIProvider = ({ children, config }: APIProviderProps): JSX.Element => {
-  const [apiState, setApiState] = React.useState<APIState>({ user: null });
+  const [apiState, setApiState] = React.useState<APIState>({
+    user: null,
+    refreshToken: null,
+    accessToken: null
+  });
+
+  const [_, setAuthData] = useStorageKey<AuthTokens>("auth");
 
   const providerConfig = { ...defaultClientConfig, ...config };
 
@@ -174,6 +195,7 @@ const APIProvider = ({ children, config }: APIProviderProps): JSX.Element => {
   const authenticate = async (
     email: string,
     password: string
+    // staySignedIn = true
   ): Promise<APIResponse<AuthenticateResponse>> => {
     const response = await post<AuthenticateResponse>("/auth/authenticate", {
       body: { email, password }
@@ -181,7 +203,23 @@ const APIProvider = ({ children, config }: APIProviderProps): JSX.Element => {
 
     if (response.ok) {
       setApiState((old) => ({ ...old, user: response.data.user }));
+      setAuthData({
+        refreshToken: response.data.refreshToken,
+        accessToken: null
+      });
     }
+
+    return response;
+  };
+
+  const createUser = async (
+    username: string,
+    email: string,
+    password: string
+  ): Promise<APIResponse<CreateUserResponse>> => {
+    const response = await post<CreateUserResponse>("/users", {
+      body: { username, email, password }
+    });
 
     return response;
   };
@@ -201,6 +239,7 @@ const APIProvider = ({ children, config }: APIProviderProps): JSX.Element => {
         patch,
         del,
         authenticate,
+        createUser,
         status,
         ...apiState
       }}

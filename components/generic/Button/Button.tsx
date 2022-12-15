@@ -6,15 +6,6 @@ import WaitingSpinner from "../WaitingSpinner/WaitingSpinner";
 import type { ColorValue } from "../../../src/types";
 
 const buttonStyleClasses = {
-  primary: styles["button--primary"],
-  secondary: styles["button--secondary"],
-  destructive: styles["button--destructive"],
-  positive: styles["button--positive"],
-  custom: styles["button--custom"],
-  plain: undefined
-};
-
-const buttonVariantClasses = {
   raised: styles["button--raised"],
   outlined: styles["button--outlined"],
   flat: styles["button--flat"]
@@ -23,7 +14,6 @@ const buttonVariantClasses = {
 interface ButtonProps {
   id?: string;
   style?: keyof typeof buttonStyleClasses;
-  variant?: keyof typeof buttonVariantClasses;
   color?: ColorValue;
   disabled?: boolean;
   submit?: boolean;
@@ -37,8 +27,7 @@ interface ButtonProps {
 
 const Button = ({
   id,
-  style = "plain",
-  variant = "raised",
+  style = "raised",
   color,
   disabled = false,
   submit,
@@ -50,27 +39,24 @@ const Button = ({
   onBlur
 }: ButtonProps): JSX.Element => {
   return (
-    <div
+    <button
       className={cn(
         styles["button"],
-        buttonStyleClasses[color ? "custom" : style],
-        buttonVariantClasses[variant],
+        Boolean(color) && styles["button--colored"],
+        buttonStyleClasses[style],
         fullWidth && styles["button--full-width"]
       )}
       style={{ "--band-color": handleColor(color) } as React.CSSProperties}
+      type={submit ? "button" : "submit"}
+      id={id}
+      onClick={onClick}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      disabled={disabled || loading}
     >
-      <button
-        type={submit ? "button" : "submit"}
-        id={id}
-        onClick={onClick}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        disabled={disabled}
-      >
-        {loading && <WaitingSpinner />}
-        {children}
-      </button>
-    </div>
+      {loading && <WaitingSpinner />}
+      {children}
+    </button>
   );
 };
 

@@ -7,4 +7,11 @@
     text-align: center;
     margin: variables.$unit * 2 0;
   }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: variables.$unit * 4;
+    margin: variables.$unit * 4 0;
+  }
 }

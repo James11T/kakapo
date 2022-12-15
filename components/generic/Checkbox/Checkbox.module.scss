@@ -1,0 +1,57 @@
+@use "../../../styles/variables";
+@use "../../../styles/colors";
+@use "../../../styles/styles";
+
+.checkbox {
+  $size: 1.6em;
+
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: $size + variables.$unit * 2;
+  padding-bottom: 0.1em;
+  cursor: pointer;
+  user-select: none;
+  height: $size;
+  color: colors.$text-muted-1;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  &--raised &__marker {
+    @extend .raised;
+  }
+
+  &--outlined &__marker {
+    @extend .outlined;
+  }
+
+  &--flat &__marker {
+    @extend .flat;
+  }
+
+  &:hover &__marker {
+    filter: brightness(0.95);
+  }
+
+  &__marker {
+    position: absolute;
+    background-color: white;
+    top: 0;
+    left: 0;
+    height: $size;
+    width: $size;
+    border-radius: variables.$border-radius;
+    padding: 0;
+
+    &__icon {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
