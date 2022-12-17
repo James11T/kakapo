@@ -2,6 +2,7 @@ import React from "react";
 import { Title } from "../components/generic";
 import useToasts from "../hooks/useToasts";
 import useAPI from "../hooks/useAPI";
+import Link from "next/link";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
@@ -25,6 +26,9 @@ const Home: NextPage = () => {
   return (
     <>
       <Title title="Home" />
+      <Link href="/sign-in">Sign In</Link>
+      <Link href="/sign-up">Sign Up</Link>
+      <Link href="/user/uisignin">User</Link>
     </>
   );
 };
