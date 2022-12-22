@@ -46,7 +46,7 @@ const Button = ({
         buttonStyleClasses[style],
         fullWidth && styles["button--full-width"]
       )}
-      style={{ "--band-color": handleColor(color) } as React.CSSProperties}
+      style={{ "--band-color": handleColor(color) }}
       type={submit ? "button" : "submit"}
       id={id}
       onClick={onClick}

@@ -1,12 +1,24 @@
 @use "../../../styles/variables";
 @use "../../../styles/styles";
 
-.card {
+.box {
   $padding: 0.5em;
   $band-width: 6px;
 
-  width: 100%;
-  border-radius: variables.$border-radius;
+  padding: calc(variables.$unit * var(--padding, 2));
+  gap: calc(variables.$unit * var(--spacing, 0));
+
+  &--flex {
+    display: flex;
+  }
+
+  &--flex-row {
+    flex-direction: row;
+  }
+
+  &--flex-col {
+    flex-direction: column;
+  }
 
   &--raised {
     @extend .raised;
@@ -22,5 +34,9 @@
 
   &--banded {
     border-left: $band-width solid var(--band-color, "black");
+  }
+
+  &--full-width {
+    width: 100%;
   }
 }

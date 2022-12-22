@@ -82,17 +82,15 @@ const Toast = ({
     <div
       className={cn(styles["toast"], cardTypeClasses[variant], classes)}
       onClick={handleClick}
-      style={
-        {
-          "--band-color": handleColor(band),
-          "--animation-time": `${animationTime}ms`
-        } as React.CSSProperties
-      }
+      style={{
+        "--band-color": handleColor(band),
+        "--animation-time": `${animationTime}ms`
+      }}
     >
       {children}
       <div
         className={styles["toast__timer"]}
-        style={{ "--ttl": `${timeToLive}ms` } as React.CSSProperties}
+        style={{ "--ttl": `${timeToLive}ms` }}
       ></div>
     </div>
   );

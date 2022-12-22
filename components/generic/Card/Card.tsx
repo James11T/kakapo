@@ -1,10 +1,11 @@
 import React from "react";
 import cn from "clsx";
+import Box from "../Box/Box";
 import { handleColor } from "../../../src/color";
-import styles from "./Card.module.scss";
 import type { ColorValue } from "../../../src/types";
+import styles from "./Card.module.scss";
 
-const cardTypeClasses = {
+const cardStyleClasses = {
   raised: styles["card--raised"],
   outlined: styles["card--outlined"],
   flat: styles["card--flat"],
@@ -12,46 +13,45 @@ const cardTypeClasses = {
 };
 
 interface CardProps {
-  className?: string;
-  children?: React.ReactNode;
-  flex?: boolean;
-  flexDirection?: "col" | "column" | "row";
-  type?: keyof typeof cardTypeClasses;
+  flex?: boolean | "col" | "row";
+  style?: keyof typeof cardStyleClasses;
   band?: ColorValue;
   padding?: number;
   spacing?: number;
+  className?: string;
+  children?: React.ReactNode;
 }
 
 const Card = ({
-  className,
-  children,
   flex,
-  flexDirection,
-  type = "raised",
+  style = "raised", // Change to style
   band,
   padding = 2,
-  spacing = 0
+  spacing = 0,
+  className,
+  children
 }: CardProps): JSX.Element => {
   const classes = {
-    [styles["card--flex"]]: flex,
-    [styles["card--flex-row"]]: flexDirection === "row",
-    [styles["card--flex-col"]]: flexDirection?.startsWith("col") ?? false,
     [styles["card--banded"]]: Boolean(band)
   };
 
   return (
-    <div
-      className={cn(styles["card"], className, cardTypeClasses[type], classes)}
-      style={
-        {
-          "--band-color": handleColor(band),
-          "--padding": padding,
-          "--spacing": spacing
-        } as React.CSSProperties
-      }
+    <Box
+      flex={flex}
+      className={cn(
+        styles["card"],
+        className,
+        cardStyleClasses[style],
+        classes
+      )}
+      style={{
+        "--band-color": handleColor(band),
+        "--padding": padding,
+        "--spacing": spacing
+      }}
     >
       {children}
-    </div>
+    </Box>
   );
 };
 

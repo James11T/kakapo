@@ -4,6 +4,7 @@ interface User {
   id: string;
   email: string;
   username: string;
+  displayName: string;
 }
 
 interface AuthenticatedUser extends User {
@@ -25,6 +26,19 @@ interface StatusResponse {
   country: string;
   memoryUsage?: string;
 }
+
+interface RequestConfig {
+  body?: any;
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  timeout: number;
+  baseUrl: string;
+  artificialLatency: number;
+}
+
+type BaseConfig = Omit<RequestConfig, "body" | "method">;
+
+type MethodlessConfig = Omit<RequestConfig, "method">;
+type BodylessConfig = Omit<MethodlessConfig, "body">;
 
 class APISuccess<T> {
   readonly data: T;
@@ -83,5 +97,9 @@ export type {
   AuthenticatedUser,
   APIResponse,
   StatusResponse,
-  CreateUserResponse
+  CreateUserResponse,
+  MethodlessConfig,
+  BodylessConfig,
+  RequestConfig,
+  BaseConfig
 };

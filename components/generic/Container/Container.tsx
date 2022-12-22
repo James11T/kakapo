@@ -13,14 +13,14 @@ const containerSizeClasses = {
 
 interface ContainerProps {
   size?: keyof typeof containerSizeClasses;
-  children?: React.ReactNode;
   className?: string;
+  children?: React.ReactNode;
 }
 
 const Container = ({
   size = "responsive",
-  children,
-  className
+  className,
+  children
 }: ContainerProps): JSX.Element => {
   return (
     <div

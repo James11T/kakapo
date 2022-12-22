@@ -17,7 +17,7 @@ const Spacer = ({ axis = "x", spacing = 1 }: SpacerProps): JSX.Element => {
         styles["spacer"],
         styles[axis === "x" ? "spacer--x" : "spacer--y"]
       )}
-      style={{ "--spacing": spacing } as React.CSSProperties}
+      style={{ "--spacing": spacing }}
     ></div>
   );
 };

@@ -1,3 +1,4 @@
+export { default as Box } from "./Box/Box";
 export { default as Card } from "./Card/Card";
 export { default as Title } from "./Title/Title";
 export { default as Toast } from "./Toast/Toast";

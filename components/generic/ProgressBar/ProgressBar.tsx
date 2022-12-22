@@ -46,11 +46,9 @@ const ProgressBar = ({
         progressBarStateClasses[state],
         progressBarClasses
       )}
-      style={
-        {
-          "--prog": `${Math.floor(prog * 10000) / 100}%`
-        } as React.CSSProperties
-      }
+      style={{
+        "--prog": `${Math.floor(prog * 10000) / 100}%`
+      }}
     >
       <span className={styles["progress-bar__label"]}>{labelText}</span>
     </div>

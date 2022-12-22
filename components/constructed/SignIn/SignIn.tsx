@@ -57,7 +57,7 @@ const SignIn = (): JSX.Element => {
 
   return (
     <Container size="xs" className={styles["sign-in-container"]}>
-      <Card flex={true} flexDirection="col" type="raised" padding={6}>
+      <Card flex="col" style="raised" padding={6}>
         <h1>Sign In</h1>
         <form action="" onSubmit={handleFormSubmit}>
           <TextInput

@@ -7,3 +7,8 @@
     --color-scheme: dark;
   }
 }
+
+body,
+#__next {
+  min-height: 100vh;
+}

@@ -5,6 +5,7 @@ import { URLStateProvider } from "../hooks/useURLState";
 import { ToastProvider } from "../hooks/useToasts";
 import { APIProvider } from "../hooks/useAPI";
 import { NavBar } from "../components/constructed";
+import { Container } from "../components/generic";
 import type { AppProps } from "next/app";
 import "../styles/globals.scss";
 
@@ -23,7 +24,9 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
               <link rel="icon" href="/favicon.ico" />
             </Head>
             <NavBar />
-            <Component {...pageProps} />
+            <Container>
+              <Component {...pageProps} />
+            </Container>
           </APIProvider>
         </URLStateProvider>
       </ToastProvider>

@@ -3,6 +3,7 @@
 .container {
   margin: 0 auto;
   padding: 0 variables.$unit * 1;
+  display: flex;
 
   &--xs {
     width: min(100%, variables.$breakpoint-xs);
