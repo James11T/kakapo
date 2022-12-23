@@ -43,7 +43,7 @@ const URLStateProvider = ({
             ); // Remove leading ENCODED_PREFIX
 
       const params: KeysType = values
-        .split("&") // Seperate parameters
+        .split("&") // Separate parameters
         .reduce((prev, curr) => {
           const split = curr.split("="); // Split into key and value
           if (split.length === 1) return { ...prev, [split[0]]: undefined }; // If no value set default
