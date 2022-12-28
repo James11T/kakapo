@@ -12,13 +12,11 @@ const NavBar = (): JSX.Element => {
         <ul>
           <li>
             <Link href="/">
-              <a>
-                <img
-                  src="/banner.png"
-                  alt="Kakapo Logo"
-                  className={styles["navbar__logo"]}
-                />
-              </a>
+              <img
+                src="/banner.png"
+                alt="Kakapo Logo"
+                className={styles["navbar__logo"]}
+              />
             </Link>
           </li>
           <FlexPusher />
