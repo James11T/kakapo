@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <style type="text/css">
+      table {border-collapse:separate;}
+      a, a:link, a:visited {text-decoration: none; color: #00788a;}
+      a:hover {text-decoration: underline;}
+      h2,h2 a,h2 a:visited,h3,h3 a,h3 a:visited,h4,h5,h6,.t_cht {color:#000 !important;}
+      .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td {line-height: 100%;}
+      .ExternalClass {width: 100%;}
+      </style> 
+  </head>
+  <body
+    style="
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      color: rgb(68, 68, 68);
+      background-color: #cccccc;
+    "
+  >
+    <center style="width: 100%; table-layout: fixed; background-color: #cccccc">
+      <table
+        width="100%"
+        style="
+          margin: 0 auto;
+          width: 100%;
+          max-width: 600px;
+          border-spacing: 0;
+          background-color: white;
+        "
+      >
+        <tr>
+          <td height="15" style="padding: 0; background-color: white"></td>
+        </tr>
+        <tr>
+          <td style="padding: 0">
+            <center>
+              <a href="https://kakaposocial.com/" style="text-decoration: none">
+                <img src="http://media.kakaposocial.com/static/two-tone-banner.png" alt="Kakapo Branding" height="35" />
+              </a>
+            </center>
+          </td>
+        </tr>
+        <tr>
+          <td height="15" style="padding: 0; background-color: white"></td>
+        </tr>
+
+        <tr>
+          <td height="2" style="padding: 0; background-color: #eeeeee"></td>
+        </tr>
+        <tr>
+          <td height="20" style="padding: 0; background-color: white"></td>
+        </tr>
+
+        {{> @partial-block }}
+
+        <tr>
+          <td height="20" style="padding: 0; background-color: white"></td>
+        </tr>
+
+        <tr>
+          <td height="15" style="padding: 0; background-color: #ebebeb"></td>
+        </tr>
+
+        <tr>
+          <td style="padding: 0; background-color: #ebebeb">
+            <center>
+              <img src="http://media.kakaposocial.com/static/shadowlogo.png" alt="Kakapo Logo" width="110" />
+            </center>
+          </td>
+        </tr>
+        <tr>
+          <td height="15" style="padding: 0; background-color: #ebebeb"></td>
+        </tr>
+        <tr>
+          <td style="padding: 0; background-color: #ebebeb" class="footer">
+            <center>
+              <a href="#" style="margin: 0 10px; display: block; color: #aaaaaa">Why am I receiving this email?</a>
+            </center>
+          </td>
+        </tr>
+        <tr>
+          <td height="10" style="padding: 0; background-color: #ebebeb"></td>
+        </tr>
+        <tr>
+          <td style="padding: 0; background-color: #ebebeb" class="footer">
+            <center>
+              <a href="#" style="margin: 0 10px; display: block; color: #aaaaaa">Unsubscribe / Stop receiving emails.</a>
+            </center>
+          </td>
+        </tr>
+        <tr>
+          <td height="20" style="padding: 0; background-color: #ebebeb"></td>
+        </tr>
+        {{#if request}}
+          <tr>
+            <td height="5" style="padding: 0; background-color: #e7e7e7"></td>
+          </tr>
+          <tr>
+            <td
+              style="
+                padding: 0;
+                color: #888888;
+                background-color: #e7e7e7;
+                padding-left: 8px;
+              "
+            >
+              Request originated from
+              {{request.flag}}
+              {{request.ip}}
+            </td>
+          </tr>
+          <tr>
+            <td height="5" style="padding: 0; background-color: #e7e7e7"></td>
+          </tr>
+        {{/if}}
+      </table>
+    </center>
+  </body>
+</html>
