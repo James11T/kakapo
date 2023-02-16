@@ -1,0 +1,20 @@
+import { Context, APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
+import getAssertiveEnv from "./get-env";
+
+const env = getAssertiveEnv(
+  "STATIC_BUCKET_NAME",
+  "MODERATION_OUTPUT_TABLE_NAME",
+  "DELETE_QUEUE_URL"
+);
+
+export const handler = async (
+  event: APIGatewayEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: "Hello World",
+    }),
+  };
+};

@@ -1,0 +1,21 @@
+{
+  "Records": [
+    {
+      "messageId": "f5043677-871e-45a1-aee2-e9a08c929025",
+      "receiptHandle": "AQEBK+doOLaryda9+HM0zd7TpCS4zF3Y2bbWs41ydxzZiHiLJcUFtG7G3/BgiHi+c7loE38UeyddMW86ZLjgdT1lLzMkMgHiqgd6/oEgSLMeDXsjMUpzQWDsfowbSt8DMqzwdxOowfHJe7jAARXzYiB4DalMsNvm26QON1i52dnErqXWgz3Y+5FUnNaHcHUGbUF7ZOXFoeDtVLsQgs0N9prA87glPUN0ylWauj2FKdts6NubXGSAEwQMY+bMSw8F6eOWTOra+oVQ1vzZwurU8qmwRFTPZnu0zzdRzBH0R2psLP4iYPKSeBg+TAd281iHj1BIOZmJQIlHPHkNGhrC41uPL8B+UjJrnFnJouHCTJkbTxFnorblAt7en2tV6ApoVdlbR/31ZxE+1MVWlXKibZJAsG2Mvn0S55eFxykteq8uAXQ03uaPadYUazsDntYRSg39Lv4ZhOgI/FeR2Zw9iO+Bcg==",
+      "body": "c615e050-fe9a-4faf-a577-1f705ee38678",
+      "attributes": {
+        "ApproximateReceiveCount": "1",
+        "AWSTraceHeader": "Root=1-63ee2948-67975efb0196276443edbcde;Parent=2edd385011742e1b;Sampled=0",
+        "SentTimestamp": "1676552520843",
+        "SenderId": "AROAZQEEQQVTOV63I4SL4:media-processing-stack-apiinvokeC5A081C7-ITZx3Bb3PkK1",
+        "ApproximateFirstReceiveTimestamp": "1676552520849"
+      },
+      "messageAttributes": {},
+      "md5OfBody": "127ba4969f723fbf24d3f563aeea2405",
+      "eventSource": "aws:sqs",
+      "eventSourceARN": "arn:aws:sqs:eu-west-2:653112935782:media-processing-stack-processmediaqueue80D06896-dtimcmynUqhP",
+      "awsRegion": "eu-west-2"
+    }
+  ]
+}
