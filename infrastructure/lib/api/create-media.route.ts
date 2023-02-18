@@ -1,9 +1,9 @@
 import { Context, APIGatewayProxyResult, APIGatewayProxyEvent } from "aws-lambda";
-import { SQS, SendMessageBatchCommand } from "@aws-sdk/client-sqs";
+import { SQS } from "@aws-sdk/client-sqs";
 import { S3 } from "@aws-sdk/client-s3";
 import { v4 as uuid4 } from "uuid";
 import { z } from "zod";
-import getAssertiveEnv from "../get-env";
+import { getAssertiveEnv } from "../get-env";
 
 const bodySchema = z.object({
   media: z.string().array().min(1),
@@ -29,7 +29,7 @@ const handler = async (
 
   let rawBody: object;
   try {
-    rawBody = JSON.parse(event.body);
+    rawBody = JSON.parse(Buffer.from(event.body, "base64").toString("utf-8"));
   } catch (error) {
     console.error(error);
     return {
@@ -73,13 +73,11 @@ const handler = async (
     };
   }
 
-  const sqsParams = new SendMessageBatchCommand({
-    QueueUrl: env.PROCESS_MEDIA_QUEUE_URL,
-    Entries: mediaIds.map((mediaId) => ({ Id: `media_${mediaId}`, MessageBody: mediaId })),
-  });
-
   try {
-    await sqsClient.send(sqsParams);
+    await sqsClient.sendMessageBatch({
+      QueueUrl: env.PROCESS_MEDIA_QUEUE_URL,
+      Entries: mediaIds.map((mediaId) => ({ Id: `media_${mediaId}`, MessageBody: mediaId })),
+    });
   } catch (error) {
     console.error(error);
     return {
