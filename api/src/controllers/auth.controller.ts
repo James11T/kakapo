@@ -125,7 +125,7 @@ const resetPasswordController = async (
     return next(new APIErrors.APIServerError("Failed to send password reset email"));
   }
 
-  res.json({
+  return res.json({
     success: true,
     token: RUNTIME_CONSTANTS.IS_DEV ? token : undefined,
   });
