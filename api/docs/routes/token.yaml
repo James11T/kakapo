@@ -1,0 +1,55 @@
+paths:
+  authenticate:
+    post:
+      summary: Authenticate with email and password
+      description: Generate an access and refresh token pair from credentials, can return MFA challenges if needed.
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/token.yaml#/components/credentials"
+      responses:
+        "200":
+          description: Correct credentials
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/token.yaml#/components/successfulAuthenticationResponse"
+        "401":
+          description: Indicates that either the credentials are incorrect or that MFA is required
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "../schemas/token.yaml#/components/mfaRequiredResponse"
+                  - $ref: "../schemas/token.yaml#/components/invalidCredentialsResponse"
+  refresh:
+    post:
+      summary: Refresh an access token
+      description: Generate a new access token from a given refresh token, may also create a new refresh token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/token.yaml#/components/refreshPayload"
+      responses:
+        "200":
+          description: Successful refresh
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/token.yaml#/components/successfulRefreshResponse"
+        "401":
+          description: Expired or invalid refresh token
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "../schemas/token.yaml#/components/invalidRefreshTokenResponse"
+                  - $ref: "../schemas/token.yaml#/components/expiredRefreshTokenResponse"

@@ -1,0 +1,81 @@
+components:
+  token:
+    type: string
+    example: "IsInR5cCI6IkpXVCJ9.eyJoZWxsbyI6Nn0.p30S-EYe"
+
+  date:
+    type: string
+    example: "2012-04-23T18:25:43.511Z"
+
+  credentials:
+    type: object
+    properties:
+      email:
+        type: string
+        example: example@example.com
+      password:
+        type: string
+        example: password123
+
+  refreshPayload:
+    type: object
+    properties:
+      accessToken:
+        $ref: "#/components/token"
+
+  tokenPair:
+    type: object
+    properties:
+      accessToken:
+        $ref: "#/components/token"
+      refreshToken:
+        $ref: "#/components/token"
+      validUntil:
+        $ref: "#/components/date"
+
+  successfulAuthenticationResponse:
+    title: "Correct Credentials"
+    $ref: "#/components/tokenPair"
+
+  successfulRefreshResponse:
+    title: "Correct Credentials"
+    $ref: "#/components/tokenPair"
+
+  mfaRequiredResponse:
+    title: "MFA Required"
+    type: object
+    properties:
+      error:
+        type: string
+        const: "MFA_PENDING"
+      source:
+        type: string
+        enum:
+          - "SMS"
+          - "EMAIL"
+          - "APP"
+        example: "APP"
+
+  invalidCredentialsResponse:
+    title: "Invalid Credentials"
+    type: object
+    properties:
+      error:
+        type: string
+        const: "INVALID_CREDENTIALS"
+
+  invalidRefreshTokenResponse:
+    title: "Invalid Refresh Token"
+    type: object
+    properties:
+      error:
+        type: string
+        const: "INVALID_REFRESH_TOKEN"
+
+  expiredRefreshTokenResponse:
+    title: "Expired Refresh Token"
+    type: object
+    properties:
+      error:
+        type: string
+        const: "REFRESH_TOKEN_EXPIRED"
