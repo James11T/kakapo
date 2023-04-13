@@ -11,6 +11,6 @@
     "@typescript-eslint/consistent-type-imports": "warn"
   },
   "parserOptions": {
-    "project": ["./tsconfig.json"]
+    "project": ["./api/tsconfig.json"]
   }
 }
