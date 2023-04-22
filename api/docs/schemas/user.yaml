@@ -1,0 +1,93 @@
+components:
+  user:
+    type: object
+    properties:
+      id:
+        $ref: "./generic.yaml#/components/uuid"
+      username:
+        type: string
+        maxLength: 32
+        example: johndoe
+      displayName:
+        type: string
+        maxLength: 32
+        example: John Doe
+      avatar:
+        type:
+          - string
+          - null
+        format: uri
+        maxLength: 255
+        example: https://example.com/avatar.jpg
+      about:
+        type: string
+        maxLength: 2000
+        example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      registeredAt:
+        type: string
+        format: date-time
+        example: 2022-05-30T14:31:25Z
+
+  extendedUser:
+    allOf:
+      - $ref: "#/components/user"
+      - type: object
+        properties:
+          email:
+            type: string
+            example: johndoe@example.com
+          emailVerified:
+            type: boolean
+            example: true
+
+  noUserResponse:
+    type: object
+    properties:
+      error:
+        type: string
+        const: UNKNOWN_USERNAME
+      message:
+        type: string
+        const: The provided username does not belong to a user
+
+  createUserSuccessResponse:
+    type: object
+    properties:
+      id:
+        $ref: "./generic.yaml#/components/uuid"
+
+  usernameReservedResponse:
+    type: object
+    properties:
+      error:
+        type: string
+        const: USERNAME_RESERVED
+      message:
+        type: string
+        const: The username provided is taken or is reserved
+
+  emailAlreadyInUseResponse:
+    type: object
+    properties:
+      error:
+        type: string
+        const: EMAIL_RESERVED
+      message:
+        type: string
+        const: The email provided is already in use
+
+  usernameAvailabilityResponse:
+    type: object
+    properties:
+      available:
+        type: boolean
+        example: true
+
+  usernamePathProperty:
+    name: username
+    in: path
+    description: Username of the user to retrieve.
+    required: true
+    schema:
+      type: string
+      maxLength: 32

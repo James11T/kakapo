@@ -1,0 +1,24 @@
+components:
+  prodStatusResponse:
+    title: Production Status
+    type: object
+    properties:
+      status:
+        type: string
+        example: ONLINE
+      version:
+        type: string
+        example: 1.0.0
+      country:
+        type: string
+        example: GB
+
+  devStatusResponse:
+    title: Development Status
+    allOf:
+      - $ref: "#/components/prodStatusResponse"
+      - type: object
+        properties:
+          memoryUsage:
+            type: string
+            example: 50MB

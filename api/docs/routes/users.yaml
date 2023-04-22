@@ -1,0 +1,97 @@
+get-user:
+  get:
+    operationId: get-individual-user
+    summary: Get a User from username
+    description: Gets a user from their username.
+    tags:
+      - users
+      - user-details
+    parameters:
+      - $ref: "../schemas/user.yaml#/components/usernamePathProperty"
+    responses:
+      "200":
+        description: Correct credentials.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/user.yaml#/components/user"
+      "404":
+        description: No user.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/user.yaml#/components/noUserResponse"
+
+users:
+  get:
+    operationId: query-users
+    summary: Query Users
+    description: Search for users based on various queries
+    tags:
+      - users
+      - user-details
+    parameters:
+      - $ref: "../schemas/generic.yaml#/components/pagination-from"
+      - $ref: "../schemas/generic.yaml#/components/pagination-count"
+      - name: username
+        in: query
+        description: Username to query by.
+        required: false
+        schema:
+          type: string
+    responses:
+      "200":
+        description: "Successful execution"
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "../schemas/user.yaml#/components/user"
+
+  post:
+    operationId: create-user
+    summary: Create a User
+    description: Create a new user, intended to be used by the end client.
+    tags:
+      - users
+      - user-details
+    responses:
+      "200":
+        description: Successful Creation.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/user.yaml#/components/createUserSuccessResponse"
+      "409":
+        description: Username or email is already in use.
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "../schemas/user.yaml#/components/usernameReservedResponse"
+                - $ref: "../schemas/user.yaml#/components/emailAlreadyInUseResponse"
+
+is-username-available:
+  get:
+    operationId: is-username-available
+    summary: Is username available?
+    description: Returns true if the given username is not taken by an existing user or reserved by the system.
+    tags:
+      - users
+      - user-details
+    parameters:
+      - name: username
+        in: path
+        description: Username of the user to retrieve.
+        required: true
+        schema:
+          type: string
+          maxLength: 32
+    responses:
+      "200":
+        description: Successful check.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/user.yaml#/components/usernameAvailabilityResponse"

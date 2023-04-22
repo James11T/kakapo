@@ -1,0 +1,70 @@
+friends:
+  get:
+    operationId: get-users-friends
+    summary: Get friends
+    description: Get all friends of a given user via username.
+    tags:
+      - users
+      - friendships
+    parameters:
+      - $ref: "../schemas/generic.yaml#/components/pagination-from"
+      - $ref: "../schemas/generic.yaml#/components/pagination-count"
+      - name: username
+        in: path
+        description: Username of the user for whom friend requests will be retrieved.
+        required: true
+        schema:
+          type: string
+          maxLength: 32
+    responses:
+      "200":
+        description: Successful execution.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "../schemas/friend.yaml#/components/friend"
+      "404":
+        description: No user.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/user.yaml#/components/noUserResponse"
+
+removeFriend:
+  delete:
+    operationId: remove-users-friend
+    summary: Remove friend
+    description: Remove a given user from a given users friends list.
+    tags:
+      - users
+      - friendships
+    parameters:
+      - $ref: "../schemas/user.yaml#/components/usernamePathProperty"
+      - name: friendUsername
+        in: path
+        description: Username of the user to remove from the friend list of the given user.
+        required: true
+        schema:
+          type: string
+          maxLength: 32
+    responses:
+      "200":
+        description: Successful execution.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/user.yaml#/components/user"
+      "400":
+        description: Not friends.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/friend.yaml#/components/notFriendsResponse"
+      "404":
+        description: No user.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/user.yaml#/components/noUserResponse"

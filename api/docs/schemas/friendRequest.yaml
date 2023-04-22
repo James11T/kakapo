@@ -1,0 +1,24 @@
+components:
+  friendRequest:
+    type: object
+    properties:
+      user:
+        $ref: "./user.yaml#/components/user"
+      sentAt:
+        $ref: "./generic.yaml#/components/date"
+
+  sendFriendRequestSuccessResponse:
+    type: object
+    properties:
+      id:
+        $ref: "./generic.yaml#/components/uuid"
+
+  existingFriendRequestResponse:
+    type: object
+    properties:
+      error:
+        type: string
+        const: EXISTING_FRIEND_REQUEST
+      message:
+        type: string
+        const: You already have a pending friend request with this user

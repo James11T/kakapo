@@ -1,0 +1,41 @@
+components:
+  pagination-from:
+    in: query
+    name: from
+    schema:
+      type: integer
+      minimum: 0
+    description: Where to start query from.
+
+  pagination-count:
+    in: query
+    name: count
+    schema:
+      type: integer
+      minimum: 1
+    description: Maximum amount of results to return.
+
+  uuid:
+    type: string
+    format: uuid
+    example: 2c97027a-0d7e-11ec-9a03-0242ac130003
+
+  jwt:
+    type: string
+    example: IsInR5cCI6IkpXVCJ9.eyJoZWxsbyI6Nn0.p30S-EYe
+
+  placeholder:
+    get:
+      summary: Route not implemented
+      description: A route that has not yet been documented or implemented.
+      operationId: noop
+      tags:
+        - placeholder
+      responses:
+        "501":
+          description: Not Implemented.
+
+  date:
+    type: string
+    format: date-time
+    example: 2022-05-30T14:31:25Z

@@ -1,0 +1,105 @@
+openapi: "3.1.0"
+
+info:
+  version: 1.0.0
+  title: Kakapo API
+  description: OpenAPI Spec for Kakapo Social.
+  x-logo:
+    url: https://raw.githubusercontent.com/James11T/kakapo/main/ui/public/banner_with_spacing.png
+    altText: Kakapo Social
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+security:
+  - authorizationToken: []
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local Test Deployment.
+  - url: https://kakaposocial.com/api/v1
+    description: Production Deployment.
+  - url: https://beta.kakaposocial.com/api/v1
+    description: Pre Production Deployment.
+
+tags:
+  - name: authentication
+    description: Contains all endpoints for managing authentication through the use of tokens.
+    x-displayName: Authentication
+  - name: users
+    description: Contains all endpoints for fetching, creating and updating users.
+    x-displayName: Users
+  - name: system
+    description: Contains all endpoints for interacting with and reading information from the system.
+    x-displayName: System
+  - name: placeholder
+    description: Contains all endpoints that are not yet documented or implemented.
+    x-displayName: placeholder
+  - name: status
+    description: Contains all endpoints for checking the status of the API.
+    x-displayName: Status
+  - name: tokens
+    description: Contains all endpoints that generate, process and manage tokens.
+    x-displayName: Tokens
+  - name: user-details
+    description: Contains all endpoints that are for managing User instances.
+    x-displayName: User Details
+  - name: friendships
+    description: Contains all endpoints that are for managing user friendships.
+    x-displayName: Friendships
+  - name: friend-requests
+    description: Contains all endpoints that are for managing and sending friend requests.
+    x-displayName: Friend Requests
+
+x-tagGroups:
+  - name: System
+    tags:
+      - status
+  - name: Authentication
+    tags:
+      - tokens
+  - name: Users
+    tags:
+      - user-details
+      - friendships
+      - friend-requests
+paths:
+  /status:
+    $ref: "./routes/status.yaml#/status"
+  /tokens/authenticate:
+    $ref: "./routes/tokens.yaml#/authenticate"
+  /tokens/refresh:
+    $ref: "./routes/tokens.yaml#/refresh"
+  /users:
+    $ref: "./routes/users.yaml#/users"
+  /users/{username}:
+    $ref: "./routes/users.yaml#/get-user"
+  /users/{username}/is-available:
+    $ref: "./routes/users.yaml#/is-username-available"
+  /users/{username}/friends:
+    $ref: "./routes/friends.yaml#/friends"
+  /users/{username}/friends/{friendUsername}:
+    $ref: "./routes/friends.yaml#/removeFriend"
+  /users/{username}/friend-requests:
+    $ref: "./routes/friendRequests.yaml#/friend-requests"
+  /auth/mfa:
+    $ref: "./schemas/generic.yaml#/components/placeholder"
+  /auth/reset-password/:
+    $ref: "./schemas/generic.yaml#/components/placeholder"
+  /auth/whoami/:
+    $ref: "./schemas/generic.yaml#/components/placeholder"
+  /posts:
+    $ref: "./schemas/generic.yaml#/components/placeholder"
+  /posts/{postId}:
+    $ref: "./schemas/generic.yaml#/components/placeholder"
+  /posts/{postId}/comments:
+    $ref: "./schemas/generic.yaml#/components/placeholder"
+  /posts/{postId}/likes:
+    $ref: "./schemas/generic.yaml#/components/placeholder"
+
+components:
+  securitySchemes:
+    authorizationToken:
+      type: apiKey
+      name: Authorization
+      in: header

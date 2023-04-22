@@ -1,0 +1,12 @@
+apis:
+  kakapo@1.0.0:
+    root: ./openapi.yaml
+
+extends:
+  - recommended
+
+rules:
+  operation-2xx-response:
+    severity: off
+  operation-4xx-response:
+    severity: off

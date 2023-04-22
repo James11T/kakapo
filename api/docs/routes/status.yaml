@@ -1,0 +1,17 @@
+status:
+  get:
+    operationId: get-api-status
+    summary: API server status
+    description: Get the current API server status.
+    tags:
+      - system
+      - status
+    responses:
+      "200":
+        description: Successful execution.
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "../schemas/status.yaml#/components/prodStatusResponse"
+                - $ref: "../schemas/status.yaml#/components/devStatusResponse"

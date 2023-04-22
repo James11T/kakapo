@@ -1,0 +1,19 @@
+components:
+  friend:
+    allOf:
+      - $ref: "./user.yaml#/components/user"
+      - type: object
+        properties:
+          becameFriendsAt:
+            $ref: "./generic.yaml#/components/date"
+
+  notFriendsResponse:
+    title: Not Friends
+    type: object
+    properties:
+      error:
+        type: string
+        const: NOT_FRIENDS
+      message:
+        type: string
+        const: This user is not friends with the given user
