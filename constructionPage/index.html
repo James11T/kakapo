@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+    <meta property="og:title" content="Kakapo Social" />
+    <meta
+      property="og:description"
+      content="Kakapo Social is under construction"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Kakapo Social" />
+    <meta property="og:url" content="https://kakaposocial.com/" />
+    <meta property="og:image" content="https://kakaposocial.com/logo.png" />
+
     <title>Under Construction</title>
     <style>
       @import url(https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;900);
@@ -32,11 +44,8 @@
       }
 
       .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 20px 0;
+        display: grid;
+        place-content: center;
         gap: 20px;
         height: 100%;
       }
@@ -84,15 +93,12 @@
   </head>
   <body>
     <div class="container">
-      <img
-        src="http://media.kakaposocial.com/static/two-tone-banner.png"
-        alt="Header"
-        class="header-img"
-      />
+      <img src="banner.png" alt="Header" class="header-img" />
       <div class="subtitle" id="subtitle"></div>
     </div>
+
     <script>
-      const addLetter = (parent, letter, index) => {
+      const addCharacter = (parent, letter, index) => {
         const newSpan = document.createElement("span");
         newSpan.innerText = letter;
         if (letter === " ") newSpan.classList.add("whitespace");
@@ -100,11 +106,15 @@
         parent.appendChild(newSpan);
       };
 
+      const writeCharacters = (element, string) => {
+        string
+          .split("")
+          .forEach((letter, index) => addCharacter(element, letter, index));
+      };
+
       const subtitle = document.getElementById("subtitle");
 
-      "This site is under construction"
-        .split("")
-        .forEach((letter, index) => addLetter(subtitle, letter, index));
+      writeCharacters(subtitle, "This site is under construction");
     </script>
   </body>
 </html>
