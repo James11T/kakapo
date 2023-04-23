@@ -24,9 +24,7 @@ components:
         maxLength: 2000
         example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       registeredAt:
-        type: string
-        format: date-time
-        example: 2022-05-30T14:31:25Z
+        $ref: "./generic.yaml#/components/date"
 
   extendedUser:
     allOf:
@@ -34,21 +32,20 @@ components:
       - type: object
         properties:
           email:
-            type: string
-            example: johndoe@example.com
+            $ref: "./generic.yaml#/components/email"
           emailVerified:
             type: boolean
             example: true
 
-  noUserResponse:
+  unknownUserResponse:
     type: object
     properties:
       error:
         type: string
-        const: UNKNOWN_USERNAME
+        const: UNKNOWN_USER
       message:
         type: string
-        const: The provided username does not belong to a user
+        const: No user was found that matches the given criteria
 
   createUserSuccessResponse:
     type: object
@@ -86,8 +83,20 @@ components:
   usernamePathProperty:
     name: username
     in: path
-    description: Username of the user to retrieve.
+    description: Username of the user to perform the operation on.
     required: true
     schema:
       type: string
       maxLength: 32
+
+  createUserBody:
+    type: object
+    properties:
+      email:
+        $ref: "./generic.yaml#/components/email"
+      username:
+        type: string
+        example: johnsmith
+        maxLength: 32
+      password:
+        $ref: "./generic.yaml#/components/password"

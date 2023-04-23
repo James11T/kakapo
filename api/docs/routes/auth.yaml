@@ -1,0 +1,82 @@
+request-password-reset:
+  post:
+    operationId: invoke-password-reset
+    summary: Request password reset
+    description: Send a password reset email to a given email address if a user is tied to that email.
+    tags:
+      - auth
+      - passwords
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                $ref: "../schemas/generic.yaml#/components/email"
+    responses:
+      "204":
+        description: Always returned, whether an account is linked to the email given or not.
+reset-password:
+  post:
+    operationId: reset-password
+    summary: Reset password
+    description: Reset the password of a user from a reset token provided by invoking a password reset email.
+    tags:
+      - auth
+      - passwords
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              resetToken:
+                $ref: "../schemas/generic.yaml#/components/jwt"
+              password:
+                $ref: "../schemas/generic.yaml#/components/password"
+    responses:
+      "204":
+        description: Successful execution.
+      "400":
+        description: Failed to change password, either token is invalid or password does not meet requirements.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  const: "BAD_PARAMETERS"
+                message:
+                  type: string
+                  const: Failed to change password, either token is invalid or password does not meet requirements.
+                errors:
+                  type: array
+                  items:
+                    $ref: "../schemas/generic.yaml#/components/zodError"
+
+whoami:
+  get:
+    operationId: whoami
+    summary: Who am I?
+    description: Return the details of the currently authenticated user.
+    tags:
+      - auth
+      - user-details
+    responses:
+      "401":
+        description: Not authenticated.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  const: NOT_AUTHENTICATED
+                message:
+                  type: string
+                  const: You are not currently authenticated.

@@ -7,11 +7,9 @@ components:
     type: object
     properties:
       email:
-        type: string
-        example: example@example.com
+        $ref: "./generic.yaml#/components/email"
       password:
-        type: string
-        example: password123
+        $ref: "./generic.yaml#/components/password"
 
   refreshPayload:
     type: object

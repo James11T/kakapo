@@ -1,4 +1,4 @@
-get-user:
+user:
   get:
     operationId: get-individual-user
     summary: Get a User from username
@@ -20,13 +20,13 @@ get-user:
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/noUserResponse"
+              $ref: "../schemas/user.yaml#/components/unknownUserResponse"
 
 users:
   get:
     operationId: query-users
     summary: Query Users
-    description: Search for users based on various queries
+    description: Search for users based on various query parameters.
     tags:
       - users
       - user-details
@@ -56,6 +56,12 @@ users:
     tags:
       - users
       - user-details
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/user.yaml#/components/createUserBody"
     responses:
       "200":
         description: Successful Creation.
@@ -63,6 +69,23 @@ users:
           application/json:
             schema:
               $ref: "../schemas/user.yaml#/components/createUserSuccessResponse"
+      "400":
+        description: Invalid parameters passed to create user.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  const: BAD_PARAMETERS
+                message:
+                  type: string
+                  const: The parameters supplied to create a user were invalid.
+                errors:
+                  type: array
+                  items:
+                    $ref: "../schemas/generic.yaml#/components/zodError"
       "409":
         description: Username or email is already in use.
         content:

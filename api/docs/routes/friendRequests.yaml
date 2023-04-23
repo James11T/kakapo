@@ -35,7 +35,7 @@ friend-requests:
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/noUserResponse"
+              $ref: "../schemas/user.yaml#/components/unknownUserResponse"
 
   post:
     operationId: send-friend-request
@@ -58,7 +58,7 @@ friend-requests:
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/noUserResponse"
+              $ref: "../schemas/user.yaml#/components/unknownUserResponse"
       "409":
         description: Already a pending friend request.
         content:

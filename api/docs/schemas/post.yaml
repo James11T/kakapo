@@ -1,0 +1,72 @@
+components:
+  media:
+    type: object
+    properties:
+      id:
+        $ref: "./generic.yaml#/components/uuid"
+      url:
+        type: string
+        maxLength: 256
+        example: https://example.com/image.jpg
+        format: uri
+      type:
+        type: string
+        enum:
+          - image
+          - video
+        example: image
+      index:
+        type: integer
+        example: 0
+      post:
+        $ref: "#/components/post"
+
+  post:
+    type: object
+    properties:
+      id:
+        $ref: "./generic.yaml#/components/uuid"
+      caption:
+        type: string
+        example: Hello World!
+        maxLength: 400
+      postedAt:
+        $ref: "./generic.yaml#/components/date"
+      author:
+        $ref: "./user.yaml#/components/user"
+      media:
+        type: array
+        items:
+          $ref: "#/components/media"
+
+  postIdPathProperty:
+    name: postId
+    in: path
+    description: ID of the post to perform the operation on.
+    required: true
+    schema:
+      $ref: "./generic.yaml#/components/uuid"
+
+  postNotFoundResponse:
+    type: object
+    properties:
+      error:
+        type: string
+        const: UNKNOWN_POST
+      message:
+        type: string
+        const: No post was found that matches the given criteria
+
+  createPostBody:
+    type: object
+    properties:
+      caption:
+        type: string
+        maxLength: 1024
+        example: "Hello World!"
+      files:
+        type: array
+        items:
+          type: string
+          format: base64
+          example: "SGVsbG8gV29ybGQh"

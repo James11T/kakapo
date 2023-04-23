@@ -1,0 +1,77 @@
+comments:
+  get:
+    operationId: get-comments
+    summary: Get Comments
+    description: Get comments on a post.
+    tags:
+      - posts
+      - comments
+    parameters:
+      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+
+comment:
+  get:
+    operationId: get-comment
+    summary: Get comment
+    description: Get an individual comment by ID.
+    tags:
+      - posts
+      - comments
+    parameters:
+      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+      - $ref: "../schemas/comment.yaml#/components/commentIdPathProperty"
+  delete:
+    operationId: delete-comment
+    summary: Delete comment
+    description: Delete a comment by ID.
+    tags:
+      - posts
+      - comments
+    parameters:
+      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+      - $ref: "../schemas/comment.yaml#/components/commentIdPathProperty"
+  patch:
+    operationId: edit-comment
+    summary: Edit comment
+    description: Update the contents of a comment, setting the edited property of a comment in the process.
+    tags:
+      - posts
+      - comments
+    parameters:
+      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+      - $ref: "../schemas/comment.yaml#/components/commentIdPathProperty"
+
+comment-likes:
+  get:
+    operationId: get-comment-likes
+    summary: Get comment like count
+    description: Get the number of likes a given comment has.
+    tags:
+      - posts
+      - comments
+      - comment-likes
+    parameters:
+      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+      - $ref: "../schemas/comment.yaml#/components/commentIdPathProperty"
+  post:
+    operationId: like-comment
+    summary: Like a comment
+    description: Like a comment based on ID.
+    tags:
+      - posts
+      - comments
+      - comment-likes
+    parameters:
+      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+      - $ref: "../schemas/comment.yaml#/components/commentIdPathProperty"
+  delete:
+    operationId: unlike-comment
+    summary: Unlike a comment
+    description: Remove a like from a comment based on comment ID.
+    tags:
+      - posts
+      - comments
+      - comment-likes
+    parameters:
+      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+      - $ref: "../schemas/comment.yaml#/components/commentIdPathProperty"

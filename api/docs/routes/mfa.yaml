@@ -1,0 +1,32 @@
+mfa:
+  get:
+    operationId: get-mfa-status
+    summary: Get MFA status
+    description: Get the MFA status of the currently authenticated user.
+    tags:
+      - auth
+      - mfa
+
+  post:
+    operationId: add-mfa-source
+    summary: Add MFA source
+    description: Add a new source of MFA, possibly Email, SMS or an Authenticator App.
+    tags:
+      - auth
+      - mfa
+
+  patch:
+    operationId: activate-mfa-source
+    summary: Activate MFA source
+    description: Activate an MFA source by providing a generated key.
+    tags:
+      - auth
+      - mfa
+
+  delete:
+    operationId: remove-mfa-source
+    summary: Remove MFA source
+    description: Remove an active or inactive MFA source from the currently authenticated user.
+    tags:
+      - auth
+      - mfa

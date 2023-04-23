@@ -30,7 +30,7 @@ friends:
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/noUserResponse"
+              $ref: "../schemas/user.yaml#/components/unknownUserResponse"
 
 removeFriend:
   delete:
@@ -67,4 +67,4 @@ removeFriend:
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/noUserResponse"
+              $ref: "../schemas/user.yaml#/components/unknownUserResponse"

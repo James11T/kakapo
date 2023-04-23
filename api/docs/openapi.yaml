@@ -50,7 +50,21 @@ tags:
   - name: friend-requests
     description: Contains all endpoints that are for managing and sending friend requests.
     x-displayName: Friend Requests
-
+  - name: mfa
+    description: Contains all endpoints that are for managing multi-factor authentication.
+    x-displayName: MFA
+  - name: passwords
+    description: Contains all endpoints that are for managing passwords.
+    x-displayName: Passwords
+  - name: posts
+    description: Contains all endpoints that are for managing posts.
+    x-displayName: Posts
+  - name: post-details
+    description: Contains all endpoints that are for managing details of posts.
+    x-displayName: Post Details
+  - name: comments
+    description: Contains all endpoints that are for managing comments on posts.
+    x-displayName: Comments
 x-tagGroups:
   - name: System
     tags:
@@ -58,11 +72,18 @@ x-tagGroups:
   - name: Authentication
     tags:
       - tokens
+      - mfa
+      - passwords
   - name: Users
     tags:
       - user-details
       - friendships
       - friend-requests
+  - name: Posts
+    tags:
+      - post-details
+      - comments
+
 paths:
   /status:
     $ref: "./routes/status.yaml#/status"
@@ -73,7 +94,7 @@ paths:
   /users:
     $ref: "./routes/users.yaml#/users"
   /users/{username}:
-    $ref: "./routes/users.yaml#/get-user"
+    $ref: "./routes/users.yaml#/user"
   /users/{username}/is-available:
     $ref: "./routes/users.yaml#/is-username-available"
   /users/{username}/friends:
@@ -83,19 +104,25 @@ paths:
   /users/{username}/friend-requests:
     $ref: "./routes/friendRequests.yaml#/friend-requests"
   /auth/mfa:
-    $ref: "./schemas/generic.yaml#/components/placeholder"
-  /auth/reset-password/:
-    $ref: "./schemas/generic.yaml#/components/placeholder"
-  /auth/whoami/:
-    $ref: "./schemas/generic.yaml#/components/placeholder"
+    $ref: "./routes/mfa.yaml#/mfa"
+  /auth/request-password-reset:
+    $ref: "./routes/auth.yaml#/request-password-reset"
+  /auth/reset-password:
+    $ref: "./routes/auth.yaml#/reset-password"
+  /auth/whoami:
+    $ref: "./routes/auth.yaml#/whoami"
   /posts:
-    $ref: "./schemas/generic.yaml#/components/placeholder"
+    $ref: "./routes/posts.yaml#/posts"
   /posts/{postId}:
-    $ref: "./schemas/generic.yaml#/components/placeholder"
-  /posts/{postId}/comments:
-    $ref: "./schemas/generic.yaml#/components/placeholder"
+    $ref: "./routes/posts.yaml#/post"
   /posts/{postId}/likes:
-    $ref: "./schemas/generic.yaml#/components/placeholder"
+    $ref: "./routes/posts.yaml#/likes"
+  /posts/{postId}/comments:
+    $ref: "./routes/comments.yaml#/comments"
+  /posts/{postId}/comments/{commentId}:
+    $ref: "./routes/comments.yaml#/comment"
+  /posts/{postId}/comments/{commentId}/likes:
+    $ref: "./routes/comments.yaml#/comment-likes"
 
 components:
   securitySchemes:
@@ -103,3 +130,4 @@ components:
       type: apiKey
       name: Authorization
       in: header
+      x-displayName: Authorization Token

@@ -1,0 +1,147 @@
+posts:
+  get:
+    operationId: query-posts
+    summary: Query posts
+    description: Search for posts based on various query parameters.
+    tags:
+      - posts
+      - post-details
+    responses:
+      "200":
+        description: Successful execution.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "../schemas/post.yaml#/components/post"
+  post:
+    operationId: create-post
+    summary: Create post
+    description: Create a new post as the currently authenticated user.
+    tags:
+      - posts
+      - post-details
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/post.yaml#/components/createPostBody"
+    responses:
+      "200":
+        description: Post created successfully.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/post.yaml#/components/post"
+      "400":
+        description: Invalid post data.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  const: INVALID_POST_DATA
+                message:
+                  type: string
+                  const: The provided post data was invalid.
+                errors:
+                  type: array
+                  items:
+                    $ref: "../schemas/generic.yaml#/components/zodError"
+
+post:
+  get:
+    operationId: get-post
+    summary: Get post
+    description: Get a post by its ID.
+    tags:
+      - posts
+      - post-details
+    parameters:
+      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+    responses:
+      "200":
+        description: Successful execution.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/post.yaml#/components/post"
+      "404":
+        description: Post not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/post.yaml#/components/postNotFoundResponse"
+  delete:
+    operationId: remove-post
+    summary: Remove post
+    description: Remove a post based on its ID.
+    tags:
+      - posts
+      - post-details
+    parameters:
+      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+    responses:
+      "204":
+        description: Successful execution.
+      "404":
+        description: Post not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/post.yaml#/components/postNotFoundResponse"
+  patch:
+    operationId: edit-post
+    summary: Edit post
+    description: Edit a post based on its ID.
+    tags:
+      - posts
+      - post-details
+    parameters:
+      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+    responses:
+      "200":
+        description: Successful execution.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/post.yaml#/components/post"
+      "404":
+        description: Post not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/post.yaml#/components/postNotFoundResponse"
+
+likes:
+  get:
+    operationId: get-like-count
+    summary: Get like count
+    description: Get the number of likes on a given post.
+    tags:
+      - posts
+      - post-details
+      - post-likes
+    parameters:
+      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+    responses:
+      "200":
+        description: Successful execution.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                likes:
+                  type: number
+                  example: 100
+      "404":
+        description: Post not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/post.yaml#/components/postNotFoundResponse"

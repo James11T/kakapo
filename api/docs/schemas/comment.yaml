@@ -1,0 +1,27 @@
+components:
+  comment:
+    type: object
+    properties:
+      id:
+        $ref: "./generic.yaml#/components/uuid"
+    text:
+      type: string
+      maxLength: 1024
+      example: Hello World!
+    edited:
+      type: boolean
+      example: false
+    postedAt:
+      $ref: "./generic.yaml#/components/date"
+    author:
+      $ref: "./user.yaml#/user"
+    post:
+      $ref: "./post.yaml/post"
+
+  commentIdPathProperty:
+    name: commentId
+    in: path
+    description: ID of the comment to perform the operation on.
+    required: true
+    schema:
+      $ref: "./generic.yaml#/components/uuid"
