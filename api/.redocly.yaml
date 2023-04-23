@@ -10,3 +10,12 @@ rules:
     severity: off
   operation-4xx-response:
     severity: off
+
+theme:
+  openapi:
+    htmlTemplate: ./docs/index.html
+    theme:
+      colors:
+        primary:
+          main: "#82ad5a"
+    hideDownloadButton: true
