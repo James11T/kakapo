@@ -1,0 +1,9 @@
+type: object
+title: Already friends
+properties:
+  error:
+    type: string
+    const: EXISTING_FRIEND_REQUEST
+  message:
+    type: string
+    const: You already have a pending friend request with this user

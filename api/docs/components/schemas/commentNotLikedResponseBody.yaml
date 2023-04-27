@@ -1,0 +1,9 @@
+type: object
+title: Comment not liked
+properties:
+  error:
+    type: string
+    const: NOT_LIKED
+  message:
+    type: string
+    const: You have not liked this comment.

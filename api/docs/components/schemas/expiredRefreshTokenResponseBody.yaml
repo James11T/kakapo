@@ -1,0 +1,9 @@
+type: object
+title: Expired refresh token
+properties:
+  error:
+    type: string
+    const: REFRESH_TOKEN_EXPIRED
+  message:
+    type: string
+    const: The provided token is expired

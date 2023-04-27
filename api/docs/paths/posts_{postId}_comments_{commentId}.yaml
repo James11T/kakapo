@@ -1,0 +1,80 @@
+get:
+  operationId: get-comment
+  summary: Get comment
+  description: Get an individual comment by ID.
+  tags:
+    - posts
+    - comments
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+    - $ref: ../components/parameters/commentIdPathProperty.yaml
+  responses:
+    '200':
+      description: Comment returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/comment.yaml
+    '404':
+      description: Post or comment not found.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: ../components/schemas/commentNotFoundResponseBody.yaml
+              - $ref: ../components/schemas/postNotFoundResponseBody.yaml
+delete:
+  operationId: delete-comment
+  summary: Delete comment
+  description: Delete a comment by ID.
+  tags:
+    - posts
+    - comments
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+    - $ref: ../components/parameters/commentIdPathProperty.yaml
+  responses:
+    '204':
+      description: Comment successfully deleted.
+    '404':
+      description: Post or comment not found.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: ../components/schemas/commentNotFoundResponseBody.yaml
+              - $ref: ../components/schemas/postNotFoundResponseBody.yaml
+patch:
+  operationId: edit-comment
+  summary: Edit comment
+  description: >-
+    Update the contents of a comment, setting the edited property of a comment
+    in the process.
+  tags:
+    - posts
+    - comments
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+    - $ref: ../components/parameters/commentIdPathProperty.yaml
+  responses:
+    '200':
+      description: Comment successfully edited.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/comment.yaml
+    '400':
+      description: Invalid comment data.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/badParametersResponseBody.yaml
+            title: Invalid parameters
+    '404':
+      description: Post or comment not found.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: ../components/schemas/commentNotFoundResponseBody.yaml
+              - $ref: ../components/schemas/postNotFoundResponseBody.yaml

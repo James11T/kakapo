@@ -1,0 +1,41 @@
+get:
+  operationId: get-mfa-status
+  summary: Get MFA status
+  description: Get the MFA status of the currently authenticated user.
+  tags:
+    - auth
+    - mfa
+  responses:
+    '200':
+      description: MFA status returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/mfaStatusResponseBody.yaml
+post:
+  operationId: add-mfa-source
+  summary: Add MFA source
+  description: Add a new authenticator app source.
+  tags:
+    - auth
+    - mfa
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/addMfaSourceBody.yaml
+  responses:
+    '200':
+      description: MFA source added successfully.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/addMfaSourceResponseBody.yaml
+    '400':
+      description: Bad parameters.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/badParametersResponseBody.yaml
+            title: Invalid parameters

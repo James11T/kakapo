@@ -1,0 +1,34 @@
+post:
+  operationId: authenticate-email-and-password
+  summary: Authenticate with email and password
+  description: >-
+    Generate an access and refresh token pair from credentials, can return MFA
+    challenges if needed.
+  tags:
+    - authentication
+    - tokens
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - $ref: ../components/schemas/credentials.yaml
+            - $ref: ../components/schemas/credentialsWithMfa.yaml
+  responses:
+    '200':
+      description: Correct credentials.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/tokenPair.yaml
+    '401':
+      description: >-
+        Indicates that either the credentials are incorrect or that MFA is
+        required.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: ../components/schemas/mfaRequiredResponseBody.yaml
+              - $ref: ../components/schemas/invalidCredentialsResponseBody.yaml

@@ -1,0 +1,6 @@
+in: query
+name: count
+schema:
+  type: integer
+  minimum: 1
+description: Maximum amount of results to return.

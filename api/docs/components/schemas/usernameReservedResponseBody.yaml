@@ -1,0 +1,9 @@
+type: object
+title: Username reserved
+properties:
+  error:
+    type: string
+    const: USERNAME_RESERVED
+  message:
+    type: string
+    const: The username provided is taken or is reserved

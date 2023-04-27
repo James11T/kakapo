@@ -1,0 +1,7 @@
+name: username
+in: path
+description: Username of the user to perform the operation on.
+required: true
+schema:
+  type: string
+  maxLength: 32

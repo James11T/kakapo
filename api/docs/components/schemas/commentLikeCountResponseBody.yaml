@@ -1,0 +1,6 @@
+type: object
+title: Comment like count
+properties:
+  likes:
+    type: number
+    example: 10

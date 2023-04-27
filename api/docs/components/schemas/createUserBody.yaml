@@ -1,0 +1,10 @@
+type: object
+properties:
+  email:
+    $ref: ./email.yaml
+  username:
+    type: string
+    example: johnsmith
+    maxLength: 32
+  password:
+    $ref: ./password.yaml

@@ -1,0 +1,24 @@
+get:
+  operationId: is-username-available
+  summary: Is username available?
+  description: >-
+    Returns true if the given username is not taken by an existing user or
+    reserved by the system.
+  tags:
+    - users
+    - user-details
+  parameters:
+    - name: username
+      in: path
+      description: Username of the user to retrieve.
+      required: true
+      schema:
+        type: string
+        maxLength: 32
+  responses:
+    '200':
+      description: Successful check.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/usernameAvailabilityResponseBody.yaml

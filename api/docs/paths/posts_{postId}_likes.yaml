@@ -1,0 +1,27 @@
+get:
+  operationId: get-like-count
+  summary: Get like count
+  description: Get the number of likes on a given post.
+  tags:
+    - posts
+    - post-details
+    - post-likes
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+  responses:
+    '200':
+      description: Like count returned.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              likes:
+                type: number
+                example: 100
+    '404':
+      description: Post not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/postNotFoundResponseBody.yaml

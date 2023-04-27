@@ -1,0 +1,5 @@
+type: object
+title: Friend request sent
+properties:
+  id:
+    $ref: ./uuid.yaml

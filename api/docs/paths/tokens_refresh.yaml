@@ -1,0 +1,30 @@
+post:
+  operationId: refresh-access-token
+  summary: Refresh an access token
+  description: >-
+    Generate a new access token from a given refresh token, may also create a
+    new refresh token.
+  tags:
+    - authentication
+    - tokens
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/refreshPayload.yaml
+  responses:
+    '200':
+      description: Successful refresh.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/tokenPair.yaml
+    '401':
+      description: Expired or invalid refresh token.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: ../components/schemas/invalidRefreshTokenResponseBody.yaml
+              - $ref: ../components/schemas/expiredRefreshTokenResponseBody.yaml

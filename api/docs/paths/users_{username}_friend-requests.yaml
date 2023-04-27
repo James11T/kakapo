@@ -1,0 +1,67 @@
+get:
+  operationId: get-users-friend-requests
+  summary: Get friend requests
+  description: >-
+    Get all pending friend requests from a given username, can be incoming or
+    outgoing.
+  tags:
+    - users
+    - friend-requests
+  parameters:
+    - $ref: ../components/parameters/pagination-from.yaml
+    - $ref: ../components/parameters/pagination-count.yaml
+    - $ref: ../components/parameters/usernamePathProperty.yaml
+    - name: direction
+      in: query
+      description: Incoming or outgoing.
+      required: false
+      schema:
+        type: string
+        example: incoming
+        default: incoming
+        enum:
+          - incoming
+          - outgoing
+  responses:
+    '200':
+      description: Friend requests returned.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/friendRequest.yaml
+    '404':
+      description: No user.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/userNotFoundResponseBody.yaml
+post:
+  operationId: send-friend-request
+  summary: Send friend request
+  description: Send a friend request from the authenticated user to the specified user.
+  tags:
+    - users
+    - friend-requests
+  parameters:
+    - $ref: ../components/parameters/usernamePathProperty.yaml
+  responses:
+    '200':
+      description: Friend request sent successfully.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/sendFriendRequestSuccessResponseBody.yaml
+    '404':
+      description: No user.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/userNotFoundResponseBody.yaml
+    '409':
+      description: Already a pending friend request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/existingFriendRequestResponseBody.yaml

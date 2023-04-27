@@ -1,0 +1,12 @@
+type: object
+properties:
+  error:
+    type: string
+    const: BAD_PARAMETERS
+  message:
+    type: string
+    example: The provided data was invalid.
+  errors:
+    type: array
+    items:
+      $ref: ./zodError.yaml

@@ -1,0 +1,10 @@
+type: object
+title: MFA status
+properties:
+  anyActive:
+    type: boolean
+    example: true
+  sources:
+    type: array
+    items:
+      $ref: ./mfaSource.yaml

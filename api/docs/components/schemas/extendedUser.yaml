@@ -1,0 +1,9 @@
+allOf:
+  - $ref: ./user.yaml
+  - type: object
+    properties:
+      email:
+        $ref: ./email.yaml
+      emailVerified:
+        type: boolean
+        example: true

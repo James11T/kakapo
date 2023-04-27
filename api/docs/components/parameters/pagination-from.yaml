@@ -1,0 +1,6 @@
+in: query
+name: from
+schema:
+  type: integer
+  minimum: 0
+description: Where to start query from.

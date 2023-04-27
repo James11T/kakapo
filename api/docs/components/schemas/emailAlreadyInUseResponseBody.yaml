@@ -1,0 +1,9 @@
+type: object
+title: Email reserved
+properties:
+  error:
+    type: string
+    const: EMAIL_RESERVED
+  message:
+    type: string
+    const: The email provided is already in use

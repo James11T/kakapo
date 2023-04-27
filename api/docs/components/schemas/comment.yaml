@@ -1,0 +1,17 @@
+type: object
+properties:
+  id:
+    $ref: ./uuid.yaml
+  text:
+    type: string
+    maxLength: 1024
+    example: Hello World!
+  edited:
+    type: boolean
+    example: false
+  postedAt:
+    $ref: ./date.yaml
+  author:
+    $ref: ./user.yaml
+  post:
+    $ref: ./post.yaml

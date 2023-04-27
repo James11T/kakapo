@@ -1,0 +1,18 @@
+type: object
+properties:
+  id:
+    $ref: ./uuid.yaml
+  url:
+    type: string
+    maxLength: 256
+    example: https://example.com/image.jpg
+    format: uri
+  type:
+    type: string
+    enum:
+      - image
+      - video
+    example: image
+  index:
+    type: integer
+    example: 0

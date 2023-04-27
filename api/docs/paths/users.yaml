@@ -1,0 +1,60 @@
+get:
+  operationId: query-users
+  summary: Query Users
+  description: Search for users based on various query parameters.
+  tags:
+    - users
+    - user-details
+  parameters:
+    - $ref: ../components/parameters/pagination-from.yaml
+    - $ref: ../components/parameters/pagination-count.yaml
+    - name: username
+      in: query
+      description: Username to query by.
+      required: false
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Users returned.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/user.yaml
+post:
+  operationId: create-user
+  summary: Create a User
+  description: Create a new user, intended to be used by the end client.
+  tags:
+    - users
+    - user-details
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/createUserBody.yaml
+  responses:
+    '200':
+      description: Successful Creation.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/createUserSuccessResponseBody.yaml
+    '400':
+      description: Invalid parameters passed to create user.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/badParametersResponseBody.yaml
+            title: Invalid parameters
+    '409':
+      description: Username or email is already in use.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: ../components/schemas/usernameReservedResponseBody.yaml
+              - $ref: ../components/schemas/emailAlreadyInUseResponseBody.yaml

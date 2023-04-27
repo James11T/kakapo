@@ -1,0 +1,11 @@
+type: object
+properties:
+  caption:
+    type: string
+    maxLength: 1024
+    example: Hello World!
+  files:
+    type: array
+    items:
+      type: string
+      format: binary

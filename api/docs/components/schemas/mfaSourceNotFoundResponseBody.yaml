@@ -1,0 +1,9 @@
+type: object
+title: MFA source not found
+properties:
+  error:
+    type: string
+    const: SOURCE_NOT_FOUND
+  message:
+    type: string
+    const: No MFA source was found that matches the given criteria.

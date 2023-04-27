@@ -1,0 +1,27 @@
+get:
+  operationId: whoami
+  summary: Who am I?
+  description: Return the details of the currently authenticated user.
+  tags:
+    - auth
+    - user-details
+  responses:
+    '200':
+      description: User identity returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/extendedUser.yaml
+    '401':
+      description: Not authenticated.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                const: NOT_AUTHENTICATED
+              message:
+                type: string
+                const: You are not currently authenticated.

@@ -1,0 +1,9 @@
+type: object
+title: Comment not found
+properties:
+  error:
+    type: string
+    const: COMMENT_NOT_FOUND
+  message:
+    type: string
+    const: No comment was found that matches the given criteria.

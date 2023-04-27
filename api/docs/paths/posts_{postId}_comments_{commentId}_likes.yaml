@@ -1,0 +1,80 @@
+get:
+  operationId: get-comment-likes
+  summary: Get comment like count
+  description: Get the number of likes a given comment has.
+  tags:
+    - posts
+    - comments
+    - comment-likes
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+    - $ref: ../components/parameters/commentIdPathProperty.yaml
+  responses:
+    '200':
+      description: Comment likes returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/commentLikeCountResponseBody.yaml
+    '404':
+      description: Post or comment not found.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: ../components/schemas/commentNotFoundResponseBody.yaml
+              - $ref: ../components/schemas/postNotFoundResponseBody.yaml
+post:
+  operationId: like-comment
+  summary: Like a comment
+  description: Like a comment based on ID.
+  tags:
+    - posts
+    - comments
+    - comment-likes
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+    - $ref: ../components/parameters/commentIdPathProperty.yaml
+  responses:
+    '200':
+      description: Comment liked successfully.
+    '404':
+      description: Post or comment not found.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: ../components/schemas/commentNotFoundResponseBody.yaml
+              - $ref: ../components/schemas/postNotFoundResponseBody.yaml
+delete:
+  operationId: unlike-comment
+  summary: Unlike a comment
+  description: Remove a like from a comment based on comment ID.
+  tags:
+    - posts
+    - comments
+    - comment-likes
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+    - $ref: ../components/parameters/commentIdPathProperty.yaml
+  responses:
+    '200':
+      description: Comment like removed successfully.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/commentLikeCountResponseBody.yaml
+    '400':
+      description: Not liked.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/commentNotLikedResponseBody.yaml
+    '404':
+      description: Post or comment not found.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: ../components/schemas/commentNotFoundResponseBody.yaml
+              - $ref: ../components/schemas/postNotFoundResponseBody.yaml

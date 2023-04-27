@@ -1,0 +1,50 @@
+patch:
+  operationId: activate-mfa-source
+  summary: Activate MFA source
+  description: Activate an MFA source by providing a generated key.
+  tags:
+    - auth
+    - mfa
+  parameters:
+    - $ref: ../components/parameters/mfaIdPathProperty.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/mfaCodeBody.yaml
+  responses:
+    '204':
+      description: Successfully activated MFA source.
+    '404':
+      description: MFA source not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/mfaSourceNotFoundResponseBody.yaml
+delete:
+  operationId: remove-mfa-source
+  summary: Remove MFA source
+  description: >-
+    Remove an active or inactive MFA source from the currently authenticated
+    user.
+  tags:
+    - auth
+    - mfa
+  parameters:
+    - $ref: ../components/parameters/mfaIdPathProperty.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/mfaCodeBody.yaml
+  responses:
+    '204':
+      description: Successfully removed MFA source.
+    '404':
+      description: MFA source not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/mfaSourceNotFoundResponseBody.yaml

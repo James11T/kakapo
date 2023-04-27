@@ -1,0 +1,6 @@
+name: postId
+in: path
+description: ID of the post to perform the operation on.
+required: true
+schema:
+  $ref: ../schemas/uuid.yaml

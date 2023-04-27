@@ -1,0 +1,11 @@
+type: object
+properties:
+  location:
+    type: string
+    example: body.caption
+  message:
+    type: string
+    example: Expected string to be at most 1024 characters long
+  type:
+    type: string
+    example: too_big

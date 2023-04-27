@@ -1,0 +1,75 @@
+get:
+  operationId: get-post
+  summary: Get post
+  description: Get a post by its ID.
+  tags:
+    - posts
+    - post-details
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+  responses:
+    '200':
+      description: Post returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/post.yaml
+    '404':
+      description: Post not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/postNotFoundResponseBody.yaml
+delete:
+  operationId: remove-post
+  summary: Remove post
+  description: Remove a post based on its ID.
+  tags:
+    - posts
+    - post-details
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+  responses:
+    '204':
+      description: Post removed successfully.
+    '404':
+      description: Post not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/postNotFoundResponseBody.yaml
+patch:
+  operationId: edit-post
+  summary: Edit post
+  description: Edit a post based on its ID.
+  tags:
+    - posts
+    - post-details
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/editPostBody.yaml
+  responses:
+    '200':
+      description: Post edited successfully.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/post.yaml
+    '400':
+      description: Invalid post data.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/badParametersResponseBody.yaml
+            title: Invalid parameters
+    '404':
+      description: Post not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/postNotFoundResponseBody.yaml

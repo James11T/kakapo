@@ -1,0 +1,9 @@
+type: object
+title: MFA status added
+properties:
+  qr:
+    $ref: ./base64.yaml
+  secret:
+    $ref: ./base32.yaml
+  id:
+    $ref: ./uuid.yaml

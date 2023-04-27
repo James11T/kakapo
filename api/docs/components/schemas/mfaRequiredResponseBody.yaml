@@ -1,0 +1,11 @@
+type: object
+title: MFA required
+properties:
+  error:
+    type: string
+    const: MFA_PENDING
+  message:
+    type: string
+    const: An MFA pin is required
+  source:
+    $ref: ./mfaType.yaml

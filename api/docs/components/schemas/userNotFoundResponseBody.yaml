@@ -1,0 +1,9 @@
+type: object
+title: User not found
+properties:
+  error:
+    type: string
+    const: USER_NOT_FOUND
+  message:
+    type: string
+    const: No user was found that matches the given criteria

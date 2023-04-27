@@ -1,0 +1,16 @@
+type: object
+properties:
+  id:
+    $ref: ./uuid.yaml
+  caption:
+    type: string
+    example: Hello World!
+    maxLength: 400
+  postedAt:
+    $ref: ./date.yaml
+  author:
+    $ref: ./user.yaml
+  media:
+    type: array
+    items:
+      $ref: ./media.yaml

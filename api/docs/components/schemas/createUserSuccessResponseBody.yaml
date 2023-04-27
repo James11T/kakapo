@@ -1,0 +1,5 @@
+type: object
+title: User created
+properties:
+  id:
+    $ref: ./uuid.yaml

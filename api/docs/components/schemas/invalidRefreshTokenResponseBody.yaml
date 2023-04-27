@@ -1,0 +1,9 @@
+type: object
+title: Invalid refresh token
+properties:
+  error:
+    type: string
+    const: INVALID_REFRESH_TOKEN
+  message:
+    type: string
+    const: The provided token is malformed or invalid

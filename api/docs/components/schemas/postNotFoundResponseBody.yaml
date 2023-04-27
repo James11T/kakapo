@@ -1,0 +1,9 @@
+type: object
+title: Post not found
+properties:
+  error:
+    type: string
+    const: POST_NOT_FOUND
+  message:
+    type: string
+    const: No post was found that matches the given criteria.

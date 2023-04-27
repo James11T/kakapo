@@ -1,0 +1,10 @@
+type: object
+properties:
+  id:
+    $ref: ./uuid.yaml
+  activated:
+    type: boolean
+    example: true
+  name:
+    type: string
+    example: iPhone 10

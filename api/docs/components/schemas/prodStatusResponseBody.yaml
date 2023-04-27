@@ -1,0 +1,12 @@
+title: Production status
+type: object
+properties:
+  status:
+    type: string
+    example: ONLINE
+  version:
+    type: string
+    example: 1.0.0
+  country:
+    type: string
+    example: GB

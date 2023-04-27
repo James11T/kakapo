@@ -1,0 +1,25 @@
+type: object
+properties:
+  id:
+    $ref: ./uuid.yaml
+  username:
+    type: string
+    maxLength: 32
+    example: johndoe
+  displayName:
+    type: string
+    maxLength: 32
+    example: John Doe
+  avatar:
+    type:
+      - string
+      - null
+    format: uri
+    maxLength: 255
+    example: https://example.com/avatar.jpg
+  about:
+    type: string
+    maxLength: 2000
+    example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  registeredAt:
+    $ref: ./date.yaml

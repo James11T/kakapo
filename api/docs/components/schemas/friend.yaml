@@ -1,0 +1,6 @@
+allOf:
+  - $ref: ./user.yaml
+  - type: object
+    properties:
+      becameFriendsAt:
+        $ref: ./date.yaml

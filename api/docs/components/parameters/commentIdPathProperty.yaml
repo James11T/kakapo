@@ -1,0 +1,6 @@
+name: commentId
+in: path
+description: ID of the comment to perform the operation on.
+required: true
+schema:
+  $ref: ../schemas/uuid.yaml

@@ -1,0 +1,22 @@
+get:
+  operationId: get-individual-user
+  summary: Get a User from username
+  description: Gets a user from their username.
+  tags:
+    - users
+    - user-details
+  parameters:
+    - $ref: ../components/parameters/usernamePathProperty.yaml
+  responses:
+    '200':
+      description: Correct credentials.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/user.yaml
+    '404':
+      description: No user.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/userNotFoundResponseBody.yaml

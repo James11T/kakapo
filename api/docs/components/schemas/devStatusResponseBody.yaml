@@ -1,0 +1,8 @@
+title: Development status
+allOf:
+  - $ref: ./prodStatusResponseBody.yaml
+  - type: object
+    properties:
+      memoryUsage:
+        type: string
+        example: 50MB

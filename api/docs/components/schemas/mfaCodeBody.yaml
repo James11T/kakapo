@@ -1,0 +1,4 @@
+type: object
+properties:
+  totp:
+    $ref: ./mfaCode.yaml
