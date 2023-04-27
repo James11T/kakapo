@@ -1,0 +1,63 @@
+components:
+  comment:
+    type: object
+    properties:
+      id:
+        $ref: "./generic.yaml#/components/uuid"
+      text:
+        type: string
+        maxLength: 1024
+        example: Hello World!
+      edited:
+        type: boolean
+        example: false
+      postedAt:
+        $ref: "./generic.yaml#/components/date"
+      author:
+        $ref: "./users.yaml#/components/user"
+      post:
+        $ref: "./posts.yaml#/components/post"
+
+  commentIdPathProperty:
+    name: commentId
+    in: path
+    description: ID of the comment to perform the operation on.
+    required: true
+    schema:
+      $ref: "./generic.yaml#/components/uuid"
+
+  commentNotFoundResponse:
+    type: object
+    title: Comment not found
+    properties:
+      error:
+        type: string
+        const: COMMENT_NOT_FOUND
+      message:
+        type: string
+        const: No comment was found that matches the given criteria.
+
+  createCommentBody:
+    type: object
+    properties:
+      text:
+        $ref: "#/components/comment/properties/text"
+
+  commentLikeCountResponse:
+    type: object
+    title: Comment like count
+    properties:
+      likes:
+        type: number
+        example: 10
+
+  commentNotLikedResponse:
+    type: object
+    title: Comment not liked
+    properties:
+      error:
+        type: string
+        const: NOT_LIKED
+      message:
+        type: string
+        const: You have not liked this comment.

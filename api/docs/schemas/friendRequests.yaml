@@ -3,18 +3,20 @@ components:
     type: object
     properties:
       user:
-        $ref: "./user.yaml#/components/user"
+        $ref: "./users.yaml#/components/user"
       sentAt:
         $ref: "./generic.yaml#/components/date"
 
   sendFriendRequestSuccessResponse:
     type: object
+    title: Friend request sent
     properties:
       id:
         $ref: "./generic.yaml#/components/uuid"
 
   existingFriendRequestResponse:
     type: object
+    title: Already friends
     properties:
       error:
         type: string

@@ -7,20 +7,20 @@ user:
       - users
       - user-details
     parameters:
-      - $ref: "../schemas/user.yaml#/components/usernamePathProperty"
+      - $ref: "../schemas/users.yaml#/components/usernamePathProperty"
     responses:
       "200":
         description: Correct credentials.
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/user"
+              $ref: "../schemas/users.yaml#/components/user"
       "404":
         description: No user.
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/unknownUserResponse"
+              $ref: "../schemas/users.yaml#/components/userNotFoundResponse"
 
 users:
   get:
@@ -41,13 +41,13 @@ users:
           type: string
     responses:
       "200":
-        description: "Successful execution"
+        description: Users returned.
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: "../schemas/user.yaml#/components/user"
+                $ref: "../schemas/users.yaml#/components/user"
 
   post:
     operationId: create-user
@@ -61,39 +61,29 @@ users:
       content:
         application/json:
           schema:
-            $ref: "../schemas/user.yaml#/components/createUserBody"
+            $ref: "../schemas/users.yaml#/components/createUserBody"
     responses:
       "200":
         description: Successful Creation.
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/createUserSuccessResponse"
+              $ref: "../schemas/users.yaml#/components/createUserSuccessResponse"
       "400":
         description: Invalid parameters passed to create user.
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  const: BAD_PARAMETERS
-                message:
-                  type: string
-                  const: The parameters supplied to create a user were invalid.
-                errors:
-                  type: array
-                  items:
-                    $ref: "../schemas/generic.yaml#/components/zodError"
+              $ref: "../schemas/generic.yaml#/components/badParametersResponse"
+              title: Invalid parameters
       "409":
         description: Username or email is already in use.
         content:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/user.yaml#/components/usernameReservedResponse"
-                - $ref: "../schemas/user.yaml#/components/emailAlreadyInUseResponse"
+                - $ref: "../schemas/users.yaml#/components/usernameReservedResponse"
+                - $ref: "../schemas/users.yaml#/components/emailAlreadyInUseResponse"
 
 is-username-available:
   get:
@@ -117,4 +107,4 @@ is-username-available:
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/usernameAvailabilityResponse"
+              $ref: "../schemas/users.yaml#/components/usernameAvailabilityResponse"

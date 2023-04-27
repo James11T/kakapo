@@ -1,0 +1,79 @@
+components:
+  mfaType:
+    type: string
+    enum:
+      - SMS
+      - EMAIL
+      - APP
+    example: APP
+
+  mfaCode:
+    type: string
+    example: 123456
+
+  mfaSource:
+    type: object
+    properties:
+      id:
+        $ref: "./generic.yaml#/components/uuid"
+      activated:
+        type: boolean
+        example: true
+      name:
+        type: string
+        example: iPhone 10
+
+  mfaStatusResponse:
+    type: object
+    title: MFA status
+    properties:
+      anyActive:
+        type: boolean
+        example: true
+      sources:
+        type: array
+        items:
+          $ref: "#/components/mfaSource"
+
+  addMfaSourceBody:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Authy
+
+  addMfaSourceResponse:
+    type: object
+    title: MFA status added
+    properties:
+      qr:
+        $ref: "./generic.yaml#/components/base64"
+      secret:
+        $ref: "./generic.yaml#/components/base32"
+      id:
+        $ref: "./generic.yaml#/components/uuid"
+
+  mfaIdPathProperty:
+    name: mfaId
+    in: path
+    description: ID of the MFA source to perform the operation on.
+    required: true
+    schema:
+      $ref: "./generic.yaml#/components/uuid"
+
+  mfaCodeBody:
+    type: object
+    properties:
+      totp:
+        $ref: "../schemas/mfa.yaml#/components/mfaCode"
+
+  mfaSourceNotFoundResponse:
+    type: object
+    title: MFA source not found
+    properties:
+      error:
+        type: string
+        const: SOURCE_NOT_FOUND
+      message:
+        type: string
+        const: No MFA source was found that matches the given criteria.

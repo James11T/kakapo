@@ -15,7 +15,7 @@ security:
   - authorizationToken: []
 
 servers:
-  - url: http://localhost:8080/api/v1
+  - url: http://localhost:5000/api/v1
     description: Local Test Deployment.
   - url: https://kakaposocial.com/api/v1
     description: Production Deployment.
@@ -24,46 +24,46 @@ servers:
 
 tags:
   - name: authentication
-    description: Contains all endpoints for managing authentication through the use of tokens.
+    description: Endpoints for managing authentication through the use of tokens.
     x-displayName: Authentication
   - name: users
-    description: Contains all endpoints for fetching, creating and updating users.
+    description: Endpoints for fetching, creating and updating users.
     x-displayName: Users
   - name: system
-    description: Contains all endpoints for interacting with and reading information from the system.
+    description: Endpoints for interacting with and reading information from the system.
     x-displayName: System
   - name: placeholder
-    description: Contains all endpoints that are not yet documented or implemented.
+    description: Endpoints that are not yet documented or implemented.
     x-displayName: placeholder
   - name: status
-    description: Contains all endpoints for checking the status of the API.
+    description: Endpoints for checking the status of the API.
     x-displayName: Status
   - name: tokens
-    description: Contains all endpoints that generate, process and manage tokens.
+    description: Endpoints that generate, process and manage tokens.
     x-displayName: Tokens
   - name: user-details
-    description: Contains all endpoints that are for managing User instances.
+    description: Endpoints that are for managing User instances.
     x-displayName: User Details
   - name: friendships
-    description: Contains all endpoints that are for managing user friendships.
+    description: Endpoints that are for managing user friendships.
     x-displayName: Friendships
   - name: friend-requests
-    description: Contains all endpoints that are for managing and sending friend requests.
+    description: Endpoints that are for managing and sending friend requests.
     x-displayName: Friend Requests
   - name: mfa
-    description: Contains all endpoints that are for managing multi-factor authentication.
+    description: Endpoints that are for managing multi-factor authentication.
     x-displayName: MFA
   - name: passwords
-    description: Contains all endpoints that are for managing passwords.
+    description: Endpoints that are for managing passwords.
     x-displayName: Passwords
   - name: posts
-    description: Contains all endpoints that are for managing posts.
+    description: Endpoints that are for managing posts.
     x-displayName: Posts
   - name: post-details
-    description: Contains all endpoints that are for managing details of posts.
+    description: Endpoints that are for managing details of posts.
     x-displayName: Post Details
   - name: comments
-    description: Contains all endpoints that are for managing comments on posts.
+    description: Endpoints that are for managing comments on posts.
     x-displayName: Comments
 x-tagGroups:
   - name: System
@@ -105,6 +105,8 @@ paths:
     $ref: "./routes/friendRequests.yaml#/friend-requests"
   /auth/mfa:
     $ref: "./routes/mfa.yaml#/mfa"
+  /auth/mfa/{mfaId}:
+    $ref: "./routes/mfa.yaml#/mfa-operations"
   /auth/request-password-reset:
     $ref: "./routes/auth.yaml#/request-password-reset"
   /auth/reset-password:

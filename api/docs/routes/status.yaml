@@ -8,7 +8,7 @@ status:
       - status
     responses:
       "200":
-        description: Successful execution.
+        description: API status returned.
         content:
           application/json:
             schema:

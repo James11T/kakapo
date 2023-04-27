@@ -18,8 +18,14 @@ components:
       index:
         type: integer
         example: 0
-      post:
-        $ref: "#/components/post"
+
+  mediaWithPostRef:
+    allOf:
+      - $ref: "#/components/media"
+      - type: object
+        properties:
+          post:
+            $ref: "#/components/post"
 
   post:
     type: object
@@ -33,7 +39,7 @@ components:
       postedAt:
         $ref: "./generic.yaml#/components/date"
       author:
-        $ref: "./user.yaml#/components/user"
+        $ref: "./users.yaml#/components/user"
       media:
         type: array
         items:
@@ -49,13 +55,14 @@ components:
 
   postNotFoundResponse:
     type: object
+    title: Post not found
     properties:
       error:
         type: string
-        const: UNKNOWN_POST
+        const: POST_NOT_FOUND
       message:
         type: string
-        const: No post was found that matches the given criteria
+        const: No post was found that matches the given criteria.
 
   createPostBody:
     type: object
@@ -63,10 +70,19 @@ components:
       caption:
         type: string
         maxLength: 1024
-        example: "Hello World!"
+        example: Hello World!
       files:
         type: array
         items:
           type: string
-          format: base64
-          example: "SGVsbG8gV29ybGQh"
+          format: binary
+
+  editPostBody:
+    type: object
+    properties:
+      caption:
+        type:
+          - string
+          - null
+        maxLength: 1024
+        example: Hello World!

@@ -6,15 +6,37 @@ posts:
     tags:
       - posts
       - post-details
+    parameters:
+      - name: caption
+        in: query
+        description: Caption content to query by.
+        required: false
+        schema:
+          type: string
+          example: Hello World!
+      - name: order-by
+        in: query
+        description: How to order the posts that are returned.
+        required: false
+        schema:
+          type: string
+          enum:
+            - likes-asc
+            - likes-desc
+            - posted-asc
+            - posted-desc
+          example: posted-asc
+      - $ref: "../schemas/generic.yaml#/components/pagination-from"
+      - $ref: "../schemas/generic.yaml#/components/pagination-count"
     responses:
       "200":
-        description: Successful execution.
+        description: Posts returned.
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: "../schemas/post.yaml#/components/post"
+                $ref: "../schemas/posts.yaml#/components/post"
   post:
     operationId: create-post
     summary: Create post
@@ -25,33 +47,23 @@ posts:
     requestBody:
       required: true
       content:
-        application/json:
+        multipart/form-data:
           schema:
-            $ref: "../schemas/post.yaml#/components/createPostBody"
+            $ref: "../schemas/posts.yaml#/components/createPostBody"
     responses:
       "200":
         description: Post created successfully.
         content:
           application/json:
             schema:
-              $ref: "../schemas/post.yaml#/components/post"
+              $ref: "../schemas/posts.yaml#/components/post"
       "400":
         description: Invalid post data.
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  const: INVALID_POST_DATA
-                message:
-                  type: string
-                  const: The provided post data was invalid.
-                errors:
-                  type: array
-                  items:
-                    $ref: "../schemas/generic.yaml#/components/zodError"
+              $ref: "../schemas/generic.yaml#/components/badParametersResponse"
+              title: Invalid parameters
 
 post:
   get:
@@ -62,20 +74,20 @@ post:
       - posts
       - post-details
     parameters:
-      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+      - $ref: "../schemas/posts.yaml#/components/postIdPathProperty"
     responses:
       "200":
-        description: Successful execution.
+        description: Post returned.
         content:
           application/json:
             schema:
-              $ref: "../schemas/post.yaml#/components/post"
+              $ref: "../schemas/posts.yaml#/components/post"
       "404":
         description: Post not found.
         content:
           application/json:
             schema:
-              $ref: "../schemas/post.yaml#/components/postNotFoundResponse"
+              $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
   delete:
     operationId: remove-post
     summary: Remove post
@@ -84,16 +96,16 @@ post:
       - posts
       - post-details
     parameters:
-      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+      - $ref: "../schemas/posts.yaml#/components/postIdPathProperty"
     responses:
       "204":
-        description: Successful execution.
+        description: Post removed successfully.
       "404":
         description: Post not found.
         content:
           application/json:
             schema:
-              $ref: "../schemas/post.yaml#/components/postNotFoundResponse"
+              $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
   patch:
     operationId: edit-post
     summary: Edit post
@@ -102,20 +114,33 @@ post:
       - posts
       - post-details
     parameters:
-      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+      - $ref: "../schemas/posts.yaml#/components/postIdPathProperty"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/posts.yaml#/components/editPostBody"
     responses:
       "200":
-        description: Successful execution.
+        description: Post edited successfully.
         content:
           application/json:
             schema:
-              $ref: "../schemas/post.yaml#/components/post"
+              $ref: "../schemas/posts.yaml#/components/post"
+      "400":
+        description: Invalid post data.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/generic.yaml#/components/badParametersResponse"
+              title: Invalid parameters
       "404":
         description: Post not found.
         content:
           application/json:
             schema:
-              $ref: "../schemas/post.yaml#/components/postNotFoundResponse"
+              $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
 
 likes:
   get:
@@ -127,10 +152,10 @@ likes:
       - post-details
       - post-likes
     parameters:
-      - $ref: "../schemas/post.yaml#/components/postIdPathProperty"
+      - $ref: "../schemas/posts.yaml#/components/postIdPathProperty"
     responses:
       "200":
-        description: Successful execution.
+        description: Like count returned.
         content:
           application/json:
             schema:
@@ -144,4 +169,4 @@ likes:
         content:
           application/json:
             schema:
-              $ref: "../schemas/post.yaml#/components/postNotFoundResponse"
+              $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"

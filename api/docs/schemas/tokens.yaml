@@ -1,9 +1,6 @@
 components:
-  date:
-    type: string
-    example: 2012-04-23T18:25:43.511Z
-
   credentials:
+    title: Credentials
     type: object
     properties:
       email:
@@ -11,33 +8,42 @@ components:
       password:
         $ref: "./generic.yaml#/components/password"
 
+  credentialsWithMfa:
+    title: Credentials with MFA
+    allOf:
+      - $ref: "#/components/credentials"
+      - type: object
+        properties:
+          mfa:
+            $ref: "./mfa.yaml#/components/mfaCode"
+
   refreshPayload:
     type: object
     properties:
-      accessToken:
-        $ref: "./generic.yaml#/components/uuid"
+      refreshToken:
+        $ref: "./generic.yaml#/components/jwt"
 
   tokenPair:
     type: object
     properties:
       accessToken:
-        $ref: "./generic.yaml#/components/uuid"
+        $ref: "./generic.yaml#/components/jwt"
       refreshToken:
-        $ref: "./generic.yaml#/components/uuid"
+        $ref: "./generic.yaml#/components/jwt"
       validUntil:
-        $ref: "#/components/date"
+        $ref: "./generic.yaml#/components/date"
 
   successfulAuthenticationResponse:
-    title: Correct Credentials
+    title: Access granted
     $ref: "#/components/tokenPair"
 
   successfulRefreshResponse:
-    title: Correct Credentials
+    title: Token refreshed
     $ref: "#/components/tokenPair"
 
   mfaRequiredResponse:
-    title: MFA Required
     type: object
+    title: MFA required
     properties:
       error:
         type: string
@@ -46,16 +52,11 @@ components:
         type: string
         const: An MFA pin is required
       source:
-        type: string
-        enum:
-          - SMS
-          - EMAIL
-          - APP
-        example: APP
+        $ref: "./mfa.yaml#/components/mfaType"
 
   invalidCredentialsResponse:
-    title: Invalid Credentials
     type: object
+    title: Invalid credentials
     properties:
       error:
         type: string
@@ -65,8 +66,8 @@ components:
         const: The provided credentials are unknown or incorrect
 
   invalidRefreshTokenResponse:
-    title: Invalid Refresh Token
     type: object
+    title: Invalid refresh token
     properties:
       error:
         type: string
@@ -76,8 +77,8 @@ components:
         const: The provided token is malformed or invalid
 
   expiredRefreshTokenResponse:
-    title: Expired Refresh Token
     type: object
+    title: Expired refresh token
     properties:
       error:
         type: string

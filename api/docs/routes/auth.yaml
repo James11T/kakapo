@@ -18,6 +18,7 @@ request-password-reset:
     responses:
       "204":
         description: Always returned, whether an account is linked to the email given or not.
+
 reset-password:
   post:
     operationId: reset-password
@@ -39,24 +40,16 @@ reset-password:
                 $ref: "../schemas/generic.yaml#/components/password"
     responses:
       "204":
-        description: Successful execution.
+        description: Password reset successfully.
       "400":
         description: Failed to change password, either token is invalid or password does not meet requirements.
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  const: "BAD_PARAMETERS"
-                message:
-                  type: string
-                  const: Failed to change password, either token is invalid or password does not meet requirements.
-                errors:
-                  type: array
-                  items:
-                    $ref: "../schemas/generic.yaml#/components/zodError"
+              oneOf:
+                - $ref: "../schemas/auth.yaml#/components/invalidResetTokenResponse"
+                - $ref: "../schemas/generic.yaml#/components/badParametersResponse"
+                  title: Invalid Password
 
 whoami:
   get:
@@ -67,6 +60,12 @@ whoami:
       - auth
       - user-details
     responses:
+      "200":
+        description: User identity returned.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/users.yaml#/components/extendedUser"
       "401":
         description: Not authenticated.
         content:

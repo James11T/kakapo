@@ -1,6 +1,6 @@
 components:
   prodStatusResponse:
-    title: Production Status
+    title: Production status
     type: object
     properties:
       status:
@@ -14,7 +14,7 @@ components:
         example: GB
 
   devStatusResponse:
-    title: Development Status
+    title: Development status
     allOf:
       - $ref: "#/components/prodStatusResponse"
       - type: object

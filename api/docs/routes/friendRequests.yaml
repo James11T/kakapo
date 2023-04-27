@@ -9,7 +9,7 @@ friend-requests:
     parameters:
       - $ref: "../schemas/generic.yaml#/components/pagination-from"
       - $ref: "../schemas/generic.yaml#/components/pagination-count"
-      - $ref: "../schemas/user.yaml#/components/usernamePathProperty"
+      - $ref: "../schemas/users.yaml#/components/usernamePathProperty"
       - name: direction
         in: query
         description: Incoming or outgoing.
@@ -23,19 +23,19 @@ friend-requests:
             - outgoing
     responses:
       "200":
-        description: Successful execution.
+        description: Friend requests returned.
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: "../schemas/friendRequest.yaml#/components/friendRequest"
+                $ref: "../schemas/friendRequests.yaml#/components/friendRequest"
       "404":
         description: No user.
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/unknownUserResponse"
+              $ref: "../schemas/users.yaml#/components/userNotFoundResponse"
 
   post:
     operationId: send-friend-request
@@ -45,23 +45,23 @@ friend-requests:
       - users
       - friend-requests
     parameters:
-      - $ref: "../schemas/user.yaml#/components/usernamePathProperty"
+      - $ref: "../schemas/users.yaml#/components/usernamePathProperty"
     responses:
       "200":
-        description: Successful execution.
+        description: Friend request sent successfully.
         content:
           application/json:
             schema:
-              $ref: "../schemas/friendRequest.yaml#/components/sendFriendRequestSuccessResponse"
+              $ref: "../schemas/friendRequests.yaml#/components/sendFriendRequestSuccessResponse"
       "404":
         description: No user.
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/unknownUserResponse"
+              $ref: "../schemas/users.yaml#/components/userNotFoundResponse"
       "409":
         description: Already a pending friend request.
         content:
           application/json:
             schema:
-              $ref: "../schemas/friendRequest.yaml#/components/existingFriendRequestResponse"
+              $ref: "../schemas/friendRequests.yaml#/components/existingFriendRequestResponse"

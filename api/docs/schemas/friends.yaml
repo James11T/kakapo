@@ -1,15 +1,15 @@
 components:
   friend:
     allOf:
-      - $ref: "./user.yaml#/components/user"
+      - $ref: "./users.yaml#/components/user"
       - type: object
         properties:
           becameFriendsAt:
             $ref: "./generic.yaml#/components/date"
 
   notFriendsResponse:
-    title: Not Friends
     type: object
+    title: Not friends
     properties:
       error:
         type: string

@@ -18,19 +18,19 @@ friends:
           maxLength: 32
     responses:
       "200":
-        description: Successful execution.
+        description: Friends returned.
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: "../schemas/friend.yaml#/components/friend"
+                $ref: "../schemas/friends.yaml#/components/friend"
       "404":
         description: No user.
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/unknownUserResponse"
+              $ref: "../schemas/users.yaml#/components/userNotFoundResponse"
 
 removeFriend:
   delete:
@@ -41,7 +41,7 @@ removeFriend:
       - users
       - friendships
     parameters:
-      - $ref: "../schemas/user.yaml#/components/usernamePathProperty"
+      - $ref: "../schemas/users.yaml#/components/usernamePathProperty"
       - name: friendUsername
         in: path
         description: Username of the user to remove from the friend list of the given user.
@@ -50,21 +50,17 @@ removeFriend:
           type: string
           maxLength: 32
     responses:
-      "200":
-        description: Successful execution.
-        content:
-          application/json:
-            schema:
-              $ref: "../schemas/user.yaml#/components/user"
+      "204":
+        description: Friend successfully removed.
       "400":
         description: Not friends.
         content:
           application/json:
             schema:
-              $ref: "../schemas/friend.yaml#/components/notFriendsResponse"
+              $ref: "../schemas/friends.yaml#/components/notFriendsResponse"
       "404":
         description: No user.
         content:
           application/json:
             schema:
-              $ref: "../schemas/user.yaml#/components/unknownUserResponse"
+              $ref: "../schemas/users.yaml#/components/userNotFoundResponse"

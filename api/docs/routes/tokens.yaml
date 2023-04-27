@@ -11,22 +11,24 @@ authenticate:
       content:
         application/json:
           schema:
-            $ref: "../schemas/token.yaml#/components/credentials"
+            oneOf:
+              - $ref: "../schemas/tokens.yaml#/components/credentials"
+              - $ref: "../schemas/tokens.yaml#/components/credentialsWithMfa"
     responses:
       "200":
         description: Correct credentials.
         content:
           application/json:
             schema:
-              $ref: "../schemas/token.yaml#/components/successfulAuthenticationResponse"
+              $ref: "../schemas/tokens.yaml#/components/successfulAuthenticationResponse"
       "401":
         description: Indicates that either the credentials are incorrect or that MFA is required.
         content:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/token.yaml#/components/mfaRequiredResponse"
-                - $ref: "../schemas/token.yaml#/components/invalidCredentialsResponse"
+                - $ref: "../schemas/tokens.yaml#/components/mfaRequiredResponse"
+                - $ref: "../schemas/tokens.yaml#/components/invalidCredentialsResponse"
 
 refresh:
   post:
@@ -41,19 +43,19 @@ refresh:
       content:
         application/json:
           schema:
-            $ref: "../schemas/token.yaml#/components/refreshPayload"
+            $ref: "../schemas/tokens.yaml#/components/refreshPayload"
     responses:
       "200":
         description: Successful refresh.
         content:
           application/json:
             schema:
-              $ref: "../schemas/token.yaml#/components/successfulRefreshResponse"
+              $ref: "../schemas/tokens.yaml#/components/successfulRefreshResponse"
       "401":
         description: Expired or invalid refresh token.
         content:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/token.yaml#/components/invalidRefreshTokenResponse"
-                - $ref: "../schemas/token.yaml#/components/expiredRefreshTokenResponse"
+                - $ref: "../schemas/tokens.yaml#/components/invalidRefreshTokenResponse"
+                - $ref: "../schemas/tokens.yaml#/components/expiredRefreshTokenResponse"

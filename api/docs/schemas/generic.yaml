@@ -29,21 +29,24 @@ components:
     format: email
     example: johnsmith@example.com
 
+  sms:
+    type: string
+    format: phone number
+    example: +447975777666
+
   password:
     type: string
     example: password123
 
-  placeholder:
-    get:
-      summary: Route not implemented
-      description: A route that has not yet been documented or implemented.
-      operationId: noop
-      tags:
-        - placeholder
-      responses:
-        "501":
-          description: Not Implemented.
+  base64:
+    type: string
+    format: base64
+    example: aGVsbG8gd29ybGQ=
 
+  base32:
+    type: string
+    format: base64
+    example: NBSWY3DPEB3W64TMMQ======
   date:
     type: string
     format: date-time
@@ -61,3 +64,17 @@ components:
       type:
         type: string
         example: too_big
+
+  badParametersResponse:
+    type: object
+    properties:
+      error:
+        type: string
+        const: BAD_PARAMETERS
+      message:
+        type: string
+        example: The provided data was invalid.
+      errors:
+        type: array
+        items:
+          $ref: "#/components/zodError"
