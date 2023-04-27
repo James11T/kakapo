@@ -26,7 +26,7 @@ components:
     schema:
       $ref: "./generic.yaml#/components/uuid"
 
-  commentNotFoundResponse:
+  commentNotFoundResponseBody:
     type: object
     title: Comment not found
     properties:
@@ -43,7 +43,7 @@ components:
       text:
         $ref: "#/components/comment/properties/text"
 
-  commentLikeCountResponse:
+  commentLikeCountResponseBody:
     type: object
     title: Comment like count
     properties:
@@ -51,7 +51,7 @@ components:
         type: number
         example: 10
 
-  commentNotLikedResponse:
+  commentNotLikedResponseBody:
     type: object
     title: Comment not liked
     properties:

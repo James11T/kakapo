@@ -30,7 +30,7 @@ friends:
         content:
           application/json:
             schema:
-              $ref: "../schemas/users.yaml#/components/userNotFoundResponse"
+              $ref: "../schemas/users.yaml#/components/userNotFoundResponseBody"
 
 removeFriend:
   delete:
@@ -57,10 +57,10 @@ removeFriend:
         content:
           application/json:
             schema:
-              $ref: "../schemas/friends.yaml#/components/notFriendsResponse"
+              $ref: "../schemas/friends.yaml#/components/notFriendsResponseBody"
       "404":
         description: No user.
         content:
           application/json:
             schema:
-              $ref: "../schemas/users.yaml#/components/userNotFoundResponse"
+              $ref: "../schemas/users.yaml#/components/userNotFoundResponseBody"

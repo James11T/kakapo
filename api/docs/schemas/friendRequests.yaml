@@ -7,14 +7,14 @@ components:
       sentAt:
         $ref: "./generic.yaml#/components/date"
 
-  sendFriendRequestSuccessResponse:
+  sendFriendRequestSuccessResponseBody:
     type: object
     title: Friend request sent
     properties:
       id:
         $ref: "./generic.yaml#/components/uuid"
 
-  existingFriendRequestResponse:
+  existingFriendRequestResponseBody:
     type: object
     title: Already friends
     properties:

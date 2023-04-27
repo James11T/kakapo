@@ -23,7 +23,7 @@ components:
         type: string
         example: iPhone 10
 
-  mfaStatusResponse:
+  mfaStatusResponseBody:
     type: object
     title: MFA status
     properties:
@@ -42,7 +42,7 @@ components:
         type: string
         example: Authy
 
-  addMfaSourceResponse:
+  addMfaSourceResponseBody:
     type: object
     title: MFA status added
     properties:
@@ -67,7 +67,7 @@ components:
       totp:
         $ref: "../schemas/mfa.yaml#/components/mfaCode"
 
-  mfaSourceNotFoundResponse:
+  mfaSourceNotFoundResponseBody:
     type: object
     title: MFA source not found
     properties:

@@ -53,7 +53,7 @@ components:
     schema:
       $ref: "./generic.yaml#/components/uuid"
 
-  postNotFoundResponse:
+  postNotFoundResponseBody:
     type: object
     title: Post not found
     properties:

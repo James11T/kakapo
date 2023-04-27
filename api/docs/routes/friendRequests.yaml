@@ -35,7 +35,7 @@ friend-requests:
         content:
           application/json:
             schema:
-              $ref: "../schemas/users.yaml#/components/userNotFoundResponse"
+              $ref: "../schemas/users.yaml#/components/userNotFoundResponseBody"
 
   post:
     operationId: send-friend-request
@@ -52,16 +52,16 @@ friend-requests:
         content:
           application/json:
             schema:
-              $ref: "../schemas/friendRequests.yaml#/components/sendFriendRequestSuccessResponse"
+              $ref: "../schemas/friendRequests.yaml#/components/sendFriendRequestSuccessResponseBody"
       "404":
         description: No user.
         content:
           application/json:
             schema:
-              $ref: "../schemas/users.yaml#/components/userNotFoundResponse"
+              $ref: "../schemas/users.yaml#/components/userNotFoundResponseBody"
       "409":
         description: Already a pending friend request.
         content:
           application/json:
             schema:
-              $ref: "../schemas/friendRequests.yaml#/components/existingFriendRequestResponse"
+              $ref: "../schemas/friendRequests.yaml#/components/existingFriendRequestResponseBody"

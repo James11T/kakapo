@@ -7,7 +7,7 @@ components:
           becameFriendsAt:
             $ref: "./generic.yaml#/components/date"
 
-  notFriendsResponse:
+  notFriendsResponseBody:
     type: object
     title: Not friends
     properties:

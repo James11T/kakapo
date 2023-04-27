@@ -12,7 +12,7 @@ mfa:
         content:
           application/json:
             schema:
-              $ref: "../schemas/mfa.yaml#/components/mfaStatusResponse"
+              $ref: "../schemas/mfa.yaml#/components/mfaStatusResponseBody"
 
   post:
     operationId: add-mfa-source
@@ -33,13 +33,13 @@ mfa:
         content:
           application/json:
             schema:
-              $ref: "../schemas/mfa.yaml#/components/addMfaSourceResponse"
+              $ref: "../schemas/mfa.yaml#/components/addMfaSourceResponseBody"
       "400":
         description: Bad parameters.
         content:
           application/json:
             schema:
-              $ref: "../schemas/generic.yaml#/components/badParametersResponse"
+              $ref: "../schemas/generic.yaml#/components/badParametersResponseBody"
               title: Invalid parameters
 
 mfa-operations:
@@ -66,7 +66,7 @@ mfa-operations:
         content:
           application/json:
             schema:
-              $ref: "../schemas/mfa.yaml#/components/mfaSourceNotFoundResponse"
+              $ref: "../schemas/mfa.yaml#/components/mfaSourceNotFoundResponseBody"
 
   delete:
     operationId: remove-mfa-source
@@ -91,4 +91,4 @@ mfa-operations:
         content:
           application/json:
             schema:
-              $ref: "../schemas/mfa.yaml#/components/mfaSourceNotFoundResponse"
+              $ref: "../schemas/mfa.yaml#/components/mfaSourceNotFoundResponseBody"

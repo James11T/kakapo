@@ -13,5 +13,5 @@ status:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/status.yaml#/components/prodStatusResponse"
-                - $ref: "../schemas/status.yaml#/components/devStatusResponse"
+                - $ref: "../schemas/status.yaml#/components/prodStatusResponseBody"
+                - $ref: "../schemas/status.yaml#/components/devStatusResponseBody"

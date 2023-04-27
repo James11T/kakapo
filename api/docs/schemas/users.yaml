@@ -37,7 +37,7 @@ components:
             type: boolean
             example: true
 
-  userNotFoundResponse:
+  userNotFoundResponseBody:
     type: object
     title: User not found
     properties:
@@ -48,14 +48,14 @@ components:
         type: string
         const: No user was found that matches the given criteria
 
-  createUserSuccessResponse:
+  createUserSuccessResponseBody:
     type: object
     title: User created
     properties:
       id:
         $ref: "./generic.yaml#/components/uuid"
 
-  usernameReservedResponse:
+  usernameReservedResponseBody:
     type: object
     title: Username reserved
     properties:
@@ -66,7 +66,7 @@ components:
         type: string
         const: The username provided is taken or is reserved
 
-  emailAlreadyInUseResponse:
+  emailAlreadyInUseResponseBody:
     type: object
     title: Email reserved
     properties:
@@ -77,7 +77,7 @@ components:
         type: string
         const: The email provided is already in use
 
-  usernameAvailabilityResponse:
+  usernameAvailabilityResponseBody:
     type: object
     title: Username availability
     properties:

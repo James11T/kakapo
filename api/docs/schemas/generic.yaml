@@ -65,7 +65,7 @@ components:
         type: string
         example: too_big
 
-  badParametersResponse:
+  badParametersResponseBody:
     type: object
     properties:
       error:

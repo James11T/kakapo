@@ -33,15 +33,15 @@ components:
       validUntil:
         $ref: "./generic.yaml#/components/date"
 
-  successfulAuthenticationResponse:
+  successfulAuthenticationResponseBody:
     title: Access granted
     $ref: "#/components/tokenPair"
 
-  successfulRefreshResponse:
+  successfulRefreshResponseBody:
     title: Token refreshed
     $ref: "#/components/tokenPair"
 
-  mfaRequiredResponse:
+  mfaRequiredResponseBody:
     type: object
     title: MFA required
     properties:
@@ -54,7 +54,7 @@ components:
       source:
         $ref: "./mfa.yaml#/components/mfaType"
 
-  invalidCredentialsResponse:
+  invalidCredentialsResponseBody:
     type: object
     title: Invalid credentials
     properties:
@@ -65,7 +65,7 @@ components:
         type: string
         const: The provided credentials are unknown or incorrect
 
-  invalidRefreshTokenResponse:
+  invalidRefreshTokenResponseBody:
     type: object
     title: Invalid refresh token
     properties:
@@ -76,7 +76,7 @@ components:
         type: string
         const: The provided token is malformed or invalid
 
-  expiredRefreshTokenResponse:
+  expiredRefreshTokenResponseBody:
     type: object
     title: Expired refresh token
     properties:

@@ -62,7 +62,7 @@ posts:
         content:
           application/json:
             schema:
-              $ref: "../schemas/generic.yaml#/components/badParametersResponse"
+              $ref: "../schemas/generic.yaml#/components/badParametersResponseBody"
               title: Invalid parameters
 
 post:
@@ -87,7 +87,7 @@ post:
         content:
           application/json:
             schema:
-              $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+              $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"
   delete:
     operationId: remove-post
     summary: Remove post
@@ -105,7 +105,7 @@ post:
         content:
           application/json:
             schema:
-              $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+              $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"
   patch:
     operationId: edit-post
     summary: Edit post
@@ -133,14 +133,14 @@ post:
         content:
           application/json:
             schema:
-              $ref: "../schemas/generic.yaml#/components/badParametersResponse"
+              $ref: "../schemas/generic.yaml#/components/badParametersResponseBody"
               title: Invalid parameters
       "404":
         description: Post not found.
         content:
           application/json:
             schema:
-              $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+              $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"
 
 likes:
   get:
@@ -169,4 +169,4 @@ likes:
         content:
           application/json:
             schema:
-              $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+              $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"

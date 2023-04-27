@@ -20,7 +20,7 @@ user:
         content:
           application/json:
             schema:
-              $ref: "../schemas/users.yaml#/components/userNotFoundResponse"
+              $ref: "../schemas/users.yaml#/components/userNotFoundResponseBody"
 
 users:
   get:
@@ -68,13 +68,13 @@ users:
         content:
           application/json:
             schema:
-              $ref: "../schemas/users.yaml#/components/createUserSuccessResponse"
+              $ref: "../schemas/users.yaml#/components/createUserSuccessResponseBody"
       "400":
         description: Invalid parameters passed to create user.
         content:
           application/json:
             schema:
-              $ref: "../schemas/generic.yaml#/components/badParametersResponse"
+              $ref: "../schemas/generic.yaml#/components/badParametersResponseBody"
               title: Invalid parameters
       "409":
         description: Username or email is already in use.
@@ -82,8 +82,8 @@ users:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/users.yaml#/components/usernameReservedResponse"
-                - $ref: "../schemas/users.yaml#/components/emailAlreadyInUseResponse"
+                - $ref: "../schemas/users.yaml#/components/usernameReservedResponseBody"
+                - $ref: "../schemas/users.yaml#/components/emailAlreadyInUseResponseBody"
 
 is-username-available:
   get:
@@ -107,4 +107,4 @@ is-username-available:
         content:
           application/json:
             schema:
-              $ref: "../schemas/users.yaml#/components/usernameAvailabilityResponse"
+              $ref: "../schemas/users.yaml#/components/usernameAvailabilityResponseBody"

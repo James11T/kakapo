@@ -20,15 +20,15 @@ authenticate:
         content:
           application/json:
             schema:
-              $ref: "../schemas/tokens.yaml#/components/successfulAuthenticationResponse"
+              $ref: "../schemas/tokens.yaml#/components/successfulAuthenticationResponseBody"
       "401":
         description: Indicates that either the credentials are incorrect or that MFA is required.
         content:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/tokens.yaml#/components/mfaRequiredResponse"
-                - $ref: "../schemas/tokens.yaml#/components/invalidCredentialsResponse"
+                - $ref: "../schemas/tokens.yaml#/components/mfaRequiredResponseBody"
+                - $ref: "../schemas/tokens.yaml#/components/invalidCredentialsResponseBody"
 
 refresh:
   post:
@@ -50,12 +50,12 @@ refresh:
         content:
           application/json:
             schema:
-              $ref: "../schemas/tokens.yaml#/components/successfulRefreshResponse"
+              $ref: "../schemas/tokens.yaml#/components/successfulRefreshResponseBody"
       "401":
         description: Expired or invalid refresh token.
         content:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/tokens.yaml#/components/invalidRefreshTokenResponse"
-                - $ref: "../schemas/tokens.yaml#/components/expiredRefreshTokenResponse"
+                - $ref: "../schemas/tokens.yaml#/components/invalidRefreshTokenResponseBody"
+                - $ref: "../schemas/tokens.yaml#/components/expiredRefreshTokenResponseBody"

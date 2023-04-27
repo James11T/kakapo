@@ -22,7 +22,7 @@ comments:
         content:
           application/json:
             schema:
-              $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+              $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"
   post:
     operationId: create-comment
     summary: Create comment
@@ -50,14 +50,14 @@ comments:
         content:
           application/json:
             schema:
-              $ref: "../schemas/generic.yaml#/components/badParametersResponse"
+              $ref: "../schemas/generic.yaml#/components/badParametersResponseBody"
               title: Invalid parameters
       "404":
         description: Post not found.
         content:
           application/json:
             schema:
-              $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+              $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"
 
 comment:
   get:
@@ -83,8 +83,8 @@ comment:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponse"
-                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponseBody"
+                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"
   delete:
     operationId: delete-comment
     summary: Delete comment
@@ -104,8 +104,8 @@ comment:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponse"
-                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponseBody"
+                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"
   patch:
     operationId: edit-comment
     summary: Edit comment
@@ -128,7 +128,7 @@ comment:
         content:
           application/json:
             schema:
-              $ref: "../schemas/generic.yaml#/components/badParametersResponse"
+              $ref: "../schemas/generic.yaml#/components/badParametersResponseBody"
               title: Invalid parameters
       "404":
         description: Post or comment not found.
@@ -136,8 +136,8 @@ comment:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponse"
-                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponseBody"
+                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"
 
 comment-likes:
   get:
@@ -157,15 +157,15 @@ comment-likes:
         content:
           application/json:
             schema:
-              $ref: "../schemas/comments.yaml#/components/commentLikeCountResponse"
+              $ref: "../schemas/comments.yaml#/components/commentLikeCountResponseBody"
       "404":
         description: Post or comment not found.
         content:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponse"
-                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponseBody"
+                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"
   post:
     operationId: like-comment
     summary: Like a comment
@@ -186,8 +186,8 @@ comment-likes:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponse"
-                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponseBody"
+                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"
   delete:
     operationId: unlike-comment
     summary: Unlike a comment
@@ -205,18 +205,18 @@ comment-likes:
         content:
           application/json:
             schema:
-              $ref: "../schemas/comments.yaml#/components/commentLikeCountResponse"
+              $ref: "../schemas/comments.yaml#/components/commentLikeCountResponseBody"
       "400":
         description: Not liked.
         content:
           application/json:
             schema:
-              $ref: "../schemas/comments.yaml#/components/commentNotLikedResponse"
+              $ref: "../schemas/comments.yaml#/components/commentNotLikedResponseBody"
       "404":
         description: Post or comment not found.
         content:
           application/json:
             schema:
               oneOf:
-                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponse"
-                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponse"
+                - $ref: "../schemas/comments.yaml#/components/commentNotFoundResponseBody"
+                - $ref: "../schemas/posts.yaml#/components/postNotFoundResponseBody"
