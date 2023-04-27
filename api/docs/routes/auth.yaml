@@ -17,7 +17,7 @@ request-password-reset:
                 $ref: "../schemas/generic.yaml#/components/email"
     responses:
       "204":
-        $ref: "../responses/auth.yaml#/invokePasswordResetSuccessResponse"
+        description: Always returned, whether an account is linked to the email given or not.
 
 reset-password:
   post:
