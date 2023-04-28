@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model comment {
+  id       String   @id @db.VarChar(36)
+  text     String   @db.VarChar(1024)
+  postedAt DateTime @db.DateTime(0)
+  authorId String   @db.VarChar(36)
+  postId   String   @db.VarChar(36)
+  author   user     @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  post     post     @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([authorId])
+  @@index([postId])
+}
+
+model friendship {
+  userFromId String    @db.VarChar(36)
+  userToId   String    @db.VarChar(36)
+  sentAt     DateTime  @db.DateTime(0)
+  acceptedAt DateTime? @db.DateTime(0)
+  accepted   Int       @default(0) @db.TinyInt
+  userTo     user      @relation("friendship_userToIdTouser", fields: [userToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  userFrom   user      @relation("friendship_userFromIdTouser", fields: [userFromId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([userFromId, userToId])
+  @@index([userToId])
+}
+
+model post {
+  id       String       @id @db.VarChar(36)
+  caption  String       @db.VarChar(400)
+  postedAt DateTime     @db.DateTime(0)
+  authorId String       @db.VarChar(36)
+  comments comment[]
+  author   user         @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  media    post_media[]
+
+  @@index([authorId])
+}
+
+model post_media {
+  id     String @id @db.VarChar(36)
+  url    String @db.VarChar(256)
+  type   String @db.VarChar(32)
+  index  Int
+  postId String @db.VarChar(36)
+  post   post   @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([postId])
+}
+
+model refresh_token {
+  id         String   @id @db.VarChar(336)
+  subjectId  String   @db.VarChar(36)
+  expiresAt  DateTime @db.DateTime(0)
+  issuedAt   DateTime @db.DateTime(0)
+  deviceType String   @default("unknown") @db.VarChar(64)
+  sourceIp   String   @db.VarChar(39)
+  isRevoked  Int      @default(0) @db.TinyInt
+  user       user     @relation(fields: [subjectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([subjectId])
+}
+
+model user {
+  id                  String          @id @db.VarChar(36)
+  username            String          @unique() @db.VarChar(32)
+  displayName         String          @db.VarChar(32)
+  avatar              String?         @db.VarChar(255)
+  about               String          @default("") @db.VarChar(2000)
+  email               String          @unique() @db.VarChar(255)
+  emailVerified       Int             @default(0) @db.TinyInt
+  registeredAt        DateTime        @db.DateTime()
+  passwordHash        String          @db.VarChar(255)
+  comments            comment[]
+  incomingFriendships friendship[]    @relation("friendship_userToIdTouser")
+  outgoingFriendships friendship[]    @relation("friendship_userFromIdTouser")
+  posts               post[]
+  refreshTokens       refresh_token[]
+  userTotps           user_totp[]
+}
+
+model user_totp {
+  id        String @id @db.VarChar(36)
+  activated Int    @default(0) @db.TinyInt
+  secret    String @db.VarChar(128)
+  userId    String @db.VarChar(36)
+  user      user   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([userId])
+}

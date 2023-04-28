@@ -1,6 +1,7 @@
 import cors from "cors";
 import helmet from "helmet";
 import express from "express";
+import prisma from "./database";
 import baseRouter from "./routes";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/error.middleware";
@@ -23,5 +24,9 @@ app.use("/api/v1", baseRouter);
 app.use(errorHandler);
 
 app.use("*", (req, res) => res.status(404).json({ error: "unknown route" }));
+
+process.on("exit", () => {
+  prisma.$disconnect();
+});
 
 export default app;

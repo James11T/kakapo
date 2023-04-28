@@ -3,7 +3,6 @@ import "reflect-metadata";
 import ip from "ip";
 import chalk from "chalk";
 import app from "./app";
-import { initializeDatabase } from "./database";
 import { RUNTIME_CONSTANTS } from "./config";
 import format from "./utils/console";
 
@@ -37,15 +36,6 @@ if (anyMissing) process.exit(0);
 const start = async () => {
   console.log(format.waiting("Starting..."));
   if (RUNTIME_CONSTANTS.IS_DEV) console.log(format.dev("Running in development mode"));
-
-  const initDbResult = await initializeDatabase();
-
-  if (initDbResult.err) {
-    console.error(format.fail("Failed to connect to database"));
-    process.exit();
-  }
-
-  console.log(format.success("Connected to database"));
 
   app.listen(API_PORT, () => {
     const localAddr = `http://localhost:${API_PORT}/`;
