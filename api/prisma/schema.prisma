@@ -7,92 +7,116 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model comment {
-  id       String   @id @db.VarChar(36)
+model Comment {
+  id       Int      @id @default(autoincrement()) @map("comment_id")
+  uuid     String   @unique @map("comment_uuid") @db.VarChar(36)
   text     String   @db.VarChar(1024)
-  postedAt DateTime @db.DateTime(0)
-  authorId String   @db.VarChar(36)
-  postId   String   @db.VarChar(36)
-  author   user     @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  post     post     @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  postedAt DateTime @map("posted_at") @db.DateTime(0)
+  authorId Int      @map("author_id")
+  postId   Int      @map("post_id")
+  author   User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([authorId])
   @@index([postId])
+  @@map("comment")
 }
 
-model friendship {
-  userFromId String    @db.VarChar(36)
-  userToId   String    @db.VarChar(36)
-  sentAt     DateTime  @db.DateTime(0)
-  acceptedAt DateTime? @db.DateTime(0)
-  accepted   Int       @default(0) @db.TinyInt
-  userTo     user      @relation("friendship_userToIdTouser", fields: [userToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  userFrom   user      @relation("friendship_userFromIdTouser", fields: [userFromId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+model FriendRequest {
+  userFromId Int      @map("user_from_id")
+  userToId   Int      @map("user_to_id")
+  sentAt     DateTime @map("sent_at") @db.DateTime(0)
+  userFrom   User     @relation("userFrom", fields: [userFromId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userTo     User     @relation("userTo", fields: [userToId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([userFromId, userToId])
-  @@index([userToId])
+  @@map("friend_request")
 }
 
-model post {
-  id       String       @id @db.VarChar(36)
-  caption  String       @db.VarChar(400)
-  postedAt DateTime     @db.DateTime(0)
-  authorId String       @db.VarChar(36)
-  comments comment[]
-  author   user         @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  media    post_media[]
+model Friendship {
+  user1Id         Int      @map("user_1_id")
+  user2Id         Int      @map("user_2_id")
+  becameFriendsAt DateTime @map("became_friends_at") @db.DateTime()
+  user1           User     @relation("user1", fields: [user1Id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user2           User     @relation("user2", fields: [user2Id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([user1Id, user2Id])
+  @@map("friendship")
+}
+
+model Post {
+  id       Int         @id @default(autoincrement()) @map("post_id")
+  uuid     String      @unique @map("post_uuid") @db.VarChar(36)
+  caption  String      @db.VarChar(400)
+  postedAt DateTime    @map("posted_at") @db.DateTime(0)
+  authorId Int         @map("author_id")
+  comments Comment[]
+  author   User        @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  media    PostMedia[]
 
   @@index([authorId])
+  @@map("post")
 }
 
-model post_media {
-  id     String @id @db.VarChar(36)
+model PostMedia {
+  id     Int    @id @default(autoincrement()) @map("post_media_id")
+  uuid   String @unique @map("post_media_uuid") @db.VarChar(36)
   url    String @db.VarChar(256)
   type   String @db.VarChar(32)
   index  Int
-  postId String @db.VarChar(36)
-  post   post   @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  postId Int    @map("post_id")
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([postId])
+  @@map("post_media")
 }
 
-model refresh_token {
-  id         String   @id @db.VarChar(336)
-  subjectId  String   @db.VarChar(36)
-  expiresAt  DateTime @db.DateTime(0)
-  issuedAt   DateTime @db.DateTime(0)
-  deviceType String   @default("unknown") @db.VarChar(64)
-  sourceIp   String   @db.VarChar(39)
-  isRevoked  Int      @default(0) @db.TinyInt
-  user       user     @relation(fields: [subjectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+model RefreshToken {
+  id         Int      @id @default(autoincrement()) @map("refresh_token_id")
+  uuid       String   @unique @map("refresh_token_uuid") @db.VarChar(36)
+  subjectId  Int      @map("subject_id")
+  expiresAt  DateTime @map("expires_at") @db.DateTime(0)
+  issuedAt   DateTime @map("issued_at") @db.DateTime(0)
+  deviceType String   @default("unknown") @map("device_type") @db.VarChar(64)
+  sourceIp   String   @map("source_ip") @db.VarChar(39)
+  isRevoked  Int      @default(0) @map("is_revoked") @db.TinyInt
+  user       User     @relation(fields: [subjectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([subjectId])
+  @@map("refresh_token")
 }
 
-model user {
-  id                  String          @id @db.VarChar(36)
-  username            String          @unique() @db.VarChar(32)
-  displayName         String          @db.VarChar(32)
-  avatar              String?         @db.VarChar(255)
-  about               String          @default("") @db.VarChar(2000)
-  email               String          @unique() @db.VarChar(255)
-  emailVerified       Int             @default(0) @db.TinyInt
-  registeredAt        DateTime        @db.DateTime()
-  passwordHash        String          @db.VarChar(255)
-  comments            comment[]
-  incomingFriendships friendship[]    @relation("friendship_userToIdTouser")
-  outgoingFriendships friendship[]    @relation("friendship_userFromIdTouser")
-  posts               post[]
-  refreshTokens       refresh_token[]
-  userTotps           user_totp[]
+model User {
+  id                     Int             @id @default(autoincrement()) @map("user_id")
+  uuid                   String          @unique @map("user_uuid") @db.VarChar(36)
+  username               String          @unique() @db.VarChar(32)
+  displayName            String          @map("display_name") @db.VarChar(32)
+  avatar                 String?         @db.VarChar(255)
+  about                  String          @default("") @db.VarChar(2000)
+  email                  String          @unique() @db.VarChar(255)
+  emailVerified          Int             @default(0) @map("email_verified") @db.TinyInt
+  registeredAt           DateTime        @map("registered_at") @db.DateTime()
+  passwordHash           String          @map("password_hash") @db.VarChar(255)
+  comments               Comment[]
+  incomingFriendRequests FriendRequest[] @relation("userTo")
+  outgoingFriendRequests FriendRequest[] @relation("userFrom")
+  friendships1           Friendship[]    @relation("user1")
+  friendships2           Friendship[]    @relation("user2")
+  posts                  Post[]
+  refreshTokens          RefreshToken[]
+  userTotps              UserTOTP[]
+
+  @@map("user")
 }
 
-model user_totp {
-  id        String @id @db.VarChar(36)
+model UserTOTP {
+  id        Int    @id @default(autoincrement()) @map("user_totp_id")
+  uuid      String @unique @map("user_totp_uuid") @db.VarChar(36)
   activated Int    @default(0) @db.TinyInt
   secret    String @db.VarChar(128)
-  userId    String @db.VarChar(36)
-  user      user   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  userId    Int    @map("user_id")
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId])
+  @@map("user_totp")
 }
