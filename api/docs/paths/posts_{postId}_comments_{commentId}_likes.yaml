@@ -10,13 +10,13 @@ get:
     - $ref: ../components/parameters/postIdPathProperty.yaml
     - $ref: ../components/parameters/commentIdPathProperty.yaml
   responses:
-    '200':
+    "200":
       description: Comment likes returned.
       content:
         application/json:
           schema:
             $ref: ../components/schemas/commentLikeCountResponseBody.yaml
-    '404':
+    "404":
       description: Post or comment not found.
       content:
         application/json:
@@ -36,9 +36,13 @@ post:
     - $ref: ../components/parameters/postIdPathProperty.yaml
     - $ref: ../components/parameters/commentIdPathProperty.yaml
   responses:
-    '200':
+    "200":
       description: Comment liked successfully.
-    '404':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/commentLikeCountResponseBody.yaml
+    "404":
       description: Post or comment not found.
       content:
         application/json:
@@ -58,19 +62,19 @@ delete:
     - $ref: ../components/parameters/postIdPathProperty.yaml
     - $ref: ../components/parameters/commentIdPathProperty.yaml
   responses:
-    '200':
+    "200":
       description: Comment like removed successfully.
       content:
         application/json:
           schema:
             $ref: ../components/schemas/commentLikeCountResponseBody.yaml
-    '400':
+    "400":
       description: Not liked.
       content:
         application/json:
           schema:
             $ref: ../components/schemas/commentNotLikedResponseBody.yaml
-    '404':
+    "404":
       description: Post or comment not found.
       content:
         application/json:

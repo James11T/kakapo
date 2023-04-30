@@ -9,7 +9,7 @@ get:
   parameters:
     - $ref: ../components/parameters/postIdPathProperty.yaml
   responses:
-    '200':
+    "200":
       description: Like count returned.
       content:
         application/json:
@@ -19,7 +19,61 @@ get:
               likes:
                 type: number
                 example: 100
-    '404':
+    "404":
+      description: Post not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/postNotFoundResponseBody.yaml
+post:
+  operationId: like-post
+  summary: Like a post
+  description: Like a post as the authenticated user.
+  tags:
+    - posts
+    - post-details
+    - post-likes
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+  responses:
+    "200":
+      description: Like count returned.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              likes:
+                type: number
+                example: 100
+    "404":
+      description: Post not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/postNotFoundResponseBody.yaml
+delete:
+  operationId: unlike-post
+  summary: Unlike a post
+  description: Unlike a post as the authenticated user.
+  tags:
+    - posts
+    - post-details
+    - post-likes
+  parameters:
+    - $ref: ../components/parameters/postIdPathProperty.yaml
+  responses:
+    "200":
+      description: Like count returned.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              likes:
+                type: number
+                example: 100
+    "404":
       description: Post not found.
       content:
         application/json:
