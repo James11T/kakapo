@@ -5,13 +5,13 @@ import type { Request, Response, NextFunction } from "express";
 // post /authenticate
 // Authenticate with a given username and password
 const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-  const parsedRequest = validate(authenticateSchema, req);
+  const parsedRequest = await validate(authenticateSchema, req);
 };
 
 // post /refresh
 // Refresh an access token with a refresh token
 const refreshAccess = async (req: Request, res: Response, next: NextFunction) => {
-  const parsedRequest = validate(refreshAccessSchema, req);
+  const parsedRequest = await validate(refreshAccessSchema, req);
 };
 
 export { authenticate, refreshAccess };
