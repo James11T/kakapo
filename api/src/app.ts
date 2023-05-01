@@ -5,7 +5,7 @@ import prisma from "./database";
 import baseRouter from "./routes";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/error.middleware";
-import setRequestMetadata, { logRequest } from "./middleware/pre.middleware";
+import setRequestMetadata, { logRequest } from "./middleware/meta.middleware";
 
 const app = express();
 
