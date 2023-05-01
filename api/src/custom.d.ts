@@ -1,4 +1,5 @@
 import type { User } from "./models";
+import type { ExtendedRequest } from "./types";
 
 declare global {
   namespace Express {

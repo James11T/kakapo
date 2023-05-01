@@ -5,11 +5,11 @@ import prisma from "./database";
 import baseRouter from "./routes";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/error.middleware";
-import setRequestMeta, { logRequest } from "./middleware/pre.middleware";
+import setRequestMetadata, { logRequest } from "./middleware/pre.middleware";
 
 const app = express();
 
-app.use(setRequestMeta);
+app.use(setRequestMetadata);
 app.use(express.urlencoded({ extended: true })); // Parse forms
 app.use(express.json()); // Parse JSON bodies
 app.use(cookieParser()); // Parse cookies

@@ -1,11 +1,38 @@
-import { Ok, Err } from "ts-results";
+import { Ok, Err } from "../errors/errorHandling";
 import { uuid } from "../utils/strings";
 import { getEpoch } from "../utils/time";
-import { RefreshToken } from "../models";
+import prisma from "../database";
+import JWT, { TokenExpiredError } from "jsonwebtoken";
 import { REFRESH_TOKEN_CONSTANTS, ACCESS_TOKEN_CONSTANTS } from "../config";
-import type { Result } from "ts-results";
-import type { User } from "../models/user.model";
-import type { JWTRefreshToken, JWTAccessToken } from "../types";
+import type { User, RefreshToken } from "@prisma/client";
+import type { JWTRefreshToken, JWTAccessToken, AsyncResult } from "../types";
+import type { Result } from "../types";
+
+const { JWT_SECRET } = process.env;
+
+const signToken = (payload: any): Result<string, "SIGN_TOKEN_ERROR"> => {
+  try {
+    const token = JWT.sign(payload, JWT_SECRET);
+    return Ok(token);
+  } catch (err) {
+    console.error(err);
+
+    return Err("SIGN_TOKEN_ERROR");
+  }
+};
+
+const decodeSignedToken = <T>(token: string): Result<T, "INVALID_TOKEN" | "TOKEN_EXPIRED"> => {
+  try {
+    const decoded = JWT.verify(token, JWT_SECRET, {
+      algorithms: ["HS256"],
+    }) as T;
+
+    return Ok(decoded);
+  } catch (error) {
+    if (error instanceof TokenExpiredError) return Err("TOKEN_EXPIRED");
+    return Err("INVALID_TOKEN");
+  }
+};
 
 type GENERATE_ACCESS_TOKEN_ERRORS =
   | "REFRESH_TOKEN_EXPIRED"
@@ -16,14 +43,14 @@ type GENERATE_ACCESS_TOKEN_ERRORS =
 const generateAccessToken = async (
   user: User,
   refreshToken: JWTRefreshToken
-): Promise<Result<JWTAccessToken, GENERATE_ACCESS_TOKEN_ERRORS>> => {
+): AsyncResult<JWTAccessToken, GENERATE_ACCESS_TOKEN_ERRORS> => {
   if (refreshToken.exp < getEpoch()) return Err("REFRESH_TOKEN_EXPIRED");
 
   let DBRefreshToken: RefreshToken | null;
 
   try {
-    DBRefreshToken = await RefreshToken.findOne({
-      where: { id: refreshToken.jti },
+    DBRefreshToken = await prisma.refreshToken.findUnique({
+      where: { uuid: refreshToken.jti },
     });
   } catch {
     return Err("FAILED_TO_GET_REFRESH_TOKEN");
@@ -38,8 +65,8 @@ const generateAccessToken = async (
   const now = getEpoch();
 
   const data: JWTAccessToken = {
-    refresh_jti: DBRefreshToken.id,
-    sub: user.id,
+    refresh_jti: DBRefreshToken.uuid,
+    sub: user.uuid,
     exp: now + ACCESS_TOKEN_CONSTANTS.TOKEN_TTL,
     iat: now,
   };
@@ -56,7 +83,7 @@ const generateRefreshToken = async (
 
   const data = {
     jti: tokenId,
-    sub: user.id,
+    sub: user.uuid,
     iat: now,
     exp: now + REFRESH_TOKEN_CONSTANTS.TOKEN_TTL,
     scp: scope,
@@ -65,4 +92,4 @@ const generateRefreshToken = async (
   return [data, tokenId];
 };
 
-export { generateAccessToken, generateRefreshToken };
+export { generateAccessToken, generateRefreshToken, signToken, decodeSignedToken };

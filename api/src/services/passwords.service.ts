@@ -1,10 +1,10 @@
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
-import { Ok, Err } from "ts-results";
-import { sendTemplate } from "../email/templates";
+import { Ok, Err } from "../errors/errorHandling";
+import { sendTemplate } from "./email/templates";
 import { HASHING_CONSTANTS, WEB_CONSTANTS } from "../config";
-import type { User } from "../models";
-import type { Result } from "ts-results";
+import type { User } from "@prisma/client";
+import type { AsyncResult } from "../types";
 
 const { JWT_SECRET } = process.env;
 
@@ -20,9 +20,7 @@ const hashingOptions = {
  * @param password A password to hash
  * @returns A password hash and salt
  */
-const hashPassword = async (
-  password: string
-): Promise<Result<string, "FAILED_TO_HASH_PASSWORD">> => {
+const hashPassword = async (password: string): AsyncResult<string, "FAILED_TO_HASH_PASSWORD"> => {
   try {
     const hash = await argon2.hash(password, hashingOptions);
     return Ok(hash);

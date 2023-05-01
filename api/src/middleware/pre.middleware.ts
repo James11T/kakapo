@@ -49,7 +49,7 @@ const logRequest = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-const setRequestMeta = [setRealIp, setRequestCountry];
+const setRequestMetadata = [setRealIp, setRequestCountry];
 
 export { setRealIp, logRequest };
-export default setRequestMeta;
+export default setRequestMetadata;

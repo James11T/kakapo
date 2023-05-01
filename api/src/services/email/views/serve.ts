@@ -2,7 +2,7 @@ import "dotenv/config";
 import fs from "fs";
 import express from "express";
 import handlebars from "handlebars";
-import format from "../../utils/console";
+import format from "../../../utils/console";
 
 const { EMAIL_DEV_SERVER_PORT } = process.env;
 

@@ -112,6 +112,7 @@ model User {
 model UserTOTP {
   id        Int    @id @default(autoincrement()) @map("user_totp_id")
   uuid      String @unique @map("user_totp_uuid") @db.VarChar(36)
+  name      String @db.VarChar(32)
   activated Int    @default(0) @db.TinyInt
   secret    String @db.VarChar(128)
   userId    Int    @map("user_id")

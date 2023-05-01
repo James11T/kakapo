@@ -1,128 +1,135 @@
-import * as APIErrors from "../errors/api";
-import { uuid } from "../utils/strings";
-import AppDataSource from "../database";
-import { WEB_CONSTANTS } from "../config";
-import { uploadFile } from "../services/s3";
-import { alwaysArray } from "../utils/array";
-import { Post, PostMedia } from "../models";
-import type * as postRequestSchemas from "../validation/posts.validation";
-import type { NextFunction, Request, Response } from "express";
-import type { ValidatedRequest } from "../middleware/validation.middleware";
+import { validate } from "../schemas/validation";
+import {
+  createPostCommentSchema,
+  createPostSchema,
+  deleteCommentSchema,
+  deletePostSchema,
+  editCommentSchema,
+  editPostSchema,
+  getCommentLikesSchema,
+  getCommentSchema,
+  getPostCommentsSchema,
+  getPostLikesSchema,
+  getPostSchema,
+  likeCommentSchema,
+  likePostSchema,
+  queryPostsSchema,
+  unlikeCommentSchema,
+  unlikePostSchema,
+} from "../schemas/posts.schemas";
+import type { Request, Response, NextFunction } from "express";
 
-const { WEB_DOMAIN, AWS_S3_IMAGE_BUCKET } = process.env;
-
-/**
- * Filter posts by search query
- */
-const queryPostsController = async (req: Request, res: Response) => {
-  return res.status(501).send("Feature not yet available");
+// get /
+// Query posts
+const queryPosts = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(queryPostsSchema, req);
 };
 
-/**
- * Create a post from the request body
- */
-const createPostController = async (
-  req: ValidatedRequest<typeof postRequestSchemas.createPostSchema>,
-  res: Response,
-  next: NextFunction
-) => {
-  if (!req.user)
-    return next(new APIErrors.APIUnauthorizedError("You must be authenticated to create posts"));
-  if (!req.files) return next(new APIErrors.APIBadRequestError("No files submitted"));
-
-  const files = alwaysArray(req.files.media);
-  const postId = uuid();
-
-  const uploads: string[] = [];
-
-  const newPost = new Post();
-  newPost.id = postId;
-  newPost.author = req.user;
-  newPost.caption = req.body.caption;
-  newPost.postedAt = new Date();
-
-  for (const [index, file] of files.entries()) {
-    const uploadRes = await uploadFile(
-      file.data,
-      `media/${postId}/media${index}`,
-      AWS_S3_IMAGE_BUCKET
-    );
-    if (uploadRes.err) {
-      return next(new APIErrors.APIServerError("Error uploading files"));
-    }
-
-    uploads.push(
-      `https://${WEB_CONSTANTS.MEDIA_SUBDOMAIN}.${WEB_DOMAIN}/media/${postId}/media${index}`
-    );
-  }
-
-  const postMedia = uploads.map((mediaUrl, index) => {
-    const newPostMedia = new PostMedia();
-    newPostMedia.id = uuid();
-    newPostMedia.url = mediaUrl;
-    newPostMedia.type = "image";
-    newPostMedia.index = index;
-    newPostMedia.post = newPost;
-    return newPostMedia;
-  });
-
-  try {
-    await AppDataSource.transaction(async (transactionManager) => {
-      await transactionManager.save(newPost);
-      await transactionManager.save(postMedia);
-    });
-  } catch (err) {
-    console.error(err);
-    return next(new APIErrors.APIServerError("Failed to save post"));
-  }
-
-  return res.json({
-    media: uploads,
-    postId,
-  });
+// post /
+// Create a post
+const createPost = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(createPostSchema, req);
 };
 
-/**
- * Get a post by ID
- */
-const getPostController = async (
-  req: ValidatedRequest<typeof postRequestSchemas.getPostSchema>,
-  res: Response,
-  next: NextFunction
-) => {
-  const { postId } = req.params;
-
-  let post: Post | null = null;
-  try {
-    post = await Post.findOne({ where: { id: postId } });
-  } catch (err) {
-    console.error(err);
-    return next(new APIErrors.APIServerError("Failed to fetch post"));
-  }
-
-  if (!post) return next(new APIErrors.APINotFoundError("Post not found"));
-
-  return res.json(post);
+// get /:postId
+// Get a post
+const getPost = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(getPostSchema, req);
 };
 
-/**
- * Delete a post by ID
- */
-const deletePostController = async (
-  req: ValidatedRequest<typeof postRequestSchemas.getPostSchema>,
-  res: Response,
-  next: NextFunction
-) => {};
+// patch /:postId
+// Edit a post
+const editPost = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(editPostSchema, req);
+};
 
-/**
- * Edit a post by ID based off the request body
- */
-const editPostController = async (req: Request, res: Response) => {};
+// delete /:postId
+// Delete a post
+const deletePost = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(deletePostSchema, req);
+};
+
+// get /:postId/likes
+// Get like count on a post
+const getPostLikes = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(getPostLikesSchema, req);
+};
+
+// post /:postId/likes
+// Like a post
+const likePost = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(likePostSchema, req);
+};
+
+// delete /:postId/likes
+// Unlike a post
+const unlikePost = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(unlikePostSchema, req);
+};
+
+// get /:postId/comments
+// Get comments on a post
+const getPostComments = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(getPostCommentsSchema, req);
+};
+
+// post /:postId/comments
+// Create a comment on a post
+const createPostComment = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(createPostCommentSchema, req);
+};
+
+// get /:postId/comments/:commentId
+// Get a specific comment
+const getComment = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(getCommentSchema, req);
+};
+
+// patch /:postId/comments/:commentId
+// Edit a comment
+const editComment = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(editCommentSchema, req);
+};
+
+// delete /:postId/comments/:commentId
+// Delete a comment
+const deleteComment = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(deleteCommentSchema, req);
+};
+
+// get /:postId/comments/:commentId/likes
+// Get a comments like count
+const getCommentLikes = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(getCommentLikesSchema, req);
+};
+
+// post /:postId/comments/:commentId/likes
+// Like a comment
+const likeComment = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(likeCommentSchema, req);
+};
+
+// delete /:postId/comments/:commentId/likes
+// Unlike a comment
+const unlikeComment = async (req: Request, res: Response, next: NextFunction) => {
+  const parsedRequest = validate(unlikeCommentSchema, req);
+};
 
 export {
-  queryPostsController,
-  createPostController,
-  getPostController,
-  deletePostController,
-  editPostController,
+  queryPosts,
+  createPost,
+  getPost,
+  editPost,
+  deletePost,
+  getPostLikes,
+  likePost,
+  unlikePost,
+  getPostComments,
+  createPostComment,
+  getComment,
+  editComment,
+  deleteComment,
+  getCommentLikes,
+  likeComment,
+  unlikeComment,
 };

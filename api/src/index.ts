@@ -1,5 +1,4 @@
 import "dotenv/config";
-import "reflect-metadata";
 import ip from "ip";
 import chalk from "chalk";
 import app from "./app";
@@ -10,13 +9,8 @@ const { API_PORT } = process.env;
 
 const requiredEnvVars = [
   "API_PORT",
-  "SESSION_SECRET",
   "JWT_SECRET",
-  "DB_DIALECT",
-  "DB_USER",
-  "DB_PASSWORD",
-  "DB_HOST",
-  "DB_DATABASE",
+  "DATABASE_URL",
   "WEB_DOMAIN",
   "AWS_REGION",
   "AWS_ACCESS_KEY_ID",
@@ -24,12 +18,14 @@ const requiredEnvVars = [
   "AWS_S3_IMAGE_BUCKET",
 ];
 
-const anyMissing = requiredEnvVars.some((envVar) => {
+let anyMissing = false;
+
+for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
     console.error(format.fail(`Required environment variable ${chalk.bold(envVar)} is not set.`));
-    return true;
+    anyMissing = true;
   }
-});
+}
 
 if (anyMissing) process.exit(0);
 

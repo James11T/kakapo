@@ -1,5 +1,5 @@
-import { User } from "../models";
-import { decodeSignedToken } from "../utils/jwt";
+import prisma from "../database";
+import { decodeSignedToken } from "../services/tokens.service";
 import { APIUnauthorizedError } from "../errors/api";
 import type { JWTAccessToken } from "../types";
 import type { Request, Response, NextFunction } from "express";
@@ -13,7 +13,7 @@ const authenticate = async (req: Request, res: Response, next: NextFunction): Pr
   const decoded = decodeSignedToken<JWTAccessToken>(accessToken);
   if (decoded.err) return next(new APIUnauthorizedError("Bad access token"));
 
-  const user = await User.findOne({ where: { id: decoded.val.sub } });
+  const user = await prisma.user.findFirst({ where: { uuid: decoded.val.sub } });
   if (!user) return next(new APIUnauthorizedError("Failed to access token subject user"));
 
   req.user = user;

@@ -1,11 +1,10 @@
 import { Router } from "express";
-import { authenticateController, refreshAccessController } from "../controllers/auth.controller";
+import { authenticate, refreshAccess } from "../controllers/tokens.controller";
 import { validate } from "../middleware/validation.middleware";
-import { authenticateSchema, refreshAccessSchema } from "../validation/auth.validation";
 
-const tokenRouter = Router();
+const tokensRouter = Router();
 
-tokenRouter.post("/authenticate", validate(authenticateSchema), authenticateController);
-tokenRouter.post("/refresh", validate(refreshAccessSchema), refreshAccessController);
+tokensRouter.post("/authenticate", authenticate);
+tokensRouter.post("/refresh", refreshAccess);
 
-export default tokenRouter;
+export default tokensRouter;

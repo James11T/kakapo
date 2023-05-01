@@ -1,7 +1,7 @@
 import geoip from "geoip-country";
-import { Ok, Err } from "ts-results";
+import { Ok, Err } from "../errors/errorHandling";
 import { countryCodeEmoji } from "country-code-emoji";
-import type { Result } from "ts-results";
+import type { Result } from "../types";
 
 const FAIL_COUNTRY_CODE = "XX";
 
