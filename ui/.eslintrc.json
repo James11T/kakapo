@@ -23,6 +23,6 @@
     "react-hooks/exhaustive-deps": "off"
   },
   "parserOptions": {
-    "project": "./ui/tsconfig.json"
+    "project": "./tsconfig.json"
   }
 }

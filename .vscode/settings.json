@@ -1,0 +1,11 @@
+{
+  "eslint.workingDirectories": ["api", "ui"],
+  "cSpell.userWords": [
+    "fileupload",
+    "geoip",
+    "kakaposocial",
+    "openapi",
+    "testuser",
+    "TOTP"
+  ]
+}
