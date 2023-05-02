@@ -1,6 +1,7 @@
 import type { z } from "zod";
 import type { Request } from "express";
 import type { ValidationSchema } from "../types";
+import { APIParameterError } from "../errors/api";
 
 const validate = async <T extends ValidationSchema>(
   schema: T,
@@ -8,13 +9,14 @@ const validate = async <T extends ValidationSchema>(
 ): Promise<z.infer<T>> => {
   const parseResult = await schema.safeParseAsync(req);
 
-  // const processedErrors = parseResult.error.issues.map((issue) => ({
-  //   location: issue.path.join("."),
-  //   message: issue.message,
-  //   type: issue.code,
-  // }));
-
-  if (!parseResult.success) throw new Error(); // TODO: Change to standardized error
+  if (!parseResult.success) {
+    const processedErrors = parseResult.error.issues.map((issue) => ({
+      location: issue.path.join("."),
+      message: issue.message,
+      type: issue.code,
+    }));
+    throw new APIParameterError(processedErrors);
+  }
   return parseResult.data;
 };
 

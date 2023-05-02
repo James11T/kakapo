@@ -68,8 +68,8 @@ export type BadParameter = { location: string; message: string; type: ZodIssue["
 class APIParameterError extends APIBadRequestError {
   parameters: BadParameter[];
 
-  constructor(message = "One or more supplied parameters are invalid", parameters: BadParameter[]) {
-    super("BAD_PARAMETERS", message);
+  constructor(parameters: BadParameter[]) {
+    super("BAD_PARAMETERS", "One or more supplied parameters are invalid.");
 
     this.parameters = parameters;
   }

@@ -1,6 +1,5 @@
-import chalk from "chalk";
+import logger from "../logging";
 import { IPToCountry } from "../utils/ip";
-import { colorizeHTTPCode } from "../utils/strings";
 import { isDevelopmentEnv, DEPLOYMENT_CONSTANTS } from "../config";
 import type { Request, Response, NextFunction } from "express";
 
@@ -25,26 +24,17 @@ const setRequestCountry = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-const ping = chalk.bold.white("Ping!");
-const methods: { [key: string]: string } = {
-  GET: chalk.bold.green("GET"),
-  POST: chalk.bold.green("POST"),
-  DELETE: chalk.bold.red("DELETE"),
-  PUT: chalk.bold.yellow("PUT"),
-  PATCH: chalk.bold.yellow("PATCH"),
-};
-
 const logRequest = (req: Request, res: Response, next: NextFunction) => {
   res.on("finish", () => {
-    const output = [
-      ping,
-      methods[req.method],
-      req.realIp,
-      req.originalUrl,
-      "->",
-      colorizeHTTPCode(res.statusCode),
-    ];
-    console.log(output.join(" "));
+    logger.log({
+      level: res.statusCode < 400 ? "info" : "error",
+      message: "HTTP request",
+      method: req.method,
+      url: req.originalUrl,
+      ip: req.realIp,
+      user: req.user?.username ?? null,
+      status: res.statusCode,
+    });
   });
   next();
 };

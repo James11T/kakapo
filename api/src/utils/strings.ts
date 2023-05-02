@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { v4 as uuid4 } from "uuid";
 
 /**
@@ -35,14 +34,4 @@ const stripFileExtension = (filename: string): string => {
  */
 const uuid = (): string => uuid4();
 
-const colorizeHTTPCode = (code: number): string => {
-  if (code < 400) {
-    return chalk.green(code);
-  } else if (code < 500) {
-    return chalk.yellow(code);
-  } else {
-    return chalk.red(code);
-  }
-};
-
-export { countOccurrences, stripFileExtension, uuid, colorizeHTTPCode };
+export { countOccurrences, stripFileExtension, uuid };

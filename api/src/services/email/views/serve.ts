@@ -2,7 +2,6 @@ import "dotenv/config";
 import fs from "fs";
 import express from "express";
 import handlebars from "handlebars";
-import format from "../../../utils/console";
 
 const { EMAIL_DEV_SERVER_PORT } = process.env;
 
@@ -50,5 +49,5 @@ app.get("/:template", (req, res) => {
 app.listen(EMAIL_DEV_SERVER_PORT, () => {
   const url = `http://localhost:${EMAIL_DEV_SERVER_PORT}/`;
   console.log(`Listening on ${EMAIL_DEV_SERVER_PORT}`);
-  console.log(`Access via ${format.link(url)}`);
+  console.log(`Access via ${url}`);
 });

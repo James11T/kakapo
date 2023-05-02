@@ -1,9 +1,8 @@
 import "dotenv/config";
 import ip from "ip";
-import chalk from "chalk";
 import app from "./app";
 import { RUNTIME_CONSTANTS } from "./config";
-import format from "./utils/console";
+import logger from "./logging";
 
 const { API_PORT } = process.env;
 
@@ -22,7 +21,7 @@ let anyMissing = false;
 
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
-    console.error(format.fail(`Required environment variable ${chalk.bold(envVar)} is not set.`));
+    logger.error(`Required environment variable ${envVar} is not set`);
     anyMissing = true;
   }
 }
@@ -30,16 +29,18 @@ for (const envVar of requiredEnvVars) {
 if (anyMissing) process.exit(0);
 
 const start = async () => {
-  console.log(format.waiting("Starting..."));
-  if (RUNTIME_CONSTANTS.IS_DEV) console.log(format.dev("Running in development mode"));
+  logger.info("API Starting");
+  if (RUNTIME_CONSTANTS.IS_DEV) logger.debug("Running in development mode");
 
   app.listen(API_PORT, () => {
-    const localAddr = `http://localhost:${API_PORT}/`;
-    const remoteAddr = `http://${ip.address()}:${API_PORT}/`;
+    logger.info(`API listening on port ${API_PORT}`);
 
-    console.log(`\n${chalk.green("●")} Server is running on port ${chalk.blue.bold(API_PORT)}`);
-    console.log(`   Connect locally with ${format.link(localAddr)}`);
-    console.log(`   Or on another device with ${format.link(remoteAddr)}`);
+    if (RUNTIME_CONSTANTS.IS_DEV) {
+      const localAddr = `http://localhost:${API_PORT}/`;
+      const remoteAddr = `http://${ip.address()}:${API_PORT}/`;
+      logger.debug(`Connect locally with ${localAddr}`);
+      logger.debug(`Connect on another device with ${remoteAddr}`);
+    }
   });
 };
 
