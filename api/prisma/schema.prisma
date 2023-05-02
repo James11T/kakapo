@@ -11,7 +11,7 @@ model Comment {
   id       Int      @id @default(autoincrement()) @map("comment_id")
   uuid     String   @unique @map("comment_uuid") @db.VarChar(36)
   text     String   @db.VarChar(1024)
-  postedAt DateTime @map("posted_at") @db.DateTime(0)
+  postedAt DateTime @map("posted_at")
   authorId Int      @map("author_id")
   postId   Int      @map("post_id")
   author   User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -25,7 +25,7 @@ model Comment {
 model FriendRequest {
   userFromId Int      @map("user_from_id")
   userToId   Int      @map("user_to_id")
-  sentAt     DateTime @map("sent_at") @db.DateTime(0)
+  sentAt     DateTime @map("sent_at")
   userFrom   User     @relation("userFrom", fields: [userFromId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userTo     User     @relation("userTo", fields: [userToId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -36,7 +36,7 @@ model FriendRequest {
 model Friendship {
   user1Id         Int      @map("user_1_id")
   user2Id         Int      @map("user_2_id")
-  becameFriendsAt DateTime @map("became_friends_at") @db.DateTime()
+  becameFriendsAt DateTime @map("became_friends_at")
   user1           User     @relation("user1", fields: [user1Id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user2           User     @relation("user2", fields: [user2Id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -48,7 +48,7 @@ model Post {
   id       Int         @id @default(autoincrement()) @map("post_id")
   uuid     String      @unique @map("post_uuid") @db.VarChar(36)
   caption  String      @db.VarChar(400)
-  postedAt DateTime    @map("posted_at") @db.DateTime(0)
+  postedAt DateTime    @map("posted_at")
   authorId Int         @map("author_id")
   comments Comment[]
   author   User        @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -75,11 +75,11 @@ model RefreshToken {
   id         Int      @id @default(autoincrement()) @map("refresh_token_id")
   uuid       String   @unique @map("refresh_token_uuid") @db.VarChar(36)
   subjectId  Int      @map("subject_id")
-  expiresAt  DateTime @map("expires_at") @db.DateTime(0)
-  issuedAt   DateTime @map("issued_at") @db.DateTime(0)
+  expiresAt  DateTime @map("expires_at")
+  issuedAt   DateTime @map("issued_at")
   deviceType String   @default("unknown") @map("device_type") @db.VarChar(64)
   sourceIp   String   @map("source_ip") @db.VarChar(39)
-  isRevoked  Int      @default(0) @map("is_revoked") @db.TinyInt
+  isRevoked  Boolean  @default(false) @map("is_revoked")
   user       User     @relation(fields: [subjectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([subjectId])
@@ -94,8 +94,8 @@ model User {
   avatar                 String?         @db.VarChar(255)
   about                  String          @default("") @db.VarChar(2000)
   email                  String          @unique() @db.VarChar(255)
-  emailVerified          Int             @default(0) @map("email_verified") @db.TinyInt
-  registeredAt           DateTime        @map("registered_at") @db.DateTime()
+  emailVerified          Boolean         @default(false) @map("email_verified")
+  registeredAt           DateTime        @map("registered_at")
   passwordHash           String          @map("password_hash") @db.VarChar(255)
   comments               Comment[]
   incomingFriendRequests FriendRequest[] @relation("userTo")
@@ -110,13 +110,13 @@ model User {
 }
 
 model UserTOTP {
-  id        Int    @id @default(autoincrement()) @map("user_totp_id")
-  uuid      String @unique @map("user_totp_uuid") @db.VarChar(36)
-  name      String @db.VarChar(32)
-  activated Int    @default(0) @db.TinyInt
-  secret    String @db.VarChar(128)
-  userId    Int    @map("user_id")
-  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id        Int     @id @default(autoincrement()) @map("user_totp_id")
+  uuid      String  @unique @map("user_totp_uuid") @db.VarChar(36)
+  name      String  @db.VarChar(32)
+  activated Boolean @default(false)
+  secret    String  @db.VarChar(128)
+  userId    Int     @map("user_id")
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId])
   @@map("user_totp")
