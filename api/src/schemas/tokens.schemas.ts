@@ -15,6 +15,7 @@ const authenticateSchema = z.object({
 const refreshAccessSchema = z.object({
   body: z.object({
     refreshToken: z.string(),
+    user: z.string().uuid(),
   }),
 });
 

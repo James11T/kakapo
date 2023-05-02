@@ -50,6 +50,15 @@ const authenticate = asyncController(async (req: Request, res: Response, next: N
 // Refresh an access token with a refresh token
 const refreshAccess = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   const parsedRequest = await validate(refreshAccessSchema, req);
+
+  const signedAccessToken = await refreshAccessToken(
+    parsedRequest.body.refreshToken,
+    parsedRequest.body.user
+  );
+
+  return res.json({
+    accessToken: signedAccessToken,
+  });
 });
 
 export { authenticate, refreshAccess };

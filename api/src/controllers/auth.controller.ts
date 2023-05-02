@@ -10,13 +10,17 @@ import {
 } from "../schemas/auth.schemas";
 import { asyncController } from "./base.controller";
 import { protect } from "../middleware/auth.middleware";
+import { filter } from "../utils/objects";
+import { privateUserFilterSchema } from "../schemas/users.schemas";
 import type { Request, Response, NextFunction } from "express";
 
 // GET /whoami
 // Return authenticated user
 const whoAmI = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   protect(req.user);
-  const parsedRequest = await validate(whoAmISchema, req);
+  await validate(whoAmISchema, req);
+
+  return res.json(filter(req.user, privateUserFilterSchema));
 });
 
 // GET /mfa
