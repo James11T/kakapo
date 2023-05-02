@@ -1,6 +1,6 @@
-import { Err, Ok } from "../errors/errorHandling";
 import prisma from "../database";
-import type { FriendshipStatus, AsyncResult, RequireKey } from "../types";
+import { APINotFoundError } from "../errors";
+import type { FriendshipStatus, RequireKey } from "../types";
 import type { FriendRequest, Friendship, User } from "@prisma/client";
 
 type ID = number;
@@ -9,7 +9,12 @@ type Username = string;
 type UniqueUserKeys = { id: ID; uuid: UUID; username: Username };
 type UniqueUser = RequireKey<UniqueUserKeys>;
 
-const getUserByUnique = async (user: UniqueUser): Promise<User | null> => {
+const userNotFound = new APINotFoundError(
+  "USER_NOT_FOUND",
+  "No user was found that matches the given criteria"
+);
+
+const getUserByUnique = async (user: UniqueUser): Promise<User> => {
   const dbUser = await prisma.user.findUnique({
     where: {
       ...(user.id && { id: user.id }),
@@ -18,15 +23,18 @@ const getUserByUnique = async (user: UniqueUser): Promise<User | null> => {
     },
   });
 
+  if (!dbUser) {
+    throw userNotFound;
+  }
+
   return dbUser;
 };
 
-const resolveID = async (user: UniqueUser): AsyncResult<ID, "UNKNOWN_USER"> => {
-  if (user.id) return Ok(user.id);
+const resolveID = async (user: UniqueUser): Promise<ID> => {
+  if (user.id) return user.id;
 
   const dbUser = await getUserByUnique(user);
-  if (dbUser) return Ok(dbUser.id);
-  return Err("UNKNOWN_USER");
+  return dbUser.id;
 };
 
 const getUserByID = async (id: ID) => await getUserByUnique({ id });
@@ -40,12 +48,11 @@ const orderUsersByID = <T extends Pick<UniqueUserKeys, "id">>(user1: T, user2: T
 const getUserFriendship = async (
   user1: UniqueUser,
   user2: UniqueUser
-): AsyncResult<Friendship | null, "UNKNOWN_USER"> => {
+): Promise<Friendship | null> => {
   const user1Id = await resolveID(user1);
   const user2Id = await resolveID(user2);
 
-  if (user1Id.err || user2Id.err) return Err("UNKNOWN_USER");
-  const [firstUser, secondUser] = orderUsersByID({ id: user1Id.val }, { id: user2Id.val });
+  const [firstUser, secondUser] = orderUsersByID({ id: user1Id }, { id: user2Id });
 
   const friendship = await prisma.friendship.findUnique({
     where: {
@@ -56,62 +63,57 @@ const getUserFriendship = async (
     },
   });
 
-  return Ok(friendship);
+  return friendship;
 };
 
 const getUserFriendRequests = async (
   user: UniqueUser,
   direction: "incoming" | "outgoing" = "incoming"
-): AsyncResult<FriendRequest[], "UNKNOWN_USER"> => {
+): Promise<FriendRequest[]> => {
   const user1Id = await resolveID(user);
-  if (user1Id.err) return user1Id;
 
   const key = direction === "incoming" ? "userToId" : "userFromId";
 
   const friendRequests = await prisma.friendRequest.findMany({
     where: {
-      [key]: user1Id.val,
+      [key]: user1Id,
     },
   });
 
-  return Ok(friendRequests);
+  return friendRequests;
 };
 
 const getUsersFriendshipState = async (
   user1: UniqueUser,
   user2: UniqueUser
-): AsyncResult<FriendshipStatus, "UNKNOWN_USER"> => {
+): Promise<FriendshipStatus> => {
   const user1Id = await resolveID(user1);
   const user2Id = await resolveID(user2);
 
-  if (user1Id.err) return user1Id;
-  if (user2Id.err) return user2Id;
-
-  const friendship = await getUserFriendship({ id: user1Id.val }, { id: user2Id.val });
-  if (friendship) return Ok("FRIENDS");
+  const friendship = await getUserFriendship({ id: user1Id }, { id: user2Id });
+  if (friendship) return "FRIENDS";
 
   const friendRequest = await prisma.friendRequest.findFirst({
     where: {
       OR: [
-        { userFromId: user1Id.val, userToId: user2Id.val },
-        { userFromId: user2Id.val, userToId: user1Id.val },
+        { userFromId: user1Id, userToId: user2Id },
+        { userFromId: user2Id, userToId: user1Id },
       ],
     },
   });
 
-  if (friendRequest) return Ok("PENDING");
+  if (friendRequest) return "PENDING";
 
-  return Ok("NOT_FRIENDS");
+  return "NOT_FRIENDS";
 };
 
-const isUsernameAvailable = async (username: string): AsyncResult<boolean, never> => {
+const isUsernameAvailable = async (username: string): Promise<boolean> => {
   const user = await prisma.user.findUnique({ where: { username } });
-  return Ok(Boolean(user));
+  return Boolean(user);
 };
 
-const getUserFriends = async (user: UniqueUser): AsyncResult<User[], "UNKNOWN_USER"> => {
+const getUserFriends = async (user: UniqueUser): Promise<User[]> => {
   const userId = await resolveID(user);
-  if (userId.err) return userId;
 
   const friends = await prisma.user.findMany({
     where: {
@@ -138,7 +140,7 @@ const getUserFriends = async (user: UniqueUser): AsyncResult<User[], "UNKNOWN_US
     },
   });
 
-  return Ok(friends);
+  return friends;
 };
 
 export {

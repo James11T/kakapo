@@ -7,6 +7,10 @@ import type { Request, Response, NextFunction } from "express";
 // Authenticate with a given username and password
 const authenticate = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   const parsedRequest = await validate(authenticateSchema, req);
+
+  const { email, password } = parsedRequest.body;
+
+  // const user = await getUser({})
 });
 
 // post /refresh

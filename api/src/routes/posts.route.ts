@@ -17,11 +17,22 @@ import {
   likeComment,
   unlikeComment,
 } from "../controllers/posts.controller";
+import fileUpload from "express-fileupload";
+import { POST_CONSTANTS } from "../config";
 
 const postsRouter = Router();
 
 postsRouter.get("/", queryPosts); // Query posts
-postsRouter.post("/", createPost); // Create a post
+postsRouter.post(
+  "/",
+  fileUpload({
+    limits: {
+      files: POST_CONSTANTS.MAX_MEDIA_COUNT,
+      fileSize: POST_CONSTANTS.MAX_MEDIA_SIZE,
+    },
+  }),
+  createPost
+); // Create a post
 
 postsRouter.get("/:postId", getPost); // Get a post
 postsRouter.patch("/:postId", editPost); // Edit a post

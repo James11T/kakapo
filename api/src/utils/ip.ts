@@ -1,9 +1,8 @@
 import geoip from "geoip-country";
-import { Ok, Err } from "../errors/errorHandling";
 import { countryCodeEmoji } from "country-code-emoji";
-import type { Result } from "../types";
 
 const FAIL_COUNTRY_CODE = "XX";
+const FAIL_EMOJI = "❓";
 
 const IPToCountry = (ip: string) => {
   const geoData = geoip.lookup(ip);
@@ -12,25 +11,18 @@ const IPToCountry = (ip: string) => {
   return geoData.country;
 };
 
-type CountryToEmojiErrors = "INVALID_COUNTRY";
+const countryToEmoji = (countryCode: string): string => {
+  if (countryCode === FAIL_COUNTRY_CODE) return FAIL_EMOJI;
 
-const countryToEmoji = (countryCode: string): Result<string, CountryToEmojiErrors> => {
-  if (countryCode === FAIL_COUNTRY_CODE) return Ok("❓");
-
-  try {
-    return Ok(countryCodeEmoji(countryCode));
-  } catch (err) {
-    return Err("INVALID_COUNTRY");
-  }
+  return countryCodeEmoji(countryCode);
 };
 
-const IPToCountryEmoji = (ip: string): Result<string, CountryToEmojiErrors> => {
+const IPToCountryEmoji = (ip: string): string => {
   const countryCode = IPToCountry(ip);
 
   const countryEmoji = countryToEmoji(countryCode);
-  if (countryEmoji.err) return Err(countryEmoji.val);
 
-  return Ok(countryEmoji.val);
+  return countryEmoji;
 };
 
-export { IPToCountry, countryToEmoji, IPToCountryEmoji };
+export { IPToCountry, countryToEmoji, IPToCountryEmoji, FAIL_COUNTRY_CODE, FAIL_EMOJI };

@@ -18,8 +18,8 @@ import {
   unlikePostSchema,
 } from "../schemas/posts.schemas";
 import { asyncController } from "./base.controller";
-import type { Request, Response, NextFunction } from "express";
 import { protect } from "../middleware/auth.middleware";
+import type { Request, Response, NextFunction } from "express";
 
 // get /
 // Query posts

@@ -1,6 +1,6 @@
 import AWS from "aws-sdk";
-import { Err, Ok } from "../errors/errorHandling";
-import type { AsyncResult } from "../types";
+import { APIServerError } from "../errors";
+import logger from "../logging";
 
 const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_S3_IMAGE_BUCKET } = process.env;
 
@@ -27,7 +27,7 @@ const uploadFile = async (
   file: Buffer,
   key: string,
   bucket = AWS_S3_IMAGE_BUCKET
-): AsyncResult<AWS.S3.ManagedUpload.SendData, "FAILED_TO_UPLOAD_FILE"> => {
+): Promise<AWS.S3.ManagedUpload.SendData> => {
   const params = {
     Bucket: bucket,
     Key: key,
@@ -36,9 +36,10 @@ const uploadFile = async (
 
   try {
     const res = await s3.upload(params).promise();
-    return Ok(res);
+    return res;
   } catch (err) {
-    return Err("FAILED_TO_UPLOAD_FILE");
+    logger.error("Failed to upload image to S3", { error: String(err) });
+    throw new APIServerError();
   }
 };
 

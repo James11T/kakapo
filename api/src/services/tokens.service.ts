@@ -1,36 +1,36 @@
-import { Ok, Err } from "../errors/errorHandling";
 import { uuid } from "../utils/strings";
 import { getEpoch } from "../utils/time";
 import prisma from "../database";
 import JWT from "jsonwebtoken";
 import { REFRESH_TOKEN_CONSTANTS, ACCESS_TOKEN_CONSTANTS } from "../config";
 import type { User, RefreshToken } from "@prisma/client";
-import type { JWTRefreshToken, JWTAccessToken, AsyncResult } from "../types";
-import type { Result } from "../types";
+import type { JWTRefreshToken, JWTAccessToken } from "../types";
+import logger from "../logging";
+import { APIServerError, APIUnauthorizedError } from "../errors";
 
 const { JWT_SECRET } = process.env;
 
-const signToken = (payload: any): Result<string, "SIGN_TOKEN_ERROR"> => {
+const signToken = (payload: any): string => {
   try {
     const token = JWT.sign(payload, JWT_SECRET);
-    return Ok(token);
+    return token;
   } catch (err) {
-    console.error(err);
-
-    return Err("SIGN_TOKEN_ERROR");
+    logger.error(err);
+    throw new APIServerError();
   }
 };
 
-const decodeSignedToken = <T>(token: string): Result<T, "INVALID_TOKEN" | "TOKEN_EXPIRED"> => {
+const decodeSignedToken = <T>(token: string): T => {
   try {
     const decoded = JWT.verify(token, JWT_SECRET, {
       algorithms: ["HS256"],
     }) as T;
 
-    return Ok(decoded);
+    return decoded;
   } catch (error) {
-    if (error instanceof JWT.TokenExpiredError) return Err("TOKEN_EXPIRED");
-    return Err("INVALID_TOKEN");
+    if (error instanceof JWT.TokenExpiredError)
+      throw new APIUnauthorizedError("TOKEN_EXPIRED", "The supplied JWT had expired.");
+    throw new APIUnauthorizedError("INVALID_TOKEN", "The supplied JWT was invalid.");
   }
 };
 
@@ -40,27 +40,39 @@ type GENERATE_ACCESS_TOKEN_ERRORS =
   | "REFRESH_TOKEN_REVOKED"
   | "INVALID_REFRESH_TOKEN";
 
+const invalidRefreshTokenError = new APIUnauthorizedError(
+  "INVALID_REFRESH_TOKEN",
+  "The provided token is malformed or invalid."
+);
+
 const generateAccessToken = async (
   user: User,
   refreshToken: JWTRefreshToken
-): AsyncResult<JWTAccessToken, GENERATE_ACCESS_TOKEN_ERRORS> => {
-  if (refreshToken.exp < getEpoch()) return Err("REFRESH_TOKEN_EXPIRED");
+): Promise<JWTAccessToken> => {
+  if (refreshToken.exp < getEpoch())
+    throw new APIUnauthorizedError(
+      "REFRESH_TOKEN_EXPIRED",
+      "The supplied refresh JWT had expired."
+    );
 
-  let DBRefreshToken: RefreshToken | null;
+  const DBRefreshToken = await prisma.refreshToken.findUnique({
+    where: { uuid: refreshToken.jti },
+  });
 
-  try {
-    DBRefreshToken = await prisma.refreshToken.findUnique({
-      where: { uuid: refreshToken.jti },
-    });
-  } catch {
-    return Err("FAILED_TO_GET_REFRESH_TOKEN");
+  if (!DBRefreshToken) {
+    throw invalidRefreshTokenError;
   }
-
-  if (!DBRefreshToken) return Err("FAILED_TO_GET_REFRESH_TOKEN");
-
-  if (DBRefreshToken.subjectId !== user.id) return Err("INVALID_REFRESH_TOKEN");
-
-  if (DBRefreshToken.isRevoked) return Err("REFRESH_TOKEN_REVOKED");
+  if (DBRefreshToken.subjectId !== user.id) {
+    logger.warn("refresh token was attempted to be used on the wrong user", {
+      user: user.username,
+      id: user.id,
+      uuid: user.uuid,
+    });
+    throw invalidRefreshTokenError;
+  }
+  if (DBRefreshToken.isRevoked) {
+    throw invalidRefreshTokenError;
+  }
 
   const now = getEpoch();
 
@@ -71,13 +83,10 @@ const generateAccessToken = async (
     iat: now,
   };
 
-  return Ok(data);
+  return data;
 };
 
-const generateRefreshToken = async (
-  user: User,
-  scope: string
-): Promise<[JWTRefreshToken, string]> => {
+const generateRefreshToken = (user: User, scope: string): [JWTRefreshToken, string] => {
   const tokenId = uuid();
   const now = getEpoch();
 

@@ -1,7 +1,7 @@
 import fs from "fs";
 import handlebars from "handlebars";
 import { sendEmail } from "../ses.service";
-import { IPToCountryEmoji } from "../../utils/ip";
+import { FAIL_EMOJI, IPToCountryEmoji } from "../../utils/ip";
 import type { TemplateDelegate } from "handlebars";
 import type { EmailOptions } from "../ses.service";
 
@@ -100,8 +100,12 @@ const sendTemplate = async (
   const loadedTemplate = templates[templateName];
 
   if (templateContext.ip) {
-    const ipFlag = IPToCountryEmoji(templateContext.ip);
-    if (ipFlag.ok) templateContext = { ...templateContext, flag: ipFlag.val };
+    try {
+      const ipFlag = IPToCountryEmoji(templateContext.ip);
+      templateContext = { ...templateContext, flag: ipFlag };
+    } catch {
+      templateContext = { ...templateContext, flag: FAIL_EMOJI };
+    }
   }
 
   const html = loadedTemplate.render({ ...templateContext });

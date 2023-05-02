@@ -1,4 +1,5 @@
 import logger from "../logging";
+import { nanoid } from "nanoid";
 import { IPToCountry } from "../utils/ip";
 import { isDevelopmentEnv, DEPLOYMENT_CONSTANTS } from "../config";
 import type { Request, Response, NextFunction } from "express";
@@ -25,21 +26,33 @@ const setRequestCountry = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const logRequest = (req: Request, res: Response, next: NextFunction) => {
+  const httpLogBase = {
+    method: req.method,
+    url: req.originalUrl,
+    ip: req.realIp,
+    user: req.user?.username ?? null,
+    requestId: req.id,
+  };
+
+  logger.info({ ...httpLogBase, message: "HTTP request started" });
+
   res.on("finish", () => {
     logger.log({
+      ...httpLogBase,
       level: res.statusCode < 400 ? "info" : "error",
-      message: "HTTP request",
-      method: req.method,
-      url: req.originalUrl,
-      ip: req.realIp,
-      user: req.user?.username ?? null,
+      message: "HTTP request finished",
       status: res.statusCode,
     });
   });
   next();
 };
 
-const setRequestMetadata = [setRealIp, setRequestCountry];
+const setRequestId = (req: Request, res: Response, next: NextFunction) => {
+  req.id = nanoid();
+  return next();
+};
 
-export { setRealIp, logRequest };
+const setRequestMetadata = [setRequestId, setRealIp, setRequestCountry];
+
+export { setRealIp, logRequest, setRequestId };
 export default setRequestMetadata;

@@ -1,4 +1,5 @@
-import { APIBadRequestError, APIBaseError, APIParameterError, APIServerError } from "../errors/api";
+import logger from "../logging";
+import { APIBaseError, APIParameterError, APIServerError } from "../errors";
 import type { Request, Response, NextFunction } from "express";
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -20,6 +21,8 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
   } else {
     error = new APIServerError();
   }
+
+  logger.error("Controller error handled", { error: error.error, errorMessage: error.message });
   return res.status(error.status).json(error.toJSON());
 };
 
