@@ -7,7 +7,8 @@ const user = (id: number) => ({
   displayName: `TestUser${id}`,
   email: `testuser${id}@kakaposocial.com`,
   registeredAt: new Date(),
-  passwordHash: "",
+  passwordHash:
+    "$argon2id$v=19$m=65536,t=3,p=4$1sn97CY19hV9ftWoitt9tA$buBbxSxOgjdORrwp8zRM2IDJ4GZt1JjHhfB+rdcHY3Y",
 });
 
 const now = () => new Date();
