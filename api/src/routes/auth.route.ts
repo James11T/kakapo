@@ -8,7 +8,6 @@ import {
   requestPasswordReset,
   resetPassword,
 } from "../controllers/auth.controller";
-import { validate } from "../middleware/validation.middleware";
 
 const authRouter = Router();
 

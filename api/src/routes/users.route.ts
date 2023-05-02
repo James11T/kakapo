@@ -9,7 +9,6 @@ import {
   getFriendRequests,
   sendFriendRequest,
 } from "../controllers/users.controllers";
-import { validate } from "../middleware/validation.middleware";
 
 const usersRouter = Router();
 

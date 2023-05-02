@@ -1,4 +1,4 @@
-import type { User } from "./models";
+import type { User } from "@prisma/client";
 import type { ExtendedRequest } from "./types";
 
 declare global {
@@ -6,7 +6,7 @@ declare global {
     interface Request {
       realIp: string;
       country: string;
-      user?: User;
+      user: User | undefined;
     }
   }
 

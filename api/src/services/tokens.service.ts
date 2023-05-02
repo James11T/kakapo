@@ -2,7 +2,7 @@ import { Ok, Err } from "../errors/errorHandling";
 import { uuid } from "../utils/strings";
 import { getEpoch } from "../utils/time";
 import prisma from "../database";
-import JWT, { TokenExpiredError } from "jsonwebtoken";
+import JWT from "jsonwebtoken";
 import { REFRESH_TOKEN_CONSTANTS, ACCESS_TOKEN_CONSTANTS } from "../config";
 import type { User, RefreshToken } from "@prisma/client";
 import type { JWTRefreshToken, JWTAccessToken, AsyncResult } from "../types";
@@ -29,7 +29,7 @@ const decodeSignedToken = <T>(token: string): Result<T, "INVALID_TOKEN" | "TOKEN
 
     return Ok(decoded);
   } catch (error) {
-    if (error instanceof TokenExpiredError) return Err("TOKEN_EXPIRED");
+    if (error instanceof JWT.TokenExpiredError) return Err("TOKEN_EXPIRED");
     return Err("INVALID_TOKEN");
   }
 };

@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { authenticate, refreshAccess } from "../controllers/tokens.controller";
-import { validate } from "../middleware/validation.middleware";
 
 const tokensRouter = Router();
 

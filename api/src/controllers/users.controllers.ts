@@ -9,55 +9,66 @@ import {
   removeFriendSchema,
   sendFriendRequestSchema,
 } from "../schemas/users.schemas";
+import { asyncController } from "./base.controller";
+import { protect } from "../middleware/auth.middleware";
 import type { Request, Response, NextFunction } from "express";
 
 // get /
 // Query users
-const queryUsers = async (req: Request, res: Response, next: NextFunction) => {
+const queryUsers = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   const parsedRequest = await validate(queryUsersSchema, req);
-};
+});
 
 // post /
 // Create user
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
+const createUser = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   const parsedRequest = await validate(createUserSchema, req);
-};
+});
 
 // get /:username
 // Get user by username
-const getUser = async (req: Request, res: Response, next: NextFunction) => {
+const getUser = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   const parsedRequest = await validate(getUserSchema, req);
-};
+});
 
 // get /:username/is-available
 // Is username available
-const isUsernameAvailable = async (req: Request, res: Response, next: NextFunction) => {
-  const parsedRequest = await validate(isUsernameAvailableSchema, req);
-};
+const isUsernameAvailable = asyncController(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const parsedRequest = await validate(isUsernameAvailableSchema, req);
+  }
+);
 
 // get /:username/friends
 // Get users friends
-const getFriends = async (req: Request, res: Response, next: NextFunction) => {
+const getFriends = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   const parsedRequest = await validate(getFriendsSchema, req);
-};
+});
 
 // delete /:username/friends/:friendUsername
 // Remove a friend frm a user
-const removeFriend = async (req: Request, res: Response, next: NextFunction) => {
+const removeFriend = asyncController(async (req: Request, res: Response, next: NextFunction) => {
+  protect(req.user);
   const parsedRequest = await validate(removeFriendSchema, req);
-};
+});
 
 // get /:username/friend-requests
 // Get friend requests
-const getFriendRequests = async (req: Request, res: Response, next: NextFunction) => {
-  const parsedRequest = await validate(getFriendRequestsSchema, req);
-};
+const getFriendRequests = asyncController(
+  async (req: Request, res: Response, next: NextFunction) => {
+    protect(req.user);
+    const parsedRequest = await validate(getFriendRequestsSchema, req);
+  }
+);
 
 // post /:username/friend-requests
 // Send friend request
-const sendFriendRequest = async (req: Request, res: Response, next: NextFunction) => {
-  const parsedRequest = await validate(sendFriendRequestSchema, req);
-};
+const sendFriendRequest = asyncController(
+  async (req: Request, res: Response, next: NextFunction) => {
+    protect(req.user);
+    const parsedRequest = await validate(sendFriendRequestSchema, req);
+  }
+);
 
 export {
   queryUsers,

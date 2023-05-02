@@ -17,7 +17,6 @@ import {
   likeComment,
   unlikeComment,
 } from "../controllers/posts.controller";
-import { validate } from "../middleware/validation.middleware";
 
 const postsRouter = Router();
 

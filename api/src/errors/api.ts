@@ -2,17 +2,20 @@ import { RUNTIME_CONSTANTS } from "../config";
 import type { ZodIssue } from "zod";
 
 class APIBaseError extends Error {
+  error: string;
   status: number;
 
-  constructor(msg: string, status = 500) {
-    super(msg);
+  constructor(error: string, message: string, status = 500) {
+    super(message);
 
+    this.error = error;
     this.status = status;
   }
 
   toJSON(): any {
     return {
-      error: this.message,
+      error: this.error,
+      message: this.message,
       stack:
         RUNTIME_CONSTANTS.IS_DEV && this.stack
           ? this.stack.split("\n").map((line) => line.trim())
@@ -22,38 +25,41 @@ class APIBaseError extends Error {
 }
 
 class APIBadRequestError extends APIBaseError {
-  constructor(msg = "Bad Request") {
-    super(msg, 400);
+  constructor(error = "BAD_REQUEST", message = "Bad Request") {
+    super(error, message, 400);
   }
 }
 
 class APIUnauthorizedError extends APIBaseError {
-  constructor(msg = "Unauthorized") {
-    super(msg, 401);
+  constructor(
+    error = "UNAUTHORIZED",
+    message = "You must be authenticated to access to requested resource."
+  ) {
+    super(error, message, 401);
   }
 }
 
 class APIForbiddenError extends APIBaseError {
-  constructor(msg = "Access Denied") {
-    super(msg, 403);
+  constructor(error = "FORBIDDEN", message = "Access Denied") {
+    super(error, message, 403);
   }
 }
 
 class APINotFoundError extends APIBaseError {
-  constructor(msg = "Not Found") {
-    super(msg, 404);
+  constructor(error = "NOT_FOUND", message = "Not Found") {
+    super(error, message, 404);
   }
 }
 
 class APIConflictError extends APIBaseError {
-  constructor(msg = "Conflict") {
-    super(msg, 409);
+  constructor(error = "CONFLICT", message = "Conflict") {
+    super(error, message, 409);
   }
 }
 
 class APIServerError extends APIBaseError {
-  constructor(msg = "Internal Server Error") {
-    super(msg, 500);
+  constructor(error = "UNEXPECTED_SERVER_ERROR", message = "Internal Server Error") {
+    super(error, message, 500);
   }
 }
 
@@ -62,8 +68,8 @@ export type BadParameter = { location: string; message: string; type: ZodIssue["
 class APIParameterError extends APIBadRequestError {
   parameters: BadParameter[];
 
-  constructor(msg = "One or more supplied parameters are invalid", parameters: BadParameter[]) {
-    super(msg);
+  constructor(message = "One or more supplied parameters are invalid", parameters: BadParameter[]) {
+    super("BAD_PARAMETERS", message);
 
     this.parameters = parameters;
   }

@@ -15,8 +15,8 @@ const password = z
   .min(PASSWORD_CONSTANTS.minPasswordLength)
   .max(PASSWORD_CONSTANTS.maxPasswordLength);
 
-const paginationFrom = z.coerce.number().min(0);
-const paginationCount = z.coerce.number().min(0).max(100);
+const paginationFrom = z.coerce.number().min(0).optional();
+const paginationCount = z.coerce.number().min(0).max(100).optional();
 
 const pagination = z.object({
   from: paginationFrom,
