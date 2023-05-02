@@ -1,21 +1,26 @@
-import { APIBaseError } from "../errors/api";
+import { APIBadRequestError, APIBaseError, APIParameterError, APIServerError } from "../errors/api";
 import type { Request, Response, NextFunction } from "express";
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.log("Error");
+  let error: APIBaseError;
 
   if (err instanceof APIBaseError) {
-    return res.status(err.status).json(err.toJSON());
+    error = err;
   } else if (err instanceof SyntaxError) {
     // Usually when express.json fails
-    return res.status(400).json({
-      error: "The supplied data was malformed",
-    });
-  }
+    const newError = new APIParameterError([
+      {
+        location: "body",
+        message: "Not valid json",
+        type: "invalid_string",
+      },
+    ]);
 
-  return res
-    .status(500)
-    .json({ error: "UNEXPECTED_ERROR", message: "An unexpected server error ocurred." });
+    error = newError;
+  } else {
+    error = new APIServerError();
+  }
+  return res.status(error.status).json(error.toJSON());
 };
 
 export default errorHandler;
