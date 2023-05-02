@@ -1,16 +1,20 @@
 import bytes from "bytes";
 import parseDuration from "parse-duration";
-import { argon2id } from "argon2";
+import argon2 from "argon2";
 
 const { NODE_ENV = "PRODUCTION", SEND_EMAILS_IN_DEV } = process.env;
 
 const isDevelopmentEnv = NODE_ENV.toUpperCase() === "DEVELOPMENT";
 const sendEmailsInDev = SEND_EMAILS_IN_DEV === "true";
 
+export const SERVER_CONSTANTS = {
+  RESPONSE_TIMEOUT: parseDuration("10sec", "ms"),
+};
+
 export const HASHING_CONSTANTS = {
   SALT_SIZE_BYTES: 16,
   HASH_LENGTH_BYTES: 32,
-  HASHING_FUNCTION: argon2id,
+  HASHING_FUNCTION: argon2.argon2id,
 };
 
 export const PASSWORD_CONSTANTS = {
