@@ -1,18 +1,18 @@
-import { validate } from "../schemas/validation";
-import { authenticateSchema, refreshAccessSchema } from "../schemas/tokens.schemas";
-import { asyncController } from "./base.controller";
-import { getUserByUnique } from "../services/user.service";
-import { verifyPassword } from "../services/passwords.service";
 import { APIBadRequestError, APIServerError } from "../errors";
 import logger from "../logging";
+import { authenticateSchema, refreshAccessSchema } from "../schemas/tokens.schemas";
+import { validate } from "../schemas/validation";
+import { verifyPassword } from "../services/passwords.service";
 import {
   createAuthenticationRefreshToken,
   refreshAccessToken,
   signToken,
 } from "../services/tokens.service";
-import type { Request, Response, NextFunction } from "express";
+import { getUserByUnique } from "../services/user.service";
+import { asyncController } from "./base.controller";
 import type { JWTRefreshToken } from "../types";
 import type { RefreshToken } from "@prisma/client";
+import type { Request, Response, NextFunction } from "express";
 
 const authenticateFailError = new APIBadRequestError(
   "INVALID_CREDENTIALS",

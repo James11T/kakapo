@@ -1,11 +1,11 @@
+import { asyncController } from "../controllers/base.controller";
 import prisma from "../database";
+import { APIUnauthorizedError } from "../errors";
 import logger from "../logging";
 import { decodeSignedToken } from "../services/tokens.service";
-import { APIUnauthorizedError } from "../errors";
-import { asyncController } from "../controllers/base.controller";
 import type { JWTAccessToken } from "../types";
-import type { Request, Response, NextFunction } from "express";
 import type { User } from "@prisma/client";
+import type { Request, Response, NextFunction } from "express";
 
 const authenticate = asyncController(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {

@@ -1,4 +1,6 @@
 import { Router } from "express";
+import fileUpload from "express-fileupload";
+import { POST_CONSTANTS } from "../config";
 import {
   queryPosts,
   createPost,
@@ -17,8 +19,6 @@ import {
   likeComment,
   unlikeComment,
 } from "../controllers/posts.controller";
-import fileUpload from "express-fileupload";
-import { POST_CONSTANTS } from "../config";
 
 const postsRouter = Router();
 

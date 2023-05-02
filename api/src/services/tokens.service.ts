@@ -1,13 +1,13 @@
+import JWT from "jsonwebtoken";
+import { REFRESH_TOKEN_CONSTANTS, ACCESS_TOKEN_CONSTANTS } from "../config";
+import prisma from "../database";
+import { APIServerError, APIUnauthorizedError } from "../errors";
+import logger from "../logging";
 import { uuid } from "../utils/strings";
 import { getEpoch } from "../utils/time";
-import prisma from "../database";
-import JWT from "jsonwebtoken";
-import logger from "../logging";
-import { REFRESH_TOKEN_CONSTANTS, ACCESS_TOKEN_CONSTANTS } from "../config";
-import { APIServerError, APIUnauthorizedError } from "../errors";
 import { getUserByUnique } from "./user.service";
-import type { User, RefreshToken } from "@prisma/client";
 import type { JWTRefreshToken, JWTAccessToken } from "../types";
+import type { User, RefreshToken } from "@prisma/client";
 
 const { JWT_SECRET } = process.env;
 

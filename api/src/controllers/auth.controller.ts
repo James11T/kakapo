@@ -1,4 +1,4 @@
-import { validate } from "../schemas/validation";
+import { protect } from "../middleware/auth.middleware";
 import {
   activateMfaSourceSchema,
   addMfaSourceSchema,
@@ -8,10 +8,10 @@ import {
   resetPasswordSchema,
   whoAmISchema,
 } from "../schemas/auth.schemas";
-import { asyncController } from "./base.controller";
-import { protect } from "../middleware/auth.middleware";
-import { filter } from "../utils/objects";
 import { privateUserFilterSchema } from "../schemas/users.schemas";
+import { validate } from "../schemas/validation";
+import { filter } from "../utils/objects";
+import { asyncController } from "./base.controller";
 import type { Request, Response, NextFunction } from "express";
 
 // GET /whoami

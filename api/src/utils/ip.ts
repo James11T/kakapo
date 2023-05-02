@@ -1,5 +1,5 @@
-import geoip from "geoip-country";
 import { countryCodeEmoji } from "country-code-emoji";
+import geoip from "geoip-country";
 
 const FAIL_COUNTRY_CODE = "XX";
 const FAIL_EMOJI = "❓";

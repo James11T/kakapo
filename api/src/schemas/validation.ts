@@ -1,7 +1,8 @@
-import type { z } from "zod";
-import type { Request } from "express";
-import type { ValidationSchema } from "../types";
 import { APIParameterError } from "../errors";
+import type { ValidationSchema } from "../types";
+import type { Request } from "express";
+import type { z } from "zod";
+
 
 const validate = async <T extends ValidationSchema>(
   schema: T,

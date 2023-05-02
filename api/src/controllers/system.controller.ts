@@ -1,8 +1,8 @@
-import { validate } from "../schemas/validation";
-import { getSystemStatusSchema } from "../schemas/system.schemas";
-import { asyncController } from "./base.controller";
-import { getMemoryUsage } from "../utils/process";
 import { RUNTIME_CONSTANTS } from "../config";
+import { getSystemStatusSchema } from "../schemas/system.schemas";
+import { validate } from "../schemas/validation";
+import { getMemoryUsage } from "../utils/process";
+import { asyncController } from "./base.controller";
 import type { Request, Response, NextFunction } from "express";
 
 // get /status

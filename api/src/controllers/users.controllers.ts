@@ -1,4 +1,4 @@
-import { validate } from "../schemas/validation";
+import { protect } from "../middleware/auth.middleware";
 import {
   createUserSchema,
   getFriendRequestsSchema,
@@ -9,8 +9,8 @@ import {
   removeFriendSchema,
   sendFriendRequestSchema,
 } from "../schemas/users.schemas";
+import { validate } from "../schemas/validation";
 import { asyncController } from "./base.controller";
-import { protect } from "../middleware/auth.middleware";
 import type { Request, Response, NextFunction } from "express";
 
 // get /

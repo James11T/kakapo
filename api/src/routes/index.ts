@@ -1,10 +1,10 @@
 import { Router } from "express";
+import { authenticate } from "../middleware/auth.middleware";
+import authRouter from "./auth.route";
+import postsRouter from "./posts.route";
 import systemRouter from "./system.route";
 import tokenRouter from "./tokens.route";
-import authRouter from "./auth.route";
 import usersRouter from "./users.route";
-import postsRouter from "./posts.route";
-import { authenticate } from "../middleware/auth.middleware";
 
 const baseRouter = Router();
 

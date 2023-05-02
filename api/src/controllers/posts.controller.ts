@@ -1,4 +1,4 @@
-import { validate } from "../schemas/validation";
+import { protect } from "../middleware/auth.middleware";
 import {
   createPostCommentSchema,
   createPostSchema,
@@ -17,8 +17,8 @@ import {
   unlikeCommentSchema,
   unlikePostSchema,
 } from "../schemas/posts.schemas";
+import { validate } from "../schemas/validation";
 import { asyncController } from "./base.controller";
-import { protect } from "../middleware/auth.middleware";
 import type { Request, Response, NextFunction } from "express";
 
 // get /
