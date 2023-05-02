@@ -6,7 +6,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "tsx .",
-    "dev": "tsx watch .",
+    "dev": "cross-env NODE_ENV=DEVELOPMENT tsx watch .",
     "build": "tsc",
     "test": "vitest",
     "lint": "eslint src/**/*.ts",
