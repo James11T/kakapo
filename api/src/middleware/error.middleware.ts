@@ -23,6 +23,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
   }
 
   logger.error("Controller error handled", { error: error.error, errorMessage: error.message });
+  logger.debug(String(err));
   return res.status(error.status).json(error.toJSON());
 };
 

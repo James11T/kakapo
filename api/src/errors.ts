@@ -58,7 +58,7 @@ class APIConflictError extends APIBaseError {
 }
 
 class APIServerError extends APIBaseError {
-  constructor(error = "UNEXPECTED_SERVER_ERROR", message = "Internal Server Error") {
+  constructor(error = "INTERNAL_SERVER_ERROR", message = "Internal Server Error") {
     super(error, message, 500);
   }
 }

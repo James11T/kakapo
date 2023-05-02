@@ -2,20 +2,21 @@ import { uuid } from "../utils/strings";
 import { getEpoch } from "../utils/time";
 import prisma from "../database";
 import JWT from "jsonwebtoken";
+import logger from "../logging";
 import { REFRESH_TOKEN_CONSTANTS, ACCESS_TOKEN_CONSTANTS } from "../config";
+import { APIServerError, APIUnauthorizedError } from "../errors";
+import { getUserByUnique } from "./user.service";
 import type { User, RefreshToken } from "@prisma/client";
 import type { JWTRefreshToken, JWTAccessToken } from "../types";
-import logger from "../logging";
-import { APIServerError, APIUnauthorizedError } from "../errors";
 
 const { JWT_SECRET } = process.env;
 
 const signToken = (payload: any): string => {
   try {
-    const token = JWT.sign(payload, JWT_SECRET);
+    const token = JWT.sign(payload, JWT_SECRET, { algorithm: "HS256" });
     return token;
   } catch (err) {
-    logger.error(err);
+    logger.error("Failed to sign token", { error: String(err) });
     throw new APIServerError();
   }
 };
@@ -28,17 +29,12 @@ const decodeSignedToken = <T>(token: string): T => {
 
     return decoded;
   } catch (error) {
+    logger.debug("JWT verify error", { error: String(error) });
     if (error instanceof JWT.TokenExpiredError)
       throw new APIUnauthorizedError("TOKEN_EXPIRED", "The supplied JWT had expired.");
     throw new APIUnauthorizedError("INVALID_TOKEN", "The supplied JWT was invalid.");
   }
 };
-
-type GENERATE_ACCESS_TOKEN_ERRORS =
-  | "REFRESH_TOKEN_EXPIRED"
-  | "FAILED_TO_GET_REFRESH_TOKEN"
-  | "REFRESH_TOKEN_REVOKED"
-  | "INVALID_REFRESH_TOKEN";
 
 const invalidRefreshTokenError = new APIUnauthorizedError(
   "INVALID_REFRESH_TOKEN",
@@ -101,4 +97,44 @@ const generateRefreshToken = (user: User, scope: string): [JWTRefreshToken, stri
   return [data, tokenId];
 };
 
-export { generateAccessToken, generateRefreshToken, signToken, decodeSignedToken };
+const createAuthenticationRefreshToken = async (
+  user: User,
+  ip: string
+): Promise<[JWTRefreshToken, RefreshToken]> => {
+  const [refreshToken, refreshTokenId] = generateRefreshToken(user, "auth");
+
+  const dbRefreshToken = await prisma.refreshToken.create({
+    data: {
+      uuid: refreshTokenId,
+      subjectId: user.id,
+      expiresAt: new Date(getEpoch() + REFRESH_TOKEN_CONSTANTS.TOKEN_TTL),
+      issuedAt: new Date(),
+      deviceType: "UNKNOWN",
+      sourceIp: ip,
+    },
+  });
+
+  return [refreshToken, dbRefreshToken];
+};
+
+const refreshAccessToken = async (refreshToken: string, uuid: string) => {
+  const user = await getUserByUnique({ uuid });
+
+  const refreshJWT = decodeSignedToken<JWTRefreshToken>(refreshToken);
+
+  if (refreshJWT.sub !== user.uuid) throw invalidRefreshTokenError;
+
+  const accessToken = await generateAccessToken(user, refreshJWT);
+  const accessJWT = signToken(accessToken);
+
+  return accessJWT;
+};
+
+export {
+  generateAccessToken,
+  generateRefreshToken,
+  signToken,
+  decodeSignedToken,
+  createAuthenticationRefreshToken,
+  refreshAccessToken,
+};

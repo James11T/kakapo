@@ -1,6 +1,5 @@
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
-import { sendTemplate } from "./email/templates";
 import { HASHING_CONSTANTS, WEB_CONSTANTS } from "../config";
 import type { User } from "@prisma/client";
 
@@ -35,19 +34,19 @@ const verifyPassword = async (password: string, hash: string): Promise<boolean> 
   return isValid;
 };
 
-const invokePasswordReset = async (user: User) => {
-  const resetPayload = { id: user.id };
-  const resetJWT = jwt.sign(resetPayload, JWT_SECRET); // TODO: Replace with generic sign
-  const resetLink = `${WEB_CONSTANTS.URL}change-password?c=${resetJWT}`;
+// const invokePasswordReset = async (user: User) => {
+//   const resetPayload = { id: user.id };
+//   const resetJWT = jwt.sign(resetPayload, JWT_SECRET); // TODO: Replace with generic sign
+//   const resetLink = `${WEB_CONSTANTS.URL}change-password?c=${resetJWT}`;
 
-  await sendTemplate(
-    user.email,
-    "resetPassword",
-    { name: user.username, link: resetLink },
-    { subject: "Password Reset Request" }
-  );
+//   await sendTemplate(
+//     user.email,
+//     "resetPassword",
+//     { name: user.username, link: resetLink },
+//     { subject: "Password Reset Request" }
+//   );
 
-  return resetJWT;
-};
+//   return resetJWT;
+// };
 
-export { verifyPassword, hashPassword, invokePasswordReset };
+export { verifyPassword, hashPassword };

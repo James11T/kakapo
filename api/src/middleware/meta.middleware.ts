@@ -30,7 +30,6 @@ const logRequest = (req: Request, res: Response, next: NextFunction) => {
     method: req.method,
     url: req.originalUrl,
     ip: req.realIp,
-    user: req.user?.username ?? null,
     requestId: req.id,
   };
 
@@ -42,6 +41,7 @@ const logRequest = (req: Request, res: Response, next: NextFunction) => {
       level: res.statusCode < 400 ? "info" : "error",
       message: "HTTP request finished",
       status: res.statusCode,
+      user: req.user ? { username: req.user.username, id: req.user.id, uuid: req.user.id } : null,
     });
   });
   next();

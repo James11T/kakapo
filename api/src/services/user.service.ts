@@ -6,7 +6,7 @@ import type { FriendRequest, Friendship, User } from "@prisma/client";
 type ID = number;
 type UUID = string;
 type Username = string;
-type UniqueUserKeys = { id: ID; uuid: UUID; username: Username };
+type UniqueUserKeys = { id: ID; uuid: UUID; username: Username; email: string };
 type UniqueUser = RequireKey<UniqueUserKeys>;
 
 const userNotFound = new APINotFoundError(
@@ -20,6 +20,7 @@ const getUserByUnique = async (user: UniqueUser): Promise<User> => {
       ...(user.id && { id: user.id }),
       ...(user.uuid && { uuid: user.uuid }),
       ...(user.username && { username: user.username }),
+      ...(user.email && { email: user.email }),
     },
   });
 
@@ -150,4 +151,5 @@ export {
   getUserFriendRequests,
   isUsernameAvailable,
   getUsersFriendshipState,
+  getUserFriends,
 };
