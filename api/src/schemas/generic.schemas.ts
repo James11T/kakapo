@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { USERNAME_CONSTANTS, PASSWORD_CONSTANTS } from "../config";
+import { USERNAME_CONSTANTS, PASSWORD_CONSTANTS } from "../config.js";
 
 const username = z
   .string()

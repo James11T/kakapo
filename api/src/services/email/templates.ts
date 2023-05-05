@@ -1,9 +1,9 @@
 import fs from "fs";
 import handlebars from "handlebars";
-import { sendEmail } from "../ses.service";
-import { FAIL_EMOJI, IPToCountryEmoji } from "../../utils/ip";
+import { FAIL_EMOJI, IPToCountryEmoji } from "../../utils/ip.js";
+import { sendEmail } from "../ses.service.js";
+import type { EmailOptions } from "../ses.service.js";
 import type { TemplateDelegate } from "handlebars";
-import type { EmailOptions } from "../ses.service";
 
 const NO_FALLBACK =
   "This email is HTML only. If you can't see the HTML version of this email then you may need to update your email client preferences.";

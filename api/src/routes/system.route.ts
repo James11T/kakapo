@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getSystemStatus } from "../controllers/system.controller";
+import { getSystemStatus } from "../controllers/system.controller.js";
 
 const systemRouter = Router();
 

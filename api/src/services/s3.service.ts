@@ -1,6 +1,6 @@
 import AWS from "aws-sdk";
-import { APIServerError } from "../errors";
-import logger from "../logging";
+import { APIServerError } from "../errors.js";
+import logger from "../logging.js";
 
 const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_S3_IMAGE_BUCKET } = process.env;
 

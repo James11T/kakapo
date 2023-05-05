@@ -1,6 +1,6 @@
-import bytes from "bytes";
-import parseDuration from "parse-duration";
 import argon2 from "argon2";
+import bytes from "bytes";
+import { duration } from "./utils/time.js";
 
 const { NODE_ENV = "PRODUCTION", SEND_EMAILS_IN_DEV } = process.env;
 
@@ -8,7 +8,7 @@ const isDevelopmentEnv = NODE_ENV.toUpperCase() === "DEVELOPMENT";
 const sendEmailsInDev = SEND_EMAILS_IN_DEV === "true";
 
 export const SERVER_CONSTANTS = {
-  RESPONSE_TIMEOUT: parseDuration("10sec", "ms"),
+  RESPONSE_TIMEOUT: duration.seconds(10),
 };
 
 export const HASHING_CONSTANTS = {
@@ -41,7 +41,7 @@ export const WEB_CONSTANTS = {
 };
 
 export const PASSWORD_RESET_CONSTANTS = {
-  tokenTTL: parseDuration("1hr", "ms"), // 1 hour
+  tokenTTL: duration.hours(1), // 1 hour
   tokenLengthBytes: 64,
 };
 
@@ -51,11 +51,11 @@ export const POST_CONSTANTS = {
 };
 
 export const REFRESH_TOKEN_CONSTANTS = {
-  TOKEN_TTL: parseDuration("60day", "s"),
+  TOKEN_TTL: duration.days(60, "s"),
 };
 
 export const ACCESS_TOKEN_CONSTANTS = {
-  TOKEN_TTL: parseDuration("1hr", "s"),
+  TOKEN_TTL: duration.hours(1, "s"),
 };
 
 export const TOTP_CONSTANTS = {

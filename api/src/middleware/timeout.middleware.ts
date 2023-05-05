@@ -1,4 +1,4 @@
-import { APIServerError } from "../errors";
+import { APIServerError } from "../errors.js";
 import type { Request, Response, NextFunction } from "express";
 
 /**

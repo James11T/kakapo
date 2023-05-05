@@ -8,7 +8,7 @@ import {
   removeFriend,
   getFriendRequests,
   sendFriendRequest,
-} from "../controllers/users.controllers";
+} from "../controllers/users.controllers.js";
 
 const usersRouter = Router();
 

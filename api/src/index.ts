@@ -1,8 +1,8 @@
 import "dotenv/config";
 import ip from "ip";
-import app from "./app";
-import { RUNTIME_CONSTANTS } from "./config";
-import logger from "./logging";
+import app from "./app.js";
+import { RUNTIME_CONSTANTS } from "./config.js";
+import logger from "./logging.js";
 
 const { API_PORT } = process.env;
 

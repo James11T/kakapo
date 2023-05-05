@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { password } from "./generic.schemas";
+import { password } from "./generic.schemas.js";
 
 // post /authenticate
 // Authenticate with a given username and password

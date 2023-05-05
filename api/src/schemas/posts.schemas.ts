@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { pagination } from "./generic.schemas";
+import { pagination } from "./generic.schemas.js";
 
 const postCaption = z.string().min(1).max(1024);
 const commentText = z.string().min(1).max(1024);

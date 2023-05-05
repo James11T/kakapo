@@ -1,5 +1,7 @@
 import { v4 as uuid4 } from "uuid";
 
+const regionalAUnicode = 127462;
+
 /**
  * Count the occurrences of a regex in a string
  *
@@ -34,4 +36,16 @@ const stripFileExtension = (filename: string): string => {
  */
 const uuid = (): string => uuid4();
 
-export { countOccurrences, stripFileExtension, uuid };
+const charToRegional = (char: string) =>
+  String.fromCodePoint(char.toUpperCase().charCodeAt(0) - 65 + regionalAUnicode);
+
+/**
+ * Calculate and return the regional values for a 2 letter country code
+ */
+const countryCodeToFlag = (countryCode: string) => {
+  const char1 = charToRegional(countryCode[0]);
+  const char2 = charToRegional(countryCode[1]);
+  return `${char1}${char2}`;
+};
+
+export { countOccurrences, stripFileExtension, uuid, countryCodeToFlag };

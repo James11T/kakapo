@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { password, totp } from "./generic.schemas";
+import { password, totp } from "./generic.schemas.js";
 
 // GET /whoami
 // Return authenticated user

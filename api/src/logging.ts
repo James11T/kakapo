@@ -1,5 +1,5 @@
 import winston from "winston";
-import { RUNTIME_CONSTANTS } from "./config";
+import { RUNTIME_CONSTANTS } from "./config.js";
 
 const logger = winston.createLogger({
   level: "info",

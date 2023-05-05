@@ -1,5 +1,4 @@
 import type { User } from "@prisma/client";
-import type { ExtendedRequest } from "./types";
 
 declare global {
   namespace Express {

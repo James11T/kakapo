@@ -1,4 +1,4 @@
-import { protect } from "../middleware/auth.middleware";
+import { protect } from "../middleware/auth.middleware.js";
 import {
   createUserSchema,
   getFriendRequestsSchema,
@@ -8,9 +8,9 @@ import {
   queryUsersSchema,
   removeFriendSchema,
   sendFriendRequestSchema,
-} from "../schemas/users.schemas";
-import { validate } from "../schemas/validation";
-import { asyncController } from "./base.controller";
+} from "../schemas/users.schemas.js";
+import { validate } from "../schemas/validation.js";
+import { asyncController } from "./base.controller.js";
 import type { Request, Response, NextFunction } from "express";
 
 // get /
@@ -48,7 +48,7 @@ const getFriends = asyncController(async (req: Request, res: Response, next: Nex
 // delete /:username/friends/:friendUsername
 // Remove a friend frm a user
 const removeFriend = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(removeFriendSchema, req);
 });
 
@@ -56,7 +56,7 @@ const removeFriend = asyncController(async (req: Request, res: Response, next: N
 // Get friend requests
 const getFriendRequests = asyncController(
   async (req: Request, res: Response, next: NextFunction) => {
-    protect(req.user);
+    protect(req);
     const parsedRequest = await validate(getFriendRequestsSchema, req);
   }
 );
@@ -65,7 +65,7 @@ const getFriendRequests = asyncController(
 // Send friend request
 const sendFriendRequest = asyncController(
   async (req: Request, res: Response, next: NextFunction) => {
-    protect(req.user);
+    protect(req);
     const parsedRequest = await validate(sendFriendRequestSchema, req);
   }
 );

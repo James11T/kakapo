@@ -1,5 +1,5 @@
-import { countryCodeEmoji } from "country-code-emoji";
 import geoip from "geoip-country";
+import { countryCodeToFlag } from "./strings.js";
 
 const FAIL_COUNTRY_CODE = "XX";
 const FAIL_EMOJI = "❓";
@@ -14,7 +14,7 @@ const IPToCountry = (ip: string) => {
 const countryToEmoji = (countryCode: string): string => {
   if (countryCode === FAIL_COUNTRY_CODE) return FAIL_EMOJI;
 
-  return countryCodeEmoji(countryCode);
+  return countryCodeToFlag(countryCode);
 };
 
 const IPToCountryEmoji = (ip: string): string => {

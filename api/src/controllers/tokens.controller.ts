@@ -1,17 +1,16 @@
-import { APIBadRequestError, APIServerError } from "../errors";
-import logger from "../logging";
-import { authenticateSchema, refreshAccessSchema } from "../schemas/tokens.schemas";
-import { validate } from "../schemas/validation";
-import { verifyPassword } from "../services/passwords.service";
+import { APIBadRequestError, APIServerError } from "../errors.js";
+import logger from "../logging.js";
+import { authenticateSchema, refreshAccessSchema } from "../schemas/tokens.schemas.js";
+import { validate } from "../schemas/validation.js";
+import { verifyPassword } from "../services/passwords.service.js";
 import {
   createAuthenticationRefreshToken,
   refreshAccessToken,
   signToken,
-} from "../services/tokens.service";
-import { getUserByUnique } from "../services/user.service";
-import { asyncController } from "./base.controller";
-import type { JWTRefreshToken } from "../types";
-import type { RefreshToken } from "@prisma/client";
+} from "../services/tokens.service.js";
+import { getUserByUnique } from "../services/user.service.js";
+import { asyncController } from "./base.controller.js";
+import type { JWTRefreshToken } from "../types.js";
 import type { Request, Response, NextFunction } from "express";
 
 const authenticateFailError = new APIBadRequestError(
@@ -31,12 +30,12 @@ const authenticate = asyncController(async (req: Request, res: Response, next: N
   if (!passwordsMatch) return next(authenticateFailError);
 
   let refreshJWT: JWTRefreshToken;
-  let refreshDBToken: RefreshToken;
 
   try {
-    [refreshJWT, refreshDBToken] = await createAuthenticationRefreshToken(user, req.realIp);
+    [refreshJWT] = await createAuthenticationRefreshToken(user, req.realIp);
   } catch (error) {
     logger.error("Failed to save refresh token");
+    logger.debug("Refresh token failed to generate", { error: String(error) });
     return next(new APIServerError("SERVER_ERROR", "Failed to generate temporary credentials"));
   }
 

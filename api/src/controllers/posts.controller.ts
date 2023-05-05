@@ -1,4 +1,4 @@
-import { protect } from "../middleware/auth.middleware";
+import { protect } from "../middleware/auth.middleware.js";
 import {
   createPostCommentSchema,
   createPostSchema,
@@ -16,9 +16,9 @@ import {
   queryPostsSchema,
   unlikeCommentSchema,
   unlikePostSchema,
-} from "../schemas/posts.schemas";
-import { validate } from "../schemas/validation";
-import { asyncController } from "./base.controller";
+} from "../schemas/posts.schemas.js";
+import { validate } from "../schemas/validation.js";
+import { asyncController } from "./base.controller.js";
 import type { Request, Response, NextFunction } from "express";
 
 // get /
@@ -30,7 +30,7 @@ const queryPosts = asyncController(async (req: Request, res: Response, next: Nex
 // post /
 // Create a post
 const createPost = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(createPostSchema, req);
 });
 
@@ -43,14 +43,14 @@ const getPost = asyncController(async (req: Request, res: Response, next: NextFu
 // patch /:postId
 // Edit a post
 const editPost = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(editPostSchema, req);
 });
 
 // delete /:postId
 // Delete a post
 const deletePost = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(deletePostSchema, req);
 });
 
@@ -63,14 +63,14 @@ const getPostLikes = asyncController(async (req: Request, res: Response, next: N
 // post /:postId/likes
 // Like a post
 const likePost = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(likePostSchema, req);
 });
 
 // delete /:postId/likes
 // Unlike a post
 const unlikePost = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(unlikePostSchema, req);
 });
 
@@ -84,7 +84,7 @@ const getPostComments = asyncController(async (req: Request, res: Response, next
 // Create a comment on a post
 const createPostComment = asyncController(
   async (req: Request, res: Response, next: NextFunction) => {
-    protect(req.user);
+    protect(req);
     const parsedRequest = await validate(createPostCommentSchema, req);
   }
 );
@@ -98,14 +98,14 @@ const getComment = asyncController(async (req: Request, res: Response, next: Nex
 // patch /:postId/comments/:commentId
 // Edit a comment
 const editComment = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(editCommentSchema, req);
 });
 
 // delete /:postId/comments/:commentId
 // Delete a comment
 const deleteComment = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(deleteCommentSchema, req);
 });
 
@@ -118,14 +118,14 @@ const getCommentLikes = asyncController(async (req: Request, res: Response, next
 // post /:postId/comments/:commentId/likes
 // Like a comment
 const likeComment = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(likeCommentSchema, req);
 });
 
 // delete /:postId/comments/:commentId/likes
 // Unlike a comment
 const unlikeComment = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(unlikeCommentSchema, req);
 });
 

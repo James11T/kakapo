@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
-import { isDevelopmentEnv, DEPLOYMENT_CONSTANTS } from "../config";
-import logger from "../logging";
-import { IPToCountry } from "../utils/ip";
+import { isDevelopmentEnv, DEPLOYMENT_CONSTANTS } from "../config.js";
+import logger from "../logging.js";
+import { IPToCountry } from "../utils/ip.js";
 import type { Request, Response, NextFunction } from "express";
 
 const setRealIp = (req: Request, res: Response, next: NextFunction) => {

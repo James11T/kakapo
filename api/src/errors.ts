@@ -1,4 +1,4 @@
-import { RUNTIME_CONSTANTS } from "./config";
+import { RUNTIME_CONSTANTS } from "./config.js";
 import type { ZodIssue } from "zod";
 
 class APIBaseError extends Error {

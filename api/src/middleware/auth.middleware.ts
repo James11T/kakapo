@@ -1,9 +1,9 @@
-import { asyncController } from "../controllers/base.controller";
-import prisma from "../database";
-import { APIUnauthorizedError } from "../errors";
-import logger from "../logging";
-import { decodeSignedToken } from "../services/tokens.service";
-import type { JWTAccessToken } from "../types";
+import { asyncController } from "../controllers/base.controller.js";
+import prisma from "../database.js";
+import { APIUnauthorizedError } from "../errors.js";
+import logger from "../logging.js";
+import { decodeSignedToken } from "../services/tokens.service.js";
+import type { JWTAccessToken } from "../types.js";
 import type { User } from "@prisma/client";
 import type { Request, Response, NextFunction } from "express";
 
@@ -23,12 +23,13 @@ const authenticate = asyncController(
     }
 
     req.user = user;
+    console.log(user);
     next();
   }
 );
 
-function protect<T extends User>(user: T | undefined): asserts user is T {
-  if (!user) throw new APIUnauthorizedError();
+function protect<T extends { user: User }>(req: Partial<T>): asserts req is T {
+  if (!req.user) throw new APIUnauthorizedError();
 }
 
 export { authenticate, protect };

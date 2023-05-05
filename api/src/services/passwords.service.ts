@@ -1,9 +1,5 @@
 import argon2 from "argon2";
-import jwt from "jsonwebtoken";
-import { HASHING_CONSTANTS, WEB_CONSTANTS } from "../config";
-import type { User } from "@prisma/client";
-
-const { JWT_SECRET } = process.env;
+import { HASHING_CONSTANTS } from "../config.js";
 
 const hashingOptions = {
   type: HASHING_CONSTANTS.HASHING_FUNCTION,

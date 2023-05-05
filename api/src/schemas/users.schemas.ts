@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { pagination, username, password } from "./generic.schemas";
+import { pagination, username, password } from "./generic.schemas.js";
 
 // get /
 // Query users

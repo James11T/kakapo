@@ -1,6 +1,6 @@
 import AWS from "aws-sdk";
 import nodemailer from "nodemailer";
-import { RUNTIME_CONSTANTS, WEB_CONSTANTS } from "../config";
+import { RUNTIME_CONSTANTS, WEB_CONSTANTS } from "../config.js";
 import type { Attachment } from "nodemailer/lib/mailer";
 
 const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, WEB_DOMAIN } = process.env;

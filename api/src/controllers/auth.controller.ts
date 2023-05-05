@@ -1,4 +1,4 @@
-import { protect } from "../middleware/auth.middleware";
+import { protect } from "../middleware/auth.middleware.js";
 import {
   activateMfaSourceSchema,
   addMfaSourceSchema,
@@ -7,17 +7,17 @@ import {
   requestPasswordResetSchema,
   resetPasswordSchema,
   whoAmISchema,
-} from "../schemas/auth.schemas";
-import { privateUserFilterSchema } from "../schemas/users.schemas";
-import { validate } from "../schemas/validation";
-import { filter } from "../utils/objects";
-import { asyncController } from "./base.controller";
+} from "../schemas/auth.schemas.js";
+import { privateUserFilterSchema } from "../schemas/users.schemas.js";
+import { validate } from "../schemas/validation.js";
+import { filter } from "../utils/objects.js";
+import { asyncController } from "./base.controller.js";
 import type { Request, Response, NextFunction } from "express";
 
 // GET /whoami
 // Return authenticated user
 const whoAmI = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   await validate(whoAmISchema, req);
 
   return res.json(filter(req.user, privateUserFilterSchema));
@@ -26,14 +26,14 @@ const whoAmI = asyncController(async (req: Request, res: Response, next: NextFun
 // GET /mfa
 // Get MFA status
 const getMfaStatus = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(getMfaStatusSchema, req);
 });
 
 // POST /mfa
 // Add MFA source
 const addMfaSource = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(addMfaSourceSchema, req);
 });
 
@@ -41,7 +41,7 @@ const addMfaSource = asyncController(async (req: Request, res: Response, next: N
 // Activate MFA source
 const activateMfaSource = asyncController(
   async (req: Request, res: Response, next: NextFunction) => {
-    protect(req.user);
+    protect(req);
     const parsedRequest = await validate(activateMfaSourceSchema, req);
   }
 );
@@ -49,7 +49,7 @@ const activateMfaSource = asyncController(
 // DELETE /mfa/:mfaId
 // Remove MFA source
 const removeMfaSource = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  protect(req.user);
+  protect(req);
   const parsedRequest = await validate(removeMfaSourceSchema, req);
 });
 

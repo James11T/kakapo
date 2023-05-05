@@ -1,6 +1,6 @@
-import prisma from "../database";
-import { APINotFoundError } from "../errors";
-import type { FriendshipStatus, RequireKey } from "../types";
+import prisma from "../database.js";
+import { APINotFoundError } from "../errors.js";
+import type { FriendshipStatus, RequireKey } from "../types.js";
 import type { FriendRequest, Friendship, User } from "@prisma/client";
 
 type ID = number;
@@ -122,14 +122,14 @@ const getUserFriends = async (user: UniqueUser): Promise<User[]> => {
         {
           friendships1: {
             some: {
-              user2Id: user.id,
+              user2Id: userId,
             },
           },
         },
         {
           friendships2: {
             some: {
-              user1Id: user.id,
+              user1Id: userId,
             },
           },
         },
