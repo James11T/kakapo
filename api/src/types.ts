@@ -26,4 +26,39 @@ type ValidationSchema = ZodObject<{
   query?: any;
 }>;
 
-export type { JWTAccessToken, JWTRefreshToken, FriendshipStatus, RequireKey, ValidationSchema };
+const SHORT_TIME_UNITS = ["ms", "s", "m", "h", "d", "w", "y"] as const;
+const LONG_TIME_UNITS = [
+  "sec",
+  "secs",
+  "min",
+  "mins",
+  "hr",
+  "hrs",
+  "hour",
+  "hours",
+  "day",
+  "days",
+  "wk",
+  "week",
+  "weeks",
+  "yr",
+  "yrs",
+  "year",
+  "years",
+] as const;
+
+type TimeUnit = (typeof SHORT_TIME_UNITS)[number];
+type LongTimeUnit = (typeof LONG_TIME_UNITS)[number];
+type AnyTimeUnit = TimeUnit | LongTimeUnit;
+
+export { SHORT_TIME_UNITS, LONG_TIME_UNITS };
+export type {
+  JWTAccessToken,
+  JWTRefreshToken,
+  FriendshipStatus,
+  RequireKey,
+  ValidationSchema,
+  TimeUnit,
+  LongTimeUnit,
+  AnyTimeUnit,
+};
