@@ -1,15 +1,16 @@
 import "dotenv/config";
 import fs from "fs";
+import path from "path";
 import express from "express";
 import handlebars from "handlebars";
 
 const { EMAIL_DEV_SERVER_PORT } = process.env;
 
-const TEMPLATE_DIR = "src/email/views/";
+const TEMPLATE_DIR = path.join(process.cwd(), "src/services/email/views");
 
 handlebars.registerPartial(
   "base",
-  handlebars.compile(fs.readFileSync(`${TEMPLATE_DIR}base.hbs`, "utf8"))
+  handlebars.compile(fs.readFileSync(path.join(TEMPLATE_DIR, "base.hbs"), "utf8"))
 );
 
 const templateFolders = fs
@@ -19,7 +20,10 @@ const templateFolders = fs
 const templates: Record<string, HandlebarsTemplateDelegate> = {};
 
 for (const templateDir of templateFolders) {
-  const content = fs.readFileSync(`${TEMPLATE_DIR}${templateDir.name}/template.hbs`, "utf8");
+  const content = fs.readFileSync(
+    path.join(TEMPLATE_DIR, templateDir.name, "/template.hbs"),
+    "utf8"
+  );
   templates[templateDir.name] = handlebars.compile(content);
 }
 

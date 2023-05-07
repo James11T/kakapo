@@ -1,13 +1,13 @@
-import cors from "cors";
-import helmet from "helmet";
-import express from "express";
-import prisma from "./database.js";
-import baseRouter from "./routes/index.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import express from "express";
+import helmet from "helmet";
+import { SERVER_CONSTANTS } from "./config.js";
+import prisma from "./database.js";
 import errorHandler from "./middleware/error.middleware.js";
 import setRequestMetadata, { logRequest } from "./middleware/meta.middleware.js";
 import timeout from "./middleware/timeout.middleware.js";
-import { SERVER_CONSTANTS } from "./config.js";
+import baseRouter from "./routes/index.js";
 
 const app = express();
 

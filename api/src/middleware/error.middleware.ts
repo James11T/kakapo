@@ -20,9 +20,9 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
     error = newError;
   } else {
     error = new APIServerError();
+    logger.error("Uncaught error handled", { error: String(err) });
   }
 
-  logger.error("Controller error handled", { error: error.error, errorMessage: error.message });
   logger.debug(String(err));
   return res.status(error.status).json(error.toJSON());
 };

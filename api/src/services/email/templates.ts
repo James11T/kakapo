@@ -1,5 +1,7 @@
 import fs from "fs";
+import path from "path";
 import handlebars from "handlebars";
+import logger from "../../logging.js";
 import { FAIL_EMOJI, IPToCountryEmoji } from "../../utils/ip.js";
 import { sendEmail } from "../ses.service.js";
 import type { EmailOptions } from "../ses.service.js";
@@ -8,7 +10,7 @@ import type { TemplateDelegate } from "handlebars";
 const NO_FALLBACK =
   "This email is HTML only. If you can't see the HTML version of this email then you may need to update your email client preferences.";
 
-const TEMPLATE_DIR = "src/email/views/";
+const TEMPLATE_DIR = path.join(process.cwd(), "src/services/email/views");
 
 interface APITemplate {
   render: TemplateDelegate;
@@ -21,7 +23,7 @@ interface Templates {
 
 handlebars.registerPartial(
   "base",
-  handlebars.compile(fs.readFileSync(`${TEMPLATE_DIR}base.hbs`, "utf8"))
+  handlebars.compile(fs.readFileSync(path.join(TEMPLATE_DIR, "base.hbs"), "utf8"))
 );
 
 /**
@@ -34,10 +36,10 @@ handlebars.registerPartial(
 const loadFallback = (dirName: string) => {
   let fallback: string;
 
-  if (!fs.existsSync(dirName)) {
+  if (!fs.existsSync(path.join(TEMPLATE_DIR, dirName))) {
     fallback = NO_FALLBACK;
   } else {
-    fallback = fs.readFileSync(`${TEMPLATE_DIR}${dirName}/fallback.txt`, "utf8");
+    fallback = fs.readFileSync(path.join(TEMPLATE_DIR, dirName, "/fallback.txt"), "utf8");
   }
 
   return handlebars.compile(fallback);
@@ -50,7 +52,7 @@ const loadFallback = (dirName: string) => {
  * @returns Template file render function with a list of attachments
  */
 const loadTemplate = (dirName: string): APITemplate => {
-  const template = fs.readFileSync(`${TEMPLATE_DIR}${dirName}/template.hbs`, "utf8");
+  const template = fs.readFileSync(path.join(TEMPLATE_DIR, dirName, "/template.hbs"), "utf8");
 
   const render = handlebars.compile(template);
   const fallback = loadFallback(dirName);
@@ -76,9 +78,11 @@ const loadTemplates = () => {
       const template = loadTemplate(templateDir.name);
       templates[templateDir.name] = template;
     } catch (error) {
-      console.error(`Failed to load template: ${templateDir.name}`);
+      logger.error(`Failed to load template ${templateDir.name}`, { error: String(error) });
     }
   });
+
+  logger.debug(`Loaded ${Object.keys(templates).length} templates`);
 
   return templates;
 };
@@ -95,7 +99,7 @@ const sendTemplate = async (
   to: string | string[],
   templateName: string,
   templateContext: any,
-  options: Partial<EmailOptions>
+  options: Partial<EmailOptions> = {}
 ) => {
   const loadedTemplate = templates[templateName];
 

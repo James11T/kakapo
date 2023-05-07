@@ -1,6 +1,7 @@
 import AWS from "aws-sdk";
 import nodemailer from "nodemailer";
 import { RUNTIME_CONSTANTS, WEB_CONSTANTS } from "../config.js";
+import logger from "../logging.js";
 import type { Attachment } from "nodemailer/lib/mailer";
 
 const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, WEB_DOMAIN } = process.env;
@@ -39,10 +40,15 @@ const defaultOptions: EmailOptions = {
  * @param to Email recipient(s)
  * @param options Additional email options
  */
-const sendEmail = async (to: string | string[], options: Partial<EmailOptions>) => {
-  if (!RUNTIME_CONSTANTS.CAN_SEND_EMAILS) return;
+const sendEmail = async (to: string | string[], options: Partial<EmailOptions> = {}) => {
+  if (!RUNTIME_CONSTANTS.CAN_SEND_EMAILS) {
+    logger.debug(`Not sending email to ${to} in dev.`);
+    return;
+  }
 
   const combinedOptions: EmailOptions = { ...defaultOptions, ...options };
+
+  logger.debug(`Sending email to ${to}`);
 
   await transporter.sendMail({
     from: {
