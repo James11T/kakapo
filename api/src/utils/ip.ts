@@ -1,9 +1,16 @@
 import geoip from "geoip-country";
 import { countryCodeToFlag } from "./strings.js";
 
-const FAIL_COUNTRY_CODE = "XX";
+type ISOCountryCode = string;
+const FAIL_COUNTRY_CODE: ISOCountryCode = "XX";
 const FAIL_EMOJI = "❓";
 
+/**
+ * Geo-locate an ip address into an ISO country code
+ *
+ * @param ip IPV4 or IPV6 address
+ * @returns A 2 character ISO country code
+ */
 const IPToCountry = (ip: string) => {
   const geoData = geoip.lookup(ip);
 
@@ -11,7 +18,13 @@ const IPToCountry = (ip: string) => {
   return geoData.country;
 };
 
-const countryToEmoji = (countryCode: string): string => {
+/**
+ * Translate an ISO country code into an emoji
+ *
+ * @param countryCode A 2 character ISO country code
+ * @returns An emoji
+ */
+const countryToEmoji = (countryCode: ISOCountryCode): string => {
   if (countryCode === FAIL_COUNTRY_CODE) return FAIL_EMOJI;
 
   return countryCodeToFlag(countryCode);

@@ -1,8 +1,7 @@
 import { asyncController } from "../controllers/base.controller.js";
-import prisma from "../database.js";
 import { APIUnauthorizedError } from "../errors.js";
-import logger from "../logging.js";
 import { decodeSignedToken } from "../services/tokens.service.js";
+import { getUserByUnique } from "../services/user.service.js";
 import type { JWTAccessToken } from "../types.js";
 import type { User } from "@prisma/client";
 import type { Request, Response, NextFunction } from "express";
@@ -14,16 +13,21 @@ const authenticate = asyncController(
 
     if (accessToken.startsWith("Bearer ")) accessToken = accessToken.slice(7); // If the auth starts with Bearer, remove it
 
-    const decodedToken = decodeSignedToken<JWTAccessToken>(accessToken);
-
-    const user = await prisma.user.findFirst({ where: { uuid: decodedToken.sub } });
-    if (!user) {
-      logger.info("Access token with unknown subject was submitted");
-      return next(new APIUnauthorizedError("UNAUTHORIZED", "Failed to access token subject user."));
+    let decodedToken: JWTAccessToken;
+    try {
+      decodedToken = decodeSignedToken<JWTAccessToken>(accessToken);
+    } catch {
+      return next(
+        new APIUnauthorizedError(
+          "INVALID_ACCESS_TOKEN",
+          "The provided access token was invalid or had expired."
+        )
+      );
     }
 
+    const user = await getUserByUnique({ uuid: decodedToken.sub });
+
     req.user = user;
-    console.log(user);
     next();
   }
 );

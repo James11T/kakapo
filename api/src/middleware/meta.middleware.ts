@@ -36,9 +36,8 @@ const logRequest = (req: Request, res: Response, next: NextFunction) => {
   logger.info({ ...httpLogBase, message: "HTTP request started" });
 
   res.on("finish", () => {
-    logger.log({
+    logger.info({
       ...httpLogBase,
-      level: res.statusCode < 400 ? "info" : "error",
       message: "HTTP request finished",
       status: res.statusCode,
       user: req.user ? { username: req.user.username, id: req.user.id, uuid: req.user.id } : null,
