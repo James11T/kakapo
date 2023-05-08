@@ -5,7 +5,7 @@ import { duration } from "./utils/time.js";
 const { NODE_ENV = "PRODUCTION", SEND_EMAILS_IN_DEV } = process.env;
 
 const isDevelopmentEnv = NODE_ENV.toUpperCase() === "DEVELOPMENT";
-const sendEmailsInDev = SEND_EMAILS_IN_DEV === "true";
+const sendEmailsInDev = SEND_EMAILS_IN_DEV.toUpperCase() === "TRUE";
 
 export const SERVER_CONSTANTS = {
   RESPONSE_TIMEOUT: duration.seconds(10),

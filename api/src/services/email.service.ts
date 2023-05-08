@@ -73,16 +73,16 @@ const loadTemplates = () => {
     .readdirSync(TEMPLATE_DIR, { withFileTypes: true })
     .filter((path) => path.isDirectory());
 
-  templateFolders.forEach((templateDir) => {
+  for (const { name } of templateFolders) {
     try {
-      const template = loadTemplate(templateDir.name);
-      templates[templateDir.name] = template;
+      const template = loadTemplate(name);
+      templates[name] = template;
     } catch (error) {
-      logger.error(`Failed to load template ${templateDir.name}`, { error: String(error) });
+      logger.error(`Failed to load templates`, { error: String(error) });
     }
-  });
+  }
 
-  logger.debug(`Loaded ${Object.keys(templates).length} templates`);
+  logger.debug(`Loaded ${Object.keys(templates).length} email templates`);
 
   return templates;
 };
