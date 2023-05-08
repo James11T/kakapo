@@ -1,17 +1,15 @@
-import AWS from "aws-sdk";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { defaultProvider } from "@aws-sdk/credential-provider-node";
 import { APIServerError } from "../errors.js";
 import logger from "../logging.js";
+import type { PutObjectCommandOutput } from "@aws-sdk/client-s3";
 
-const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_S3_IMAGE_BUCKET } = process.env;
+const { AWS_REGION, AWS_S3_IMAGE_BUCKET } = process.env;
 
-AWS.config.update({
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY,
-  region: AWS_REGION,
-});
-
-export const s3 = new AWS.S3({
+export const s3 = new S3Client({
   apiVersion: "latest",
+  region: AWS_REGION,
+  credentialDefaultProvider: defaultProvider,
 });
 
 /**
@@ -27,15 +25,15 @@ const uploadFile = async (
   file: Buffer,
   key: string,
   bucket = AWS_S3_IMAGE_BUCKET
-): Promise<AWS.S3.ManagedUpload.SendData> => {
-  const params = {
+): Promise<PutObjectCommandOutput> => {
+  const command = new PutObjectCommand({
     Bucket: bucket,
     Key: key,
     Body: file,
-  };
+  });
 
   try {
-    const res = await s3.upload(params).promise();
+    const res = await s3.send(command);
     return res;
   } catch (err) {
     logger.error("Failed to upload image to S3", { error: String(err) });

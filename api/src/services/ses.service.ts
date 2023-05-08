@@ -1,10 +1,11 @@
-import AWS from "aws-sdk";
+import SES from "@aws-sdk/client-ses";
+import { defaultProvider } from "@aws-sdk/credential-provider-node";
 import nodemailer from "nodemailer";
 import { RUNTIME_CONSTANTS, WEB_CONSTANTS } from "../config.js";
 import logger from "../logging.js";
 import type { Attachment } from "nodemailer/lib/mailer";
 
-const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, WEB_DOMAIN } = process.env;
+const { AWS_REGION, WEB_DOMAIN } = process.env;
 
 interface EmailOptions {
   name: string;
@@ -15,16 +16,14 @@ interface EmailOptions {
   attachments?: Attachment[];
 }
 
-AWS.config.update({
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY,
+const ses = new SES.SESClient({
+  apiVersion: "latest",
   region: AWS_REGION,
+  credentialDefaultProvider: defaultProvider,
 });
 
-const ses = new AWS.SES({ apiVersion: "latest", sslEnabled: true });
-
 const transporter = nodemailer.createTransport({
-  SES: ses,
+  SES: { ses, aws: SES },
   sendingRate: 1,
 });
 
