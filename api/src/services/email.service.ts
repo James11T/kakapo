@@ -1,16 +1,16 @@
 import fs from "fs";
 import path from "path";
 import handlebars from "handlebars";
-import logger from "../../logging.js";
-import { FAIL_EMOJI, IPToCountryEmoji } from "../../utils/ip.js";
-import { sendEmail } from "../ses.service.js";
-import type { EmailOptions } from "../ses.service.js";
+import logger from "../logging.js";
+import { FAIL_EMOJI, IPToCountryEmoji } from "../utils/ip.js";
+import { sendEmail } from "./ses.service.js";
+import type { EmailOptions } from "./ses.service.js";
 import type { TemplateDelegate } from "handlebars";
 
 const NO_FALLBACK =
   "This email is HTML only. If you can't see the HTML version of this email then you may need to update your email client preferences.";
 
-const TEMPLATE_DIR = path.join(process.cwd(), "src/services/email/views");
+const TEMPLATE_DIR = path.join(process.cwd(), "src/views");
 
 interface APITemplate {
   render: TemplateDelegate;

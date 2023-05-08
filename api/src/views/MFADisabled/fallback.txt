@@ -1,6 +1,6 @@
 Hello {{name}}!
 
-We're just emailing you to let you know that 2FA was recently disabled on your account.
+We're just emailing you to let you know that MFA was recently disabled on your account.
 
 If this was not you then you should change your password immediately.
 
