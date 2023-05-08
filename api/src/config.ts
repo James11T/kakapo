@@ -25,8 +25,7 @@ export const PASSWORD_CONSTANTS = {
 export const USERNAME_CONSTANTS = {
   minUsernameLength: 3,
   maxUsernameLength: 32,
-  allowedChars: /[a-zA-Z0-9-_.]/g,
-  matchRegex: /^(?![_.-])(?!.*[_.-]{2})[a-zA-Z0-9._-]+([^._\s-])$/,
+  matchRegex: /^(?=.{3,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
 };
 
 export const RUNTIME_CONSTANTS = {
@@ -41,7 +40,7 @@ export const WEB_CONSTANTS = {
 };
 
 export const PASSWORD_RESET_CONSTANTS = {
-  tokenTTL: duration.hours(1), // 1 hour
+  tokenTTL: duration.hours(1, "ms"),
   tokenLengthBytes: 64,
 };
 
@@ -51,11 +50,11 @@ export const POST_CONSTANTS = {
 };
 
 export const REFRESH_TOKEN_CONSTANTS = {
-  TOKEN_TTL: duration.days(60, "s"),
+  TOKEN_TTL: duration.days(60, "sec"),
 };
 
 export const ACCESS_TOKEN_CONSTANTS = {
-  TOKEN_TTL: duration.hours(1, "s"),
+  TOKEN_TTL: duration.hours(1, "sec"),
 };
 
 export const TOTP_CONSTANTS = {

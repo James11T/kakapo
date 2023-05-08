@@ -1,12 +1,7 @@
 import { z } from "zod";
 import { USERNAME_CONSTANTS, PASSWORD_CONSTANTS } from "../config.js";
 
-const username = z
-  .string()
-  .trim()
-  .min(USERNAME_CONSTANTS.minUsernameLength)
-  .max(USERNAME_CONSTANTS.maxUsernameLength)
-  .regex(USERNAME_CONSTANTS.matchRegex);
+const username = z.string().trim().regex(USERNAME_CONSTANTS.matchRegex);
 
 const totp = z.string().length(6);
 
