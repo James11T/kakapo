@@ -1,5 +1,5 @@
-import { v4 as uuid } from "uuid";
 import prisma from "./database.js";
+import { uuid } from "./utils/strings.js";
 
 const user = (id: number) => ({
   uuid: uuid(),

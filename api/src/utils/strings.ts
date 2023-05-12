@@ -1,4 +1,4 @@
-import { v4 as uuid4 } from "uuid";
+import { nanoid } from "nanoid";
 
 const regionalAUnicode = 127462;
 
@@ -30,11 +30,11 @@ const stripFileExtension = (filename: string): string => {
 };
 
 /**
- * Essentially a UUIDv4
+ * Central source of random strings
  *
- * @returns A unique string of length 36
+ * @returns A unique string currently of length 21
  */
-const uuid = (): string => uuid4();
+const uuid = (): string => nanoid();
 
 const charToRegional = (char: string) =>
   String.fromCodePoint(char.toUpperCase().charCodeAt(0) - 65 + regionalAUnicode);

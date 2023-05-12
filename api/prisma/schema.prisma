@@ -9,7 +9,7 @@ datasource db {
 
 model Comment {
   id       Int      @id @default(autoincrement()) @map("comment_id")
-  uuid     String   @unique @map("comment_uuid") @db.VarChar(36)
+  uuid     String   @unique @map("comment_uuid") @db.VarChar(21)
   text     String   @db.VarChar(1024)
   postedAt DateTime @map("posted_at")
   authorId Int      @map("author_id")
@@ -46,7 +46,7 @@ model Friendship {
 
 model Post {
   id       Int         @id @default(autoincrement()) @map("post_id")
-  uuid     String      @unique @map("post_uuid") @db.VarChar(36)
+  uuid     String      @unique @map("post_uuid") @db.VarChar(21)
   caption  String      @db.VarChar(400)
   postedAt DateTime    @map("posted_at")
   authorId Int         @map("author_id")
@@ -60,7 +60,7 @@ model Post {
 
 model PostMedia {
   id     Int    @id @default(autoincrement()) @map("post_media_id")
-  uuid   String @unique @map("post_media_uuid") @db.VarChar(36)
+  uuid   String @unique @map("post_media_uuid") @db.VarChar(21)
   url    String @db.VarChar(256)
   type   String @db.VarChar(32)
   index  Int
@@ -73,7 +73,7 @@ model PostMedia {
 
 model RefreshToken {
   id         Int      @id @default(autoincrement()) @map("refresh_token_id")
-  uuid       String   @unique @map("refresh_token_uuid") @db.VarChar(36)
+  uuid       String   @unique @map("refresh_token_uuid") @db.VarChar(21)
   subjectId  Int      @map("subject_id")
   expiresAt  DateTime @map("expires_at")
   issuedAt   DateTime @map("issued_at")
@@ -88,7 +88,7 @@ model RefreshToken {
 
 model User {
   id                     Int             @id @default(autoincrement()) @map("user_id")
-  uuid                   String          @unique @map("user_uuid") @db.VarChar(36)
+  uuid                   String          @unique @map("user_uuid") @db.VarChar(21)
   username               String          @unique() @db.VarChar(32)
   displayName            String          @map("display_name") @db.VarChar(32)
   avatar                 String?         @db.VarChar(255)
@@ -111,7 +111,7 @@ model User {
 
 model UserTOTP {
   id        Int     @id @default(autoincrement()) @map("user_totp_id")
-  uuid      String  @unique @map("user_totp_uuid") @db.VarChar(36)
+  uuid      String  @unique @map("user_totp_uuid") @db.VarChar(21)
   name      String  @db.VarChar(32)
   activated Boolean @default(false)
   secret    String  @db.VarChar(128)
