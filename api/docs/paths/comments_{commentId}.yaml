@@ -6,7 +6,6 @@ get:
     - posts
     - comments
   parameters:
-    - $ref: ../components/parameters/postIdPathProperty.yaml
     - $ref: ../components/parameters/commentIdPathProperty.yaml
   responses:
     "200":
@@ -31,7 +30,6 @@ delete:
     - posts
     - comments
   parameters:
-    - $ref: ../components/parameters/postIdPathProperty.yaml
     - $ref: ../components/parameters/commentIdPathProperty.yaml
   responses:
     "204":
@@ -54,7 +52,6 @@ patch:
     - posts
     - comments
   parameters:
-    - $ref: ../components/parameters/postIdPathProperty.yaml
     - $ref: ../components/parameters/commentIdPathProperty.yaml
   requestBody:
     required: true

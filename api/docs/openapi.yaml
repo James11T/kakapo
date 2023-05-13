@@ -115,12 +115,12 @@ paths:
     $ref: paths/posts_{postId}.yaml
   /posts/{postId}/likes:
     $ref: paths/posts_{postId}_likes.yaml
-  /posts/{postId}/comments:
-    $ref: paths/posts_{postId}_comments.yaml
-  /posts/{postId}/comments/{commentId}:
-    $ref: paths/posts_{postId}_comments_{commentId}.yaml
-  /posts/{postId}/comments/{commentId}/likes:
-    $ref: paths/posts_{postId}_comments_{commentId}_likes.yaml
+  /comments:
+    $ref: paths/comments.yaml
+  /comments/{commentId}:
+    $ref: paths/comments_{commentId}.yaml
+  /comments/{commentId}/likes:
+    $ref: paths/comments_{commentId}_likes.yaml
 components:
   securitySchemes:
     authorizationToken:

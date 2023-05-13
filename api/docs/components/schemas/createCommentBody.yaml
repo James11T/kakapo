@@ -2,3 +2,5 @@ type: object
 properties:
   text:
     $ref: ./text.yaml
+  postId:
+    $ref: ./uuid.yaml

@@ -1,0 +1,64 @@
+get:
+  operationId: query-comments
+  summary: Query comments
+  description: Search for comments based on various parameters.
+  tags:
+    - posts
+    - comments
+  parameters:
+    - $ref: ../components/parameters/pagination-from.yaml
+    - $ref: ../components/parameters/pagination-count.yaml
+    - name: post-id
+      in: query
+      description: Post ID to search for comments under.
+      required: true
+      schema:
+        $ref: ../components/schemas/uuid.yaml
+  responses:
+    "200":
+      description: Comments returned.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/comment.yaml
+    "404":
+      description: Post not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/postNotFoundResponseBody.yaml
+post:
+  operationId: create-comment
+  summary: Create comment
+  description: Add a new comment to a post as the currently authenticated user.
+  tags:
+    - posts
+    - comments
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/createCommentBody.yaml
+  responses:
+    "200":
+      description: Comment created successfully.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/comment.yaml
+    "400":
+      description: Invalid comment data.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/badParametersResponseBody.yaml
+            title: Invalid parameters
+    "404":
+      description: Post not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/postNotFoundResponseBody.yaml

@@ -15,20 +15,28 @@ get:
         example: Hello World!
     - name: order-by
       in: query
-      description: How to order the posts that are returned.
+      description: What to order returned posts by.
       required: false
       schema:
         type: string
         enum:
-          - likes-asc
-          - likes-desc
-          - posted-asc
-          - posted-desc
-        example: posted-asc
+          - likes
+          - posted-at
+        example: posted-at
+    - name: order-direction
+      in: query
+      description: Order the returned posts in ascending or descending order.
+      required: false
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        example: desc
     - $ref: ../components/parameters/pagination-from.yaml
     - $ref: ../components/parameters/pagination-count.yaml
   responses:
-    '200':
+    "200":
       description: Posts returned.
       content:
         application/json:
@@ -50,13 +58,13 @@ post:
         schema:
           $ref: ../components/schemas/createPostBody.yaml
   responses:
-    '200':
+    "200":
       description: Post created successfully.
       content:
         application/json:
           schema:
             $ref: ../components/schemas/post.yaml
-    '400':
+    "400":
       description: Invalid post data.
       content:
         application/json:
