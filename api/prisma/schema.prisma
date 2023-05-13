@@ -8,18 +8,31 @@ datasource db {
 }
 
 model Comment {
-  id       Int      @id @default(autoincrement()) @map("comment_id")
-  uuid     String   @unique @map("comment_uuid") @db.VarChar(21)
-  text     String   @db.VarChar(1024)
-  postedAt DateTime @map("posted_at")
-  authorId Int      @map("author_id")
-  postId   Int      @map("post_id")
-  author   User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id       Int           @id @default(autoincrement()) @map("comment_id")
+  uuid     String        @unique @map("comment_uuid") @db.VarChar(21)
+  text     String        @db.VarChar(1024)
+  postedAt DateTime      @map("posted_at")
+  authorId Int           @map("author_id")
+  postId   Int           @map("post_id")
+  author   User          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  post     Post          @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  likes    CommentLike[]
 
   @@index([authorId])
   @@index([postId])
   @@map("comment")
+}
+
+model CommentLike {
+  id        Int      @id @default(autoincrement()) @map("comment_like_id")
+  commentId Int      @map("comment_id")
+  userId    Int      @map("user_id")
+  likedAt   DateTime @map("liked_at")
+
+  post Comment @relation(fields: [commentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("comment_like")
 }
 
 model FriendRequest {
@@ -53,9 +66,22 @@ model Post {
   comments Comment[]
   author   User        @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   media    PostMedia[]
+  likes    PostLike[]
 
   @@index([authorId])
   @@map("post")
+}
+
+model PostLike {
+  id      Int      @id @default(autoincrement()) @map("post_like_id")
+  postId  Int      @map("post_id")
+  userId  Int      @map("user_id")
+  likedAt DateTime @map("liked_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("post_like")
 }
 
 model PostMedia {
@@ -105,6 +131,8 @@ model User {
   posts                  Post[]
   refreshTokens          RefreshToken[]
   userTotps              UserTOTP[]
+  postLikes              PostLike[]
+  commentLikes           CommentLike[]
 
   @@map("user")
 }
