@@ -24,7 +24,7 @@ const activateMfaSourceSchema = z.object({
     totp: totp,
   }),
   params: z.object({
-    mfaId: z.string().uuid(),
+    mfaId: z.string(),
   }),
 });
 
@@ -35,7 +35,7 @@ const removeMfaSourceSchema = z.object({
     totp: totp,
   }),
   params: z.object({
-    mfaId: z.string().uuid(),
+    mfaId: z.string(),
   }),
 });
 
@@ -56,6 +56,12 @@ const resetPasswordSchema = z.object({
   }),
 });
 
+const mfaSourceFilterSchema = z.object({
+  uuid: z.any(),
+  name: z.any(),
+  activated: z.any(),
+});
+
 export {
   whoAmISchema,
   getMfaStatusSchema,
@@ -64,4 +70,5 @@ export {
   removeMfaSourceSchema,
   requestPasswordResetSchema,
   resetPasswordSchema,
+  mfaSourceFilterSchema,
 };

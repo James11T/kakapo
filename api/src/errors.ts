@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { RUNTIME_CONSTANTS } from "./config.js";
 import type { ZodIssue } from "zod";
 
@@ -79,6 +80,12 @@ class APIParameterError extends APIBadRequestError {
   }
 }
 
+const managePrismaError = (error: any, notFoundError: any) => {
+  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025")
+    throw notFoundError;
+  throw error;
+};
+
 export {
   APIBaseError,
   APIBadRequestError,
@@ -88,4 +95,5 @@ export {
   APIConflictError,
   APIServerError,
   APIParameterError,
+  managePrismaError,
 };

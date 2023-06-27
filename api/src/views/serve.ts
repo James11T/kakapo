@@ -4,9 +4,9 @@ import path from "path";
 import express from "express";
 import handlebars from "handlebars";
 
-const { EMAIL_DEV_SERVER_PORT } = process.env;
+const { EMAIL_DEV_SERVER_PORT = 5001 } = process.env;
 
-const TEMPLATE_DIR = path.join(process.cwd(), "src/services/email/views");
+const TEMPLATE_DIR = path.join(process.cwd(), "src/views");
 
 handlebars.registerPartial(
   "base",

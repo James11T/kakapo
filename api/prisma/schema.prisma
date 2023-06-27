@@ -8,15 +8,16 @@ datasource db {
 }
 
 model Comment {
-  id       Int           @id @default(autoincrement()) @map("comment_id")
-  uuid     String        @unique @map("comment_uuid") @db.VarChar(21)
-  text     String        @db.VarChar(1024)
-  postedAt DateTime      @map("posted_at")
-  authorId Int           @map("author_id")
-  postId   Int           @map("post_id")
-  author   User          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  post     Post          @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  likes    CommentLike[]
+  id       Int      @id @default(autoincrement()) @map("comment_id")
+  uuid     String   @unique @map("comment_uuid") @db.VarChar(21)
+  text     String   @db.VarChar(1024)
+  postedAt DateTime @map("posted_at")
+  authorId Int      @map("author_id")
+  postId   Int      @map("post_id")
+
+  author User          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  post   Post          @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  likes  CommentLike[]
 
   @@index([authorId])
   @@index([postId])
@@ -24,7 +25,6 @@ model Comment {
 }
 
 model CommentLike {
-  id        Int      @id @default(autoincrement()) @map("comment_like_id")
   commentId Int      @map("comment_id")
   userId    Int      @map("user_id")
   likedAt   DateTime @map("liked_at")
@@ -32,6 +32,7 @@ model CommentLike {
   post Comment @relation(fields: [commentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
+  @@id([commentId, userId])
   @@map("comment_like")
 }
 
@@ -39,8 +40,9 @@ model FriendRequest {
   userFromId Int      @map("user_from_id")
   userToId   Int      @map("user_to_id")
   sentAt     DateTime @map("sent_at")
-  userFrom   User     @relation("userFrom", fields: [userFromId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userTo     User     @relation("userTo", fields: [userToId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  userFrom User @relation("userFrom", fields: [userFromId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userTo   User @relation("userTo", fields: [userToId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([userFromId, userToId])
   @@map("friend_request")
@@ -50,19 +52,22 @@ model Friendship {
   user1Id         Int      @map("user_1_id")
   user2Id         Int      @map("user_2_id")
   becameFriendsAt DateTime @map("became_friends_at")
-  user1           User     @relation("user1", fields: [user1Id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user2           User     @relation("user2", fields: [user2Id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  user1 User @relation("user1", fields: [user1Id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user2 User @relation("user2", fields: [user2Id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([user1Id, user2Id])
   @@map("friendship")
 }
 
 model Post {
-  id       Int         @id @default(autoincrement()) @map("post_id")
-  uuid     String      @unique @map("post_uuid") @db.VarChar(21)
-  caption  String      @db.VarChar(400)
-  postedAt DateTime    @map("posted_at")
-  authorId Int         @map("author_id")
+  id        Int      @id @default(autoincrement()) @map("post_id")
+  uuid      String   @unique @map("post_uuid") @db.VarChar(21)
+  caption   String   @db.VarChar(400)
+  postedAt  DateTime @map("posted_at")
+  authorId  Int      @map("author_id")
+  processed Boolean  @default(false)
+
   comments Comment[]
   author   User        @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   media    PostMedia[]
@@ -73,7 +78,6 @@ model Post {
 }
 
 model PostLike {
-  id      Int      @id @default(autoincrement()) @map("post_like_id")
   postId  Int      @map("post_id")
   userId  Int      @map("user_id")
   likedAt DateTime @map("liked_at")
@@ -81,17 +85,20 @@ model PostLike {
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
+  @@id([postId, userId])
   @@map("post_like")
 }
 
 model PostMedia {
-  id     Int    @id @default(autoincrement()) @map("post_media_id")
-  uuid   String @unique @map("post_media_uuid") @db.VarChar(21)
-  url    String @db.VarChar(256)
-  type   String @db.VarChar(32)
-  index  Int
-  postId Int    @map("post_id")
-  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id       Int     @id @default(autoincrement()) @map("post_media_id")
+  uuid     String  @unique @map("post_media_uuid") @db.VarChar(21)
+  url      String  @db.VarChar(256)
+  type     String  @db.VarChar(32)
+  index    Int
+  observed Boolean @default(false)
+  postId   Int     @map("post_id")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([postId])
   @@map("post_media")
@@ -106,33 +113,36 @@ model RefreshToken {
   deviceType String   @default("unknown") @map("device_type") @db.VarChar(64)
   sourceIp   String   @map("source_ip") @db.VarChar(39)
   isRevoked  Boolean  @default(false) @map("is_revoked")
-  user       User     @relation(fields: [subjectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  user User @relation(fields: [subjectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([subjectId])
   @@map("refresh_token")
 }
 
 model User {
-  id                     Int             @id @default(autoincrement()) @map("user_id")
-  uuid                   String          @unique @map("user_uuid") @db.VarChar(21)
-  username               String          @unique() @db.VarChar(32)
-  displayName            String          @map("display_name") @db.VarChar(32)
-  avatar                 String?         @db.VarChar(255)
-  about                  String          @default("") @db.VarChar(2000)
-  email                  String          @unique() @db.VarChar(255)
-  emailVerified          Boolean         @default(false) @map("email_verified")
-  registeredAt           DateTime        @map("registered_at")
-  passwordHash           String          @map("password_hash") @db.VarChar(255)
+  id            Int      @id @default(autoincrement()) @map("user_id")
+  uuid          String   @unique @map("user_uuid") @db.VarChar(21)
+  username      String   @unique @db.VarChar(32)
+  displayName   String   @map("display_name") @db.VarChar(32)
+  avatar        String?  @db.VarChar(255)
+  about         String   @default("") @db.VarChar(2000)
+  email         String   @unique @db.VarChar(255)
+  emailVerified Boolean  @default(false) @map("email_verified")
+  registeredAt  DateTime @map("registered_at")
+  passwordHash  String   @map("password_hash") @db.VarChar(255)
+
   comments               Comment[]
-  incomingFriendRequests FriendRequest[] @relation("userTo")
-  outgoingFriendRequests FriendRequest[] @relation("userFrom")
-  friendships1           Friendship[]    @relation("user1")
-  friendships2           Friendship[]    @relation("user2")
+  incomingFriendRequests FriendRequest[]     @relation("userTo")
+  outgoingFriendRequests FriendRequest[]     @relation("userFrom")
+  friendships1           Friendship[]        @relation("user1")
+  friendships2           Friendship[]        @relation("user2")
   posts                  Post[]
   refreshTokens          RefreshToken[]
   userTotps              UserTOTP[]
   postLikes              PostLike[]
   commentLikes           CommentLike[]
+  passwordResets         UserPasswordReset[]
 
   @@map("user")
 }
@@ -144,8 +154,21 @@ model UserTOTP {
   activated Boolean @default(false)
   secret    String  @db.VarChar(128)
   userId    Int     @map("user_id")
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId])
   @@map("user_totp")
+}
+
+model UserPasswordReset {
+  id        Int      @id @default(autoincrement()) @map("password_reset_id")
+  userId    Int      @map("user_id")
+  token     String   @db.VarChar(64)
+  createdAt DateTime @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([token])
+  @@map("user_password_reset")
 }

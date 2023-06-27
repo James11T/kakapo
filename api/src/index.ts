@@ -10,7 +10,6 @@ const requiredEnvVars = [
   "API_PORT",
   "JWT_SECRET",
   "DATABASE_URL",
-  "WEB_DOMAIN",
   "AWS_REGION",
   "AWS_ACCESS_KEY_ID",
   "AWS_SECRET_ACCESS_KEY",
@@ -31,6 +30,7 @@ if (anyMissing) process.exit(0);
 const start = async () => {
   logger.info("API Starting");
   if (RUNTIME_CONSTANTS.IS_DEV) logger.debug("Running in development mode");
+  if (RUNTIME_CONSTANTS.IS_DEV && RUNTIME_CONSTANTS.CAN_SEND_EMAILS) logger.debug("Emails enabled");
 
   app.listen(API_PORT, () => {
     logger.info(`API listening on port ${API_PORT}`);

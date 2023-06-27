@@ -1,13 +1,16 @@
+import { bypassAuth } from "../config.js";
 import { asyncController } from "../controllers/base.controller.js";
 import { APIUnauthorizedError } from "../errors.js";
 import { decodeSignedToken } from "../services/tokens.service.js";
-import { getUserByUnique } from "../services/user.service.js";
+import { getUser } from "../services/user.service.js";
 import type { JWTAccessToken } from "../types.js";
 import type { User } from "@prisma/client";
 import type { Request, Response, NextFunction } from "express";
 
 const authenticate = asyncController(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    if (bypassAuth) return next();
+
     let accessToken = req.headers.authorization;
     if (!accessToken || !accessToken.length) return next();
 
@@ -25,7 +28,7 @@ const authenticate = asyncController(
       );
     }
 
-    const user = await getUserByUnique({ uuid: decodedToken.sub });
+    const user = await getUser({ uuid: decodedToken.sub });
 
     req.user = user;
     next();

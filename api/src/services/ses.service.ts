@@ -4,8 +4,9 @@ import nodemailer from "nodemailer";
 import { RUNTIME_CONSTANTS, WEB_CONSTANTS } from "../config.js";
 import logger from "../logging.js";
 import type { Attachment } from "nodemailer/lib/mailer";
+import type { Options } from "nodemailer/lib/mailer";
 
-const { AWS_REGION, WEB_DOMAIN } = process.env;
+const { AWS_REGION } = process.env;
 
 interface EmailOptions {
   name: string;
@@ -40,26 +41,28 @@ const defaultOptions: EmailOptions = {
  * @param options Additional email options
  */
 const sendEmail = async (to: string | string[], options: Partial<EmailOptions> = {}) => {
-  if (!RUNTIME_CONSTANTS.CAN_SEND_EMAILS) {
-    logger.debug(`Not sending email to ${to} in dev.`);
-    return;
-  }
-
   const combinedOptions: EmailOptions = { ...defaultOptions, ...options };
 
-  logger.debug(`Sending email to ${to}`);
-
-  await transporter.sendMail({
+  const emailOptions: Options = {
     from: {
       name: combinedOptions.name,
-      address: `${combinedOptions.user}@${WEB_CONSTANTS.MAIL_SUBDOMAIN}.${WEB_DOMAIN}`,
+      address: `${combinedOptions.user}@${WEB_CONSTANTS.MAIL_SUBDOMAIN}.${WEB_CONSTANTS.DOMAIN}`,
     },
     to,
     subject: combinedOptions.subject,
     text: combinedOptions.text,
     html: combinedOptions.html,
     attachments: combinedOptions.attachments,
-  });
+  };
+
+  if (!RUNTIME_CONSTANTS.CAN_SEND_EMAILS) {
+    logger.debug("Email not sent", { to });
+    return;
+  }
+
+  logger.debug(`Sending email to ${to}`);
+
+  await transporter.sendMail(emailOptions);
 };
 
 export { sendEmail };

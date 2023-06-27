@@ -51,6 +51,14 @@ type TimeUnit = (typeof SHORT_TIME_UNITS)[number];
 type LongTimeUnit = (typeof LONG_TIME_UNITS)[number];
 type AnyTimeUnit = TimeUnit | LongTimeUnit;
 
+interface Pagination {
+  from?: number;
+  count?: number;
+}
+
+type ID = number;
+type UUID = string;
+
 export { SHORT_TIME_UNITS, LONG_TIME_UNITS };
 export type {
   JWTAccessToken,
@@ -61,4 +69,7 @@ export type {
   TimeUnit,
   LongTimeUnit,
   AnyTimeUnit,
+  Pagination,
+  ID,
+  UUID,
 };

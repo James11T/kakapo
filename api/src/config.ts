@@ -2,10 +2,11 @@ import argon2 from "argon2";
 import bytes from "bytes";
 import { duration } from "./utils/time.js";
 
-const { NODE_ENV = "PRODUCTION", SEND_EMAILS_IN_DEV } = process.env;
+const { NODE_ENV = "PRODUCTION", DEV_SEND_EMAILS, DEV_BYPASS_AUTH } = process.env;
 
-const isDevelopmentEnv = NODE_ENV.toUpperCase() === "DEVELOPMENT";
-const sendEmailsInDev = SEND_EMAILS_IN_DEV.toUpperCase() === "TRUE";
+const isDevelopmentEnv = (NODE_ENV ?? "").toUpperCase().trim() === "DEVELOPMENT";
+const sendEmailsInDev = (DEV_SEND_EMAILS ?? "").toUpperCase().trim() === "TRUE";
+const bypassAuth = isDevelopmentEnv && (DEV_BYPASS_AUTH ?? "").toUpperCase().trim() === "TRUE";
 
 export const SERVER_CONSTANTS = {
   RESPONSE_TIMEOUT: duration.seconds(10),
@@ -34,19 +35,20 @@ export const RUNTIME_CONSTANTS = {
 };
 
 export const WEB_CONSTANTS = {
-  URL: "https://kakaposocial.com/",
+  DOMAIN: "kakaposocial.com",
   MAIL_SUBDOMAIN: "mail",
   MEDIA_SUBDOMAIN: "media",
 };
 
 export const PASSWORD_RESET_CONSTANTS = {
   tokenTTL: duration.hours(1, "ms"),
-  tokenLengthBytes: 64,
+  tokenLength: 64,
 };
 
 export const POST_CONSTANTS = {
   MAX_MEDIA_COUNT: 8,
   MAX_MEDIA_SIZE: bytes.parse("50MB"),
+  SIGNED_URL_TTL: duration.minutes(1, "ms"),
 };
 
 export const REFRESH_TOKEN_CONSTANTS = {
@@ -66,4 +68,9 @@ export const DEPLOYMENT_CONSTANTS = {
   COUNTRY_HEADER: "CF-IPCountry",
 } as Record<string, string | undefined>;
 
-export { isDevelopmentEnv };
+export const DATA_CONSTANTS = {
+  PAGINATION_TAKE_DEFAULT: 20,
+  PAGINATION_TAKE_MAXIMUM: 100,
+};
+
+export { isDevelopmentEnv, bypassAuth };

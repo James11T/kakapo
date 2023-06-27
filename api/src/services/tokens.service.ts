@@ -5,7 +5,7 @@ import { APIServerError, APIUnauthorizedError } from "../errors.js";
 import logger from "../logging.js";
 import { uuid } from "../utils/strings.js";
 import { getEpoch } from "../utils/time.js";
-import { getUserByUnique } from "./user.service.js";
+import { getUser } from "./user.service.js";
 import type { JWTRefreshToken, JWTAccessToken } from "../types.js";
 import type { User, RefreshToken } from "@prisma/client";
 
@@ -45,12 +45,6 @@ const generateAccessToken = async (
   user: User,
   refreshToken: JWTRefreshToken
 ): Promise<JWTAccessToken> => {
-  if (refreshToken.exp < getEpoch())
-    throw new APIUnauthorizedError(
-      "REFRESH_TOKEN_EXPIRED",
-      "The supplied refresh JWT had expired."
-    );
-
   const DBRefreshToken = await prisma.refreshToken.findUnique({
     where: { uuid: refreshToken.jti },
   });
@@ -58,19 +52,20 @@ const generateAccessToken = async (
   if (!DBRefreshToken) {
     throw invalidRefreshTokenError;
   }
+
   if (DBRefreshToken.subjectId !== user.id) {
     logger.warn("refresh token was attempted to be used on the wrong user", {
       user: user.username,
-      id: user.id,
       uuid: user.uuid,
     });
     throw invalidRefreshTokenError;
   }
+
   if (DBRefreshToken.isRevoked) {
     throw invalidRefreshTokenError;
   }
 
-  const now = getEpoch();
+  const now = getEpoch({ truncate: true });
 
   const data: JWTAccessToken = {
     refresh_jti: DBRefreshToken.uuid,
@@ -118,7 +113,7 @@ const createAuthenticationRefreshToken = async (
 };
 
 const refreshAccessToken = async (refreshToken: string, uuid: string) => {
-  const user = await getUserByUnique({ uuid });
+  const user = await getUser({ uuid });
 
   const refreshJWT = decodeSignedToken<JWTRefreshToken>(refreshToken);
 

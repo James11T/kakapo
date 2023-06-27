@@ -3,9 +3,12 @@ import path from "path";
 import handlebars from "handlebars";
 import logger from "../logging.js";
 import { FAIL_EMOJI, IPToCountryEmoji } from "../utils/ip.js";
+import { TEMPLATE_NAMES } from "../views/templates.js";
 import { sendEmail } from "./ses.service.js";
 import type { EmailOptions } from "./ses.service.js";
+import type { TemplateContextMap, TemplateName } from "../views/templates.js";
 import type { TemplateDelegate } from "handlebars";
+import { RUNTIME_CONSTANTS } from "../config.js";
 
 const NO_FALLBACK =
   "This email is HTML only. If you can't see the HTML version of this email then you may need to update your email client preferences.";
@@ -69,11 +72,9 @@ const loadTemplates = () => {
   const templates: Templates = {};
 
   // Get all directory names in the template directory
-  const templateFolders = fs
-    .readdirSync(TEMPLATE_DIR, { withFileTypes: true })
-    .filter((path) => path.isDirectory());
+  const templateFolders = TEMPLATE_NAMES;
 
-  for (const { name } of templateFolders) {
+  for (const name of templateFolders) {
     try {
       const template = loadTemplate(name);
       templates[name] = template;
@@ -95,10 +96,10 @@ const loadTemplates = () => {
  * @param templateContext Context to pass to the template
  * @param options Additional email options
  */
-const sendTemplate = async (
+const sendTemplate = async <T extends TemplateName>(
   to: string | string[],
-  templateName: string,
-  templateContext: any,
+  templateName: T,
+  templateContext: TemplateContextMap[T],
   options: Partial<EmailOptions> = {}
 ) => {
   const loadedTemplate = templates[templateName];
@@ -115,6 +116,11 @@ const sendTemplate = async (
   const html = loadedTemplate.render({ ...templateContext });
   const text = loadedTemplate.fallback(templateContext);
 
+  if (!RUNTIME_CONSTANTS.CAN_SEND_EMAILS) {
+    logger.debug("Email not sent", { context: templateContext });
+    return;
+  }
+
   await sendEmail(to, {
     ...options,
     html,
@@ -125,5 +131,3 @@ const sendTemplate = async (
 const templates = loadTemplates();
 
 export { sendTemplate };
-
-// LATO and Raleway

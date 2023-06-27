@@ -7,6 +7,7 @@ const authenticateSchema = z.object({
   body: z.object({
     email: z.string().email(),
     password: password,
+    totp: z.string().optional(),
   }),
 });
 
@@ -15,7 +16,7 @@ const authenticateSchema = z.object({
 const refreshAccessSchema = z.object({
   body: z.object({
     refreshToken: z.string(),
-    user: z.string().uuid(),
+    user: z.string(),
   }),
 });
 

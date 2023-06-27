@@ -3,7 +3,6 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import { SERVER_CONSTANTS } from "./config.js";
-import prisma from "./database.js";
 import errorHandler from "./middleware/error.middleware.js";
 import setRequestMetadata, { logRequest } from "./middleware/meta.middleware.js";
 import timeout from "./middleware/timeout.middleware.js";
@@ -29,9 +28,5 @@ app.use(errorHandler);
 app.use("*", (req, res) =>
   res.status(404).json({ error: "UNKNOWN_ROUTE", message: "Unknown route." })
 );
-
-process.on("exit", () => {
-  prisma.$disconnect();
-});
 
 export default app;

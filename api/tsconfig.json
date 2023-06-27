@@ -4,13 +4,13 @@
     "strict": true,
     "target": "ES2022",
     "outDir": "dist",
-    "incremental": true,
     "skipLibCheck": true,
     "module": "NodeNext",
     "noImplicitAny": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "moduleResolution": "nodenext"
+    "moduleResolution": "nodenext",
+    "sourceMap": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules/*"]

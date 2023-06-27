@@ -1,6 +1,9 @@
 {
   "eslint.workingDirectories": ["api", "ui"],
-  "cSpell.userWords": [
+  "cSpell.words": [
+    "keyuri",
+    "otplib",
+    "qrcode",
     "fileupload",
     "geoip",
     "kakaposocial",

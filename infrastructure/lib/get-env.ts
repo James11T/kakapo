@@ -5,12 +5,17 @@ const assertEnv = <T extends string[]>(...keys: T) => {
   }
 };
 
-const getAssertiveEnv = <T extends string[]>(...keys: T): Record<T[number], string> => {
+const getAssertiveEnv = <T extends string[]>(
+  ...keys: T
+): Record<T[number], string> => {
   assertEnv(...keys);
-  return keys.reduce((prev, curr) => ({ ...prev, [curr]: process.env[curr] }), {}) as Record<
-    T[number],
-    string
-  >;
+  const keyObject: Record<string, any> = {};
+
+  for (const key of keys) {
+    keyObject[key] = process.env[key];
+  }
+
+  return keyObject;
 };
 
 export { assertEnv, getAssertiveEnv };

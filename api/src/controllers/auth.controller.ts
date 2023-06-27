@@ -1,8 +1,10 @@
+import logger from "../logging.js";
 import { protect } from "../middleware/auth.middleware.js";
 import {
   activateMfaSourceSchema,
   addMfaSourceSchema,
   getMfaStatusSchema,
+  mfaSourceFilterSchema,
   removeMfaSourceSchema,
   requestPasswordResetSchema,
   resetPasswordSchema,
@@ -10,6 +12,8 @@ import {
 } from "../schemas/auth.schemas.js";
 import { privateUserFilterSchema } from "../schemas/users.schemas.js";
 import { validate } from "../schemas/validation.js";
+import * as MFAService from "../services/mfa.service.js";
+import * as passwordsService from "../services/passwords.service.js";
 import { filter } from "../utils/objects.js";
 import { asyncController } from "./base.controller.js";
 import type { Request, Response, NextFunction } from "express";
@@ -27,7 +31,14 @@ const whoAmI = asyncController(async (req: Request, res: Response, next: NextFun
 // Get MFA status
 const getMfaStatus = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   protect(req);
-  const parsedRequest = await validate(getMfaStatusSchema, req);
+  await validate(getMfaStatusSchema, req);
+
+  const mfaSources = await MFAService.getMFASources(req.user);
+
+  return res.json({
+    anyActive: mfaSources.some((mfaSource) => mfaSource.activated),
+    sources: mfaSources.map((mfaSource) => filter(mfaSource, mfaSourceFilterSchema)),
+  });
 });
 
 // POST /mfa
@@ -35,6 +46,10 @@ const getMfaStatus = asyncController(async (req: Request, res: Response, next: N
 const addMfaSource = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   protect(req);
   const parsedRequest = await validate(addMfaSourceSchema, req);
+
+  const mfaDetails = await MFAService.createMFASource(req.user, parsedRequest.body.name);
+
+  return res.json(mfaDetails);
 });
 
 // PATCH /mfa/:mfaId
@@ -43,6 +58,12 @@ const activateMfaSource = asyncController(
   async (req: Request, res: Response, next: NextFunction) => {
     protect(req);
     const parsedRequest = await validate(activateMfaSourceSchema, req);
+
+    const mfaSource = await MFAService.getMFASource(req.user, { uuid: parsedRequest.params.mfaId });
+
+    await MFAService.activateMFASource(mfaSource, parsedRequest.body.totp);
+
+    return res.sendStatus(204);
   }
 );
 
@@ -51,6 +72,11 @@ const activateMfaSource = asyncController(
 const removeMfaSource = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   protect(req);
   const parsedRequest = await validate(removeMfaSourceSchema, req);
+
+  const mfaSource = await MFAService.getMFASource(req.user, { uuid: parsedRequest.params.mfaId });
+  await MFAService.removeMFASource(mfaSource, parsedRequest.body.totp);
+
+  return res.sendStatus(204);
 });
 
 // POST /request-password-reset
@@ -58,6 +84,14 @@ const removeMfaSource = asyncController(async (req: Request, res: Response, next
 const requestPasswordReset = asyncController(
   async (req: Request, res: Response, next: NextFunction) => {
     const parsedRequest = await validate(requestPasswordResetSchema, req);
+
+    try {
+      passwordsService.requestPasswordReset(parsedRequest.body.email);
+    } catch (error) {
+      logger.error("failed to send password reset", { error: String(error) });
+    }
+
+    return res.sendStatus(204);
   }
 );
 
@@ -65,6 +99,10 @@ const requestPasswordReset = asyncController(
 // Reset users password
 const resetPassword = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   const parsedRequest = await validate(resetPasswordSchema, req);
+
+  passwordsService.resetPassword(parsedRequest.body.resetToken, parsedRequest.body.password);
+
+  return res.sendStatus(204);
 });
 
 export {

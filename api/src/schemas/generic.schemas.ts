@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { USERNAME_CONSTANTS, PASSWORD_CONSTANTS } from "../config.js";
+import { USERNAME_CONSTANTS, PASSWORD_CONSTANTS, DATA_CONSTANTS } from "../config.js";
 
 const username = z.string().trim().regex(USERNAME_CONSTANTS.matchRegex);
 
@@ -11,7 +11,11 @@ const password = z
   .max(PASSWORD_CONSTANTS.maxPasswordLength);
 
 const paginationFrom = z.coerce.number().min(0).optional();
-const paginationCount = z.coerce.number().min(0).max(100).optional();
+const paginationCount = z.coerce
+  .number()
+  .min(0)
+  .max(DATA_CONSTANTS.PAGINATION_TAKE_MAXIMUM)
+  .optional();
 
 const pagination = z.object({
   from: paginationFrom,

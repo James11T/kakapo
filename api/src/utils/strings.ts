@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { nanoid } from "nanoid";
 
 const regionalAUnicode = 127462;
@@ -48,4 +49,12 @@ const countryCodeToFlag = (countryCode: string) => {
   return `${char1}${char2}`;
 };
 
-export { countOccurrences, stripFileExtension, uuid, countryCodeToFlag };
+/**
+ * Generates a random, cryptographically secure, hexadecimal string of a given length
+ *
+ * @param length The length of the string in characters
+ * @returns The hexadecimal string
+ */
+const randomHex = (length: number) => crypto.randomBytes(length * 2).toString("hex");
+
+export { countOccurrences, stripFileExtension, uuid, countryCodeToFlag, randomHex };
