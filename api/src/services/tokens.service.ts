@@ -16,7 +16,7 @@ const signToken = (payload: any): string => {
     const token = JWT.sign(payload, JWT_SECRET, { algorithm: "HS256" });
     return token;
   } catch (err) {
-    logger.error("Failed to sign token", { error: String(err) });
+    logger.error("Failed to sign token", { ID: "JWT_SIGN_FAIL", error: String(err) });
     throw new APIServerError();
   }
 };
@@ -29,7 +29,7 @@ const decodeSignedToken = <T>(token: string): T => {
 
     return decoded;
   } catch (error) {
-    logger.debug("JWT verify error", { error: String(error) });
+    logger.debug("JWT verify error", { ID: "JWT_VERIFY_FAIL", error: String(error) });
     if (error instanceof JWT.TokenExpiredError)
       throw new APIUnauthorizedError("TOKEN_EXPIRED", "The supplied JWT had expired.");
     throw new APIUnauthorizedError("INVALID_TOKEN", "The supplied JWT was invalid.");
@@ -54,7 +54,8 @@ const generateAccessToken = async (
   }
 
   if (DBRefreshToken.subjectId !== user.id) {
-    logger.warn("refresh token was attempted to be used on the wrong user", {
+    logger.warn("Refresh token was attempted to be used on the wrong user", {
+      ID: "REFRESH_TOKEN_USER_MISMATCH_FAIL",
       user: user.username,
       uuid: user.uuid,
     });

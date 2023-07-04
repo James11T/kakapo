@@ -88,7 +88,10 @@ const requestPasswordReset = asyncController(
     try {
       passwordsService.requestPasswordReset(parsedRequest.body.email);
     } catch (error) {
-      logger.error("failed to send password reset", { error: String(error) });
+      logger.error("Failed to send password reset", {
+        ID: "PASSWORD_RESET_FAIL",
+        error: String(error),
+      });
     }
 
     return res.sendStatus(204);

@@ -2,6 +2,8 @@ import { DATA_CONSTANTS } from "../config.js";
 import prisma from "../database.js";
 import { APIBadRequestError, APIConflictError, APINotFoundError } from "../errors.js";
 import { managePrismaError } from "../errors.js";
+import logger from "../logging.js";
+import { uuid } from "../utils/strings.js";
 import { getPostID } from "./post.service.js";
 import { getUserID } from "./user.service.js";
 import type { UniquePost } from "./post.service.js";
@@ -158,4 +160,64 @@ const unlikeComment = async (comment: UniqueComment, user: UniqueUser) => {
   return Math.max(like.post._count.likes - 1, 0);
 };
 
-export { unlikeComment, getComment, getCommentID, getCommentLikes, queryComments, likeComment };
+const createComment = async (post: UniquePost, author: UniqueUser, text: string) => {
+  logger.info(`Creating a comment on post ${post.uuid} from user ${author.uuid}`, {
+    ID: "CREATE_COMMENT_START",
+    post: post.uuid,
+    author: author.uuid,
+  });
+
+  const postId = await getPostID(post);
+  const authorId = await getUserID(author);
+
+  const newComment = await prisma.comment.create({
+    data: {
+      uuid: uuid(),
+      postId: postId,
+      authorId: authorId,
+      text,
+      postedAt: new Date(),
+    },
+    include: {
+      post: true,
+      author: true,
+    },
+  });
+
+  logger.info(
+    `Created new comment ${newComment.uuid} on post ${post.uuid} from user ${author.uuid}`,
+    { ID: "CREATE_COMMENT_FINISH", post: post.uuid, author: author.uuid, comment: newComment.uuid }
+  );
+
+  return newComment;
+};
+
+const editComment = async (comment: UniqueComment, text: string) => {
+  const commentId = await getCommentID(comment);
+
+  const newComment = await prisma.comment.update({
+    where: { id: commentId },
+    data: { edited: true, text },
+    include: { author: true, post: true },
+  });
+
+  return newComment;
+};
+
+const deleteComment = async (comment: UniqueComment) => {
+  const commentId = await getCommentID(comment);
+
+  await prisma.comment.delete({ where: { id: commentId } });
+};
+
+export {
+  unlikeComment,
+  getComment,
+  getCommentID,
+  getCommentLikes,
+  queryComments,
+  likeComment,
+  createComment,
+  editComment,
+  deleteComment,
+};

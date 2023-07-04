@@ -72,6 +72,12 @@ const sendFriendRequestSchema = z.object({
   params: z.object({ username: z.string() }),
 });
 
+const deleteFriendRequestSchema = z.object({
+  params: z.object({
+    friendRequestId: z.string(),
+  }),
+});
+
 const publicUserFilterSchema = z.object({
   uuid: z.any(),
   username: z.any(),
@@ -88,6 +94,12 @@ const privateUserFilterSchema = z
   })
   .merge(publicUserFilterSchema);
 
+const friendRequestPublicSchema = z.object({
+  sentAt: z.any(),
+  uuid: z.any(),
+  user: publicUserFilterSchema,
+});
+
 export {
   queryUsersSchema,
   createUserSchema,
@@ -97,6 +109,8 @@ export {
   removeFriendSchema,
   getFriendRequestsSchema,
   sendFriendRequestSchema,
+  deleteFriendRequestSchema,
   publicUserFilterSchema,
   privateUserFilterSchema,
+  friendRequestPublicSchema,
 };

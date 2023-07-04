@@ -1,8 +1,7 @@
 import { z } from "zod";
-import { publicCommentFilterSchema } from "./comments.schemas.js";
+import { POST_CONSTANTS } from "../config.js";
 import { pagination } from "./generic.schemas.js";
 import { publicUserFilterSchema } from "./users.schemas.js";
-import { POST_CONSTANTS } from "../config.js";
 
 const postCaption = z.string().min(1).max(1024);
 
@@ -84,15 +83,17 @@ const postMediaFilterSchema = z.object({
   url: z.string(),
   type: z.string(),
   index: z.number(),
+  blocked: z.boolean(),
+  restricted: z.boolean(),
+  processed: z.boolean(),
 });
 
 const publicPostFilterSchema = z.object({
   uuid: z.string(),
   caption: z.string(),
   postedAt: z.date(),
-  comments: z.array(publicCommentFilterSchema).optional(), // TODO: Update comments schema
   author: publicUserFilterSchema.optional(),
-  media: z.array(postMediaFilterSchema).optional(), // TODO: Update media schema
+  media: z.array(postMediaFilterSchema).optional(),
 });
 
 export {

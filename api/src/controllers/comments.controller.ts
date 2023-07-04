@@ -1,3 +1,4 @@
+import { APIForbiddenError } from "../errors.js";
 import { protect } from "../middleware/auth.middleware.js";
 import {
   createPostCommentSchema,
@@ -12,6 +13,7 @@ import {
 } from "../schemas/comments.schemas.js";
 import { validate } from "../schemas/validation.js";
 import * as commentsService from "../services/comments.service.js";
+import * as postService from "../services/post.service.js";
 import { filter } from "../utils/objects.js";
 import { asyncController } from "./base.controller.js";
 import type { Request, Response, NextFunction } from "express";
@@ -34,6 +36,12 @@ const createPostComment = asyncController(
   async (req: Request, res: Response, next: NextFunction) => {
     protect(req);
     const parsedRequest = await validate(createPostCommentSchema, req);
+
+    const post = await postService.getPost({ uuid: parsedRequest.body.postId });
+
+    const comment = await commentsService.createComment(post, req.user, parsedRequest.body.text);
+
+    return res.json(filter(comment, publicCommentFilterSchema));
   }
 );
 
@@ -52,6 +60,17 @@ const getComment = asyncController(async (req: Request, res: Response, next: Nex
 const editComment = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   protect(req);
   const parsedRequest = await validate(editCommentSchema, req);
+
+  const comment = await commentsService.getComment({ uuid: parsedRequest.params.commentId });
+
+  if (comment.authorId !== req.user.id)
+    return next(
+      new APIForbiddenError("FORBIDDEN", "You do not have permission to edit this comment")
+    );
+
+  const newComment = await commentsService.editComment(comment, parsedRequest.body.text);
+
+  return res.json(filter(newComment, publicCommentFilterSchema));
 });
 
 // delete /:commentId
@@ -59,6 +78,17 @@ const editComment = asyncController(async (req: Request, res: Response, next: Ne
 const deleteComment = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   protect(req);
   const parsedRequest = await validate(deleteCommentSchema, req);
+
+  const comment = await commentsService.getComment({ uuid: parsedRequest.params.commentId });
+
+  if (comment.authorId !== req.user.id)
+    return next(
+      new APIForbiddenError("FORBIDDEN", "You do not have permission to delete this comment")
+    );
+
+  await commentsService.deleteComment(comment);
+
+  return res.sendStatus(204);
 });
 
 // get /:commentId/likes

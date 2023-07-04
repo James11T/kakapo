@@ -31,6 +31,7 @@ const authenticate = asyncController(async (req: Request, res: Response, next: N
 
   if (!passwordsMatch) {
     logger.info(`Failed authentication for user ${user.username}`, {
+      ID: "FAILED_AUTHENTICATION",
       user: {
         username: user.username,
         uuid: user.uuid,
@@ -55,8 +56,11 @@ const authenticate = asyncController(async (req: Request, res: Response, next: N
   try {
     [refreshJWT] = await createAuthenticationRefreshToken(user, req.realIp);
   } catch (error) {
-    logger.error("Failed to save refresh token");
-    logger.debug("Refresh token failed to generate", { error: String(error) });
+    logger.error("Failed to save refresh token", { ID: "PERSIST_REFRESH_TOKEN_FAIL" });
+    logger.debug("Refresh token failed to generate", {
+      ID: "GENERATE_REFRESH_TOKEN_FAIL",
+      error: String(error),
+    });
     return next(new APIServerError("SERVER_ERROR", "Failed to generate temporary credentials"));
   }
 
@@ -64,6 +68,7 @@ const authenticate = asyncController(async (req: Request, res: Response, next: N
   const signedAccessToken = await refreshAccessToken(signedRefreshToken, user.uuid);
 
   logger.info(`Successful authentication for user ${user.username}`, {
+    ID: "SUCCESSFUL_AUTHENTICATION",
     username: user.username,
     ip: req.realIp,
     requestId: req.id,

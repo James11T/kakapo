@@ -56,11 +56,11 @@ const sendEmail = async (to: string | string[], options: Partial<EmailOptions> =
   };
 
   if (!RUNTIME_CONSTANTS.CAN_SEND_EMAILS) {
-    logger.debug("Email not sent", { to });
+    logger.debug("Email not sent", { ID: "EMAIL_SEND_ABORT", to });
     return;
   }
 
-  logger.debug(`Sending email to ${to}`);
+  logger.debug(`Sending email to ${to}`, { ID: "EMAIL_SENT" });
 
   await transporter.sendMail(emailOptions);
 };

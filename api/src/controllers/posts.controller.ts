@@ -1,6 +1,4 @@
-import { DynamoDB } from "@aws-sdk/client-dynamodb";
-import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { APIBadRequestError } from "../errors.js";
+import { APIForbiddenError } from "../errors.js";
 import { protect } from "../middleware/auth.middleware.js";
 import {
   createPostSchema,
@@ -19,10 +17,6 @@ import { getUploadURL } from "../services/s3.service.js";
 import { filter } from "../utils/objects.js";
 import { asyncController } from "./base.controller.js";
 import type { Request, Response, NextFunction } from "express";
-
-const { MODERATION_OUTPUT_TABLE_NAME } = process.env;
-
-const dynamoDBClient = new DynamoDB({});
 
 // get /
 // Query posts
@@ -61,11 +55,6 @@ const createPost = asyncController(async (req: Request, res: Response, next: Nex
   });
 });
 
-const processingError = new APIBadRequestError(
-  "PROCESSING",
-  "The requested post is still being processed"
-);
-
 // get /:postId
 // Get a post
 const getPost = asyncController(async (req: Request, res: Response, next: NextFunction) => {
@@ -73,27 +62,7 @@ const getPost = asyncController(async (req: Request, res: Response, next: NextFu
 
   const post = await postsService.getPost({ uuid: parsedRequest.params.postId });
 
-  // TODO: Move into service, save results in SQL
-
-  const getMediaParams = {
-    RequestItems: {
-      [MODERATION_OUTPUT_TABLE_NAME]: {
-        Keys: post.media.map((media) => ({
-          MEDIA_ID: { S: media.uuid },
-        })),
-      },
-    },
-  };
-
-  const mediaResult = await dynamoDBClient.batchGetItem(getMediaParams);
-
-  if (!mediaResult.Responses) return next(processingError);
-
-  const moderationResults = mediaResult.Responses[MODERATION_OUTPUT_TABLE_NAME].map((item) =>
-    unmarshall(item)
-  );
-
-  return res.json({ ...filter(post, publicPostFilterSchema), moderation: moderationResults });
+  return res.json(filter(post, publicPostFilterSchema));
 });
 
 // patch /:postId
@@ -101,6 +70,12 @@ const getPost = asyncController(async (req: Request, res: Response, next: NextFu
 const editPost = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   protect(req);
   const parsedRequest = await validate(editPostSchema, req);
+
+  const post = await postsService.getPost({ uuid: parsedRequest.params.postId });
+
+  const newPost = await postsService.editPost(post, parsedRequest.body.caption);
+
+  return res.json(filter(newPost, publicPostFilterSchema));
 });
 
 // delete /:postId
@@ -108,6 +83,17 @@ const editPost = asyncController(async (req: Request, res: Response, next: NextF
 const deletePost = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   protect(req);
   const parsedRequest = await validate(deletePostSchema, req);
+
+  const post = await postsService.getPost({ uuid: parsedRequest.params.postId });
+
+  if (post.id !== req.user.id)
+    return next(
+      new APIForbiddenError("FORBIDDEN", "You do not have permission to delete this post")
+    );
+
+  await postsService.deletePost(post);
+
+  return res.sendStatus(204);
 });
 
 // get /:postId/likes

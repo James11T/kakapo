@@ -33,11 +33,12 @@ const logRequest = (req: Request, res: Response, next: NextFunction) => {
     requestId: req.id,
   };
 
-  logger.info({ ...httpLogBase, message: "HTTP request started" });
+  logger.info({ ...httpLogBase, message: "HTTP request started", ID: "HTTP_START" });
 
   res.on("finish", () => {
     logger.info({
       ...httpLogBase,
+      ID: "HTTP_END",
       message: "HTTP request finished",
       status: res.statusCode,
       user: req.user ? { username: req.user.username, id: req.user.id, uuid: req.user.id } : null,

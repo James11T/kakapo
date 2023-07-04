@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { POST_CONSTANTS } from "../config.js";
 import {
   queryPosts,
   createPost,

@@ -42,12 +42,20 @@ const requestPasswordReset = async (email: User["email"]) => {
   try {
     user = await userService.getUser({ email });
   } catch (error) {
-    logger.debug("request password failed to find user", { error: String(error) });
+    logger.debug("Request password failed to find user", {
+      ID: "PASSWORD_RESET_ABORT",
+      REASON: "NO_USER",
+      error: String(error),
+    });
     return;
   }
 
   if (!user.emailVerified) {
-    logger.debug("password reset attempted on non verified email", { email });
+    logger.debug("Password reset attempted on non verified email", {
+      ID: "PASSWORD_RESET_ABORT",
+      REASON: "EMAIL_NOT_VERIFIED",
+      email,
+    });
     return;
   }
 
@@ -70,7 +78,10 @@ const requestPasswordReset = async (email: User["email"]) => {
     { subject: "Password Reset Request" }
   );
 
-  logger.info("password reset issued", { user: { uuid: user.uuid, username: user.username } });
+  logger.info("Password reset issued", {
+    ID: "PASSWORD_RESET_REQUEST_SUCCESS",
+    user: { uuid: user.uuid, username: user.username },
+  });
 };
 
 const badResetTokenError = new APIBadRequestError(

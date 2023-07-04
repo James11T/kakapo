@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import handlebars from "handlebars";
+import { RUNTIME_CONSTANTS } from "../config.js";
 import logger from "../logging.js";
 import { FAIL_EMOJI, IPToCountryEmoji } from "../utils/ip.js";
 import { TEMPLATE_NAMES } from "../views/templates.js";
@@ -8,7 +9,6 @@ import { sendEmail } from "./ses.service.js";
 import type { EmailOptions } from "./ses.service.js";
 import type { TemplateContextMap, TemplateName } from "../views/templates.js";
 import type { TemplateDelegate } from "handlebars";
-import { RUNTIME_CONSTANTS } from "../config.js";
 
 const NO_FALLBACK =
   "This email is HTML only. If you can't see the HTML version of this email then you may need to update your email client preferences.";
@@ -77,13 +77,19 @@ const loadTemplates = () => {
   for (const name of templateFolders) {
     try {
       const template = loadTemplate(name);
+      logger.debug(`Loaded email template ${name}`, {
+        ID: "LOAD_TEMPLATE_SUCCESS",
+        template: name,
+      });
       templates[name] = template;
     } catch (error) {
-      logger.error(`Failed to load templates`, { error: String(error) });
+      logger.error(`Failed to load templates`, { ID: "LOAD_TEMPLATE_FAIL", error: String(error) });
     }
   }
 
-  logger.debug(`Loaded ${Object.keys(templates).length} email templates`);
+  logger.debug(`Loaded ${Object.keys(templates).length} email templates`, {
+    ID: "LOAD_TEMPLATES_SUCCESS",
+  });
 
   return templates;
 };
@@ -117,7 +123,7 @@ const sendTemplate = async <T extends TemplateName>(
   const text = loadedTemplate.fallback(templateContext);
 
   if (!RUNTIME_CONSTANTS.CAN_SEND_EMAILS) {
-    logger.debug("Email not sent", { context: templateContext });
+    logger.debug("Email not sent", { ID: "EMAIL_SEND_ABORT", context: templateContext });
     return;
   }
 

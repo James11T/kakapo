@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { pagination } from "./generic.schemas.js";
+import { publicPostFilterSchema } from "./posts.schemas.js";
 import { publicUserFilterSchema } from "./users.schemas.js";
 
 const commentText = z.string().min(1).max(1024);
@@ -80,6 +81,7 @@ const publicCommentFilterSchema = z.object({
   text: z.string(),
   postedAt: z.date(),
   author: publicUserFilterSchema,
+  post: publicPostFilterSchema,
 });
 
 export {

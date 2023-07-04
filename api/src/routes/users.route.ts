@@ -8,6 +8,7 @@ import {
   removeFriend,
   getFriendRequests,
   sendFriendRequest,
+  deleteFriendRequest,
 } from "../controllers/users.controllers.js";
 
 const usersRouter = Router();
@@ -23,5 +24,6 @@ usersRouter.delete("/:username/friends/:friendUsername", removeFriend); // Remov
 
 usersRouter.get("/:username/friend-requests", getFriendRequests); // Get friend requests
 usersRouter.post("/:username/friend-requests", sendFriendRequest); // Send friend request
+usersRouter.delete("/:username/friend-requests", deleteFriendRequest); // Delete friend request
 
 export default usersRouter;

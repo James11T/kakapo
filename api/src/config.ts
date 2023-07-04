@@ -63,10 +63,7 @@ export const TOTP_CONSTANTS = {
   SERVICE: "Kakapo",
 };
 
-export const DEPLOYMENT_CONSTANTS = {
-  REAL_IP_HEADER: "CF-Connecting-IP",
-  COUNTRY_HEADER: "CF-IPCountry",
-} as Record<string, string | undefined>;
+export const DEPLOYMENT_CONSTANTS = {} as Record<string, string | undefined>;
 
 export const DATA_CONSTANTS = {
   PAGINATION_TAKE_DEFAULT: 20,

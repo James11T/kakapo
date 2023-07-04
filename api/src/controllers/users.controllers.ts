@@ -1,6 +1,6 @@
-import { APIConflictError, APIUnauthorizedError } from "../errors.js";
+import { APIConflictError, APIForbiddenError } from "../errors.js";
 import { protect } from "../middleware/auth.middleware.js";
-import { publicUserFilterSchema } from "../schemas/users.schemas.js";
+import { friendRequestPublicSchema, publicUserFilterSchema } from "../schemas/users.schemas.js";
 import {
   createUserSchema,
   getFriendRequestsSchema,
@@ -10,6 +10,7 @@ import {
   queryUsersSchema,
   removeFriendSchema,
   sendFriendRequestSchema,
+  deleteFriendRequestSchema,
 } from "../schemas/users.schemas.js";
 import { validate } from "../schemas/validation.js";
 import * as userService from "../services/user.service.js";
@@ -37,12 +38,6 @@ const createUser = asyncController(async (req: Request, res: Response, next: Nex
     return next(
       new APIConflictError("USERNAME_RESERVED", "The username provided is taken or reserved")
     );
-
-  const isEmailInUse = await userService.isEmailInUse(parsedRequest.body.email);
-  if (isEmailInUse)
-    return next(new APIConflictError("EMAIL_RESERVED", "The email provided is already in use"));
-
-  // TODO: Add email verification
 
   const user = await userService.createUser(
     parsedRequest.body.username,
@@ -89,10 +84,26 @@ const getFriends = asyncController(async (req: Request, res: Response, next: Nex
 });
 
 // delete /:username/friends/:friendUsername
-// Remove a friend frm a user
+// Remove a friend from a user
 const removeFriend = asyncController(async (req: Request, res: Response, next: NextFunction) => {
   protect(req);
   const parsedRequest = await validate(removeFriendSchema, req);
+
+  const subject = await userService.getUser({ username: parsedRequest.params.username });
+
+  if (subject.id !== req.user.id)
+    return next(
+      new APIForbiddenError(
+        "FORBIDDEN",
+        "You do not have permission to remove this user as a friend from this user"
+      )
+    );
+
+  await userService.removeUserFriendship(subject, {
+    username: parsedRequest.params.friendUsername,
+  });
+
+  return res.sendStatus(204);
 });
 
 // get /:username/friend-requests
@@ -105,7 +116,7 @@ const getFriendRequests = asyncController(
     // Investigate better way of doing this
     if (parsedRequest.params.username !== req.user.username) {
       return next(
-        new APIUnauthorizedError("UNAUTHORIZED", "You can only retrieve your own friend requests.")
+        new APIForbiddenError("FORBIDDEN", "You can only retrieve your own friend requests.")
       );
     }
 
@@ -115,10 +126,15 @@ const getFriendRequests = asyncController(
     );
 
     return res.json(
-      friendRequests.map((friendRequest) => ({
-        sentAt: friendRequest.sentAt,
-        user: filter(friendRequest.userFrom ?? friendRequest.userTo, publicUserFilterSchema),
-      }))
+      friendRequests.map((friendRequest) =>
+        filter(
+          {
+            ...friendRequest,
+            user: friendRequest.userFrom ?? friendRequest.userTo,
+          },
+          friendRequestPublicSchema
+        )
+      )
     );
   }
 );
@@ -129,6 +145,35 @@ const sendFriendRequest = asyncController(
   async (req: Request, res: Response, next: NextFunction) => {
     protect(req);
     const parsedRequest = await validate(sendFriendRequestSchema, req);
+
+    const from = req.user;
+    const to = await userService.getUser({ username: parsedRequest.params.username });
+
+    const newFriendRequest = await userService.createFriendRequest(from, to);
+
+    return res.json(filter(newFriendRequest, friendRequestPublicSchema));
+  }
+);
+
+const deleteFriendRequest = asyncController(
+  async (req: Request, res: Response, next: NextFunction) => {
+    protect(req);
+    const parsedRequest = await validate(deleteFriendRequestSchema, req);
+
+    const friendRequest = await userService.getFriendRequest(parsedRequest.params.friendRequestId);
+
+    // Friend request is not from or to this current user
+    if (friendRequest.userFromId !== req.user.id && friendRequest.userToId !== req.user.id)
+      return next(
+        new APIForbiddenError(
+          "FORBIDDEN",
+          "You do not have permission to delete this friend request"
+        )
+      );
+
+    await userService.deleteFriendRequest(friendRequest);
+
+    return res.sendStatus(204);
   }
 );
 
@@ -141,4 +186,5 @@ export {
   removeFriend,
   getFriendRequests,
   sendFriendRequest,
+  deleteFriendRequest,
 };

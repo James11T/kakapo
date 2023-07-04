@@ -20,10 +20,10 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
     error = newError;
   } else {
     error = new APIServerError();
-    logger.error("Uncaught error handled", { error: String(err) });
+    logger.error("Uncaught error handled", { ID: "UNCAUGHT_ERROR", error: String(err) });
   }
 
-  logger.debug(String(err));
+  logger.debug(String(err), { ID: "ERROR" });
   return res.status(error.status).json(error.toJSON());
 };
 

@@ -11,6 +11,7 @@ model Comment {
   id       Int      @id @default(autoincrement()) @map("comment_id")
   uuid     String   @unique @map("comment_uuid") @db.VarChar(21)
   text     String   @db.VarChar(1024)
+  edited   Boolean  @default(false)
   postedAt DateTime @map("posted_at")
   authorId Int      @map("author_id")
   postId   Int      @map("post_id")
@@ -40,6 +41,7 @@ model FriendRequest {
   userFromId Int      @map("user_from_id")
   userToId   Int      @map("user_to_id")
   sentAt     DateTime @map("sent_at")
+  uuid       String   @unique @map("friend_request_uuid") @db.VarChar(21)
 
   userFrom User @relation("userFrom", fields: [userFromId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userTo   User @relation("userTo", fields: [userToId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -67,6 +69,7 @@ model Post {
   postedAt  DateTime @map("posted_at")
   authorId  Int      @map("author_id")
   processed Boolean  @default(false)
+  edited    Boolean  @default(false)
 
   comments Comment[]
   author   User        @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -90,13 +93,15 @@ model PostLike {
 }
 
 model PostMedia {
-  id       Int     @id @default(autoincrement()) @map("post_media_id")
-  uuid     String  @unique @map("post_media_uuid") @db.VarChar(21)
-  url      String  @db.VarChar(256)
-  type     String  @db.VarChar(32)
-  index    Int
-  observed Boolean @default(false)
-  postId   Int     @map("post_id")
+  id         Int     @id @default(autoincrement()) @map("post_media_id")
+  uuid       String  @unique @map("post_media_uuid") @db.VarChar(21)
+  url        String  @db.VarChar(256)
+  type       String  @db.VarChar(32)
+  index      Int
+  observed   Boolean @default(false)
+  restricted Boolean @default(false)
+  blocked    Boolean @default(false)
+  postId     Int     @map("post_id")
 
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -104,71 +109,24 @@ model PostMedia {
   @@map("post_media")
 }
 
-model RefreshToken {
-  id         Int      @id @default(autoincrement()) @map("refresh_token_id")
-  uuid       String   @unique @map("refresh_token_uuid") @db.VarChar(21)
-  subjectId  Int      @map("subject_id")
-  expiresAt  DateTime @map("expires_at")
-  issuedAt   DateTime @map("issued_at")
-  deviceType String   @default("unknown") @map("device_type") @db.VarChar(64)
-  sourceIp   String   @map("source_ip") @db.VarChar(39)
-  isRevoked  Boolean  @default(false) @map("is_revoked")
-
-  user User @relation(fields: [subjectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@index([subjectId])
-  @@map("refresh_token")
-}
-
 model User {
-  id            Int      @id @default(autoincrement()) @map("user_id")
-  uuid          String   @unique @map("user_uuid") @db.VarChar(21)
-  username      String   @unique @db.VarChar(32)
-  displayName   String   @map("display_name") @db.VarChar(32)
-  avatar        String?  @db.VarChar(255)
-  about         String   @default("") @db.VarChar(2000)
-  email         String   @unique @db.VarChar(255)
-  emailVerified Boolean  @default(false) @map("email_verified")
-  registeredAt  DateTime @map("registered_at")
-  passwordHash  String   @map("password_hash") @db.VarChar(255)
+  id           Int      @id @default(autoincrement()) @map("user_id")
+  uuid         String   @unique @map("user_uuid") @db.VarChar(36)
+  username     String   @unique @db.VarChar(32)
+  displayName  String   @map("display_name") @db.VarChar(32)
+  avatar       String?  @db.VarChar(255)
+  about        String   @default("") @db.VarChar(2000)
+  email        String   @unique @db.VarChar(255)
+  registeredAt DateTime @map("registered_at")
 
   comments               Comment[]
-  incomingFriendRequests FriendRequest[]     @relation("userTo")
-  outgoingFriendRequests FriendRequest[]     @relation("userFrom")
-  friendships1           Friendship[]        @relation("user1")
-  friendships2           Friendship[]        @relation("user2")
+  incomingFriendRequests FriendRequest[] @relation("userTo")
+  outgoingFriendRequests FriendRequest[] @relation("userFrom")
+  friendships1           Friendship[]    @relation("user1")
+  friendships2           Friendship[]    @relation("user2")
   posts                  Post[]
-  refreshTokens          RefreshToken[]
-  userTotps              UserTOTP[]
   postLikes              PostLike[]
   commentLikes           CommentLike[]
-  passwordResets         UserPasswordReset[]
 
   @@map("user")
-}
-
-model UserTOTP {
-  id        Int     @id @default(autoincrement()) @map("user_totp_id")
-  uuid      String  @unique @map("user_totp_uuid") @db.VarChar(21)
-  name      String  @db.VarChar(32)
-  activated Boolean @default(false)
-  secret    String  @db.VarChar(128)
-  userId    Int     @map("user_id")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@index([userId])
-  @@map("user_totp")
-}
-
-model UserPasswordReset {
-  id        Int      @id @default(autoincrement()) @map("password_reset_id")
-  userId    Int      @map("user_id")
-  token     String   @db.VarChar(64)
-  createdAt DateTime @map("created_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@index([token])
-  @@map("user_password_reset")
 }
