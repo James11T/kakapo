@@ -13,16 +13,11 @@ const logger = winston.createLogger({
       format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
       level: "error",
     }),
-  ],
-});
-
-if (RUNTIME_CONSTANTS.IS_DEV) {
-  logger.add(
     new winston.transports.Console({
       format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
-      level: "debug",
-    })
-  );
-}
+      level: RUNTIME_CONSTANTS.IS_DEV ? "debug" : "info",
+    }),
+  ],
+});
 
 export default logger;
