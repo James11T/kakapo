@@ -1,6 +1,6 @@
 import { S3 } from "@aws-sdk/client-s3";
 import { Context, SQSEvent } from "aws-lambda";
-import { getAssertiveEnv } from "./get-env";
+import { getAssertiveEnv } from "../utils/get-env";
 
 const env = getAssertiveEnv("STATIC_BUCKET_NAME");
 

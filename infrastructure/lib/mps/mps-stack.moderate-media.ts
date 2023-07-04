@@ -3,7 +3,7 @@ import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { SSM } from "@aws-sdk/client-ssm";
 import { SQS } from "@aws-sdk/client-sqs";
 import { Context, SQSEvent } from "aws-lambda";
-import { getAssertiveEnv } from "./get-env";
+import { getAssertiveEnv } from "../utils/get-env";
 
 const env = getAssertiveEnv(
   "STATIC_BUCKET_NAME",
@@ -43,7 +43,10 @@ export const handler = async (event: SQSEvent, context: Context) => {
       },
     });
 
-    const labels = moderation.ModerationLabels?.map((label) => label.Name ?? "Unknown Label") ?? [];
+    const labels =
+      moderation.ModerationLabels?.map(
+        (label) => label.Name ?? "Unknown Label"
+      ) ?? [];
 
     const isBlocked = labels.some((label) => blockedLabels.includes(label));
 
@@ -51,7 +54,9 @@ export const handler = async (event: SQSEvent, context: Context) => {
       TableName: env.MODERATION_OUTPUT_TABLE_NAME,
       Item: {
         MEDIA_ID: { S: record.body },
-        IS_RESTRICTED: { BOOL: labels.some((label) => restrictedLabels.includes(label)) },
+        IS_RESTRICTED: {
+          BOOL: labels.some((label) => restrictedLabels.includes(label)),
+        },
         IS_BLOCKED: { BOOL: isBlocked },
         DETECTED_LABELS: { L: labels.map((label) => ({ S: label })) },
       },

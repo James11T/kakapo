@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { Stack, StackProps, Duration, RemovalPolicy } from "aws-cdk-lib";
+import * as cdk from "aws-cdk-lib";
 import {
   aws_s3 as s3,
   aws_sqs as sqs,
@@ -13,31 +13,26 @@ import {
   aws_cloudfront_origins as cloudfrontOrigin,
   aws_route53 as route53,
   aws_route53_targets as route53t,
-  aws_certificatemanager as certmngr,
   CfnOutput,
-  CfnParameter,
 } from "aws-cdk-lib";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
+import { getKakapoCertificate } from "../utils/certificate";
 
 const DOMAIN = "kakaposocial.com";
-const CERT_DOMAIN = "*.kakaposocial.com";
 const ACCESS_FROM = `media.${DOMAIN}`;
 
-export class MpsStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+class MediaProcessingStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const certificateArn = new CfnParameter(this, "certificateArn", {
-      type: "String",
-      description: "Kakapo certificate ARN",
-    });
+    const certificate = getKakapoCertificate(this);
 
     const dlq = new sqs.Queue(this, "media-dlq");
 
     // Queue for images waiting to be processed
     const processQueue = new sqs.Queue(this, "process-media-queue", {
-      visibilityTimeout: Duration.seconds(30),
-      retentionPeriod: Duration.minutes(2),
+      visibilityTimeout: cdk.Duration.seconds(30),
+      retentionPeriod: cdk.Duration.minutes(2),
       deadLetterQueue: {
         queue: dlq,
         maxReceiveCount: 3,
@@ -46,8 +41,8 @@ export class MpsStack extends Stack {
 
     // Queue for images to be moderated by rekognition
     const moderateQueue = new sqs.Queue(this, "moderate-media-queue", {
-      visibilityTimeout: Duration.minutes(30),
-      retentionPeriod: Duration.minutes(2),
+      visibilityTimeout: cdk.Duration.minutes(30),
+      retentionPeriod: cdk.Duration.minutes(2),
       deadLetterQueue: {
         queue: dlq,
         maxReceiveCount: 3,
@@ -56,7 +51,7 @@ export class MpsStack extends Stack {
 
     // Queue for images to be deleted
     const deletionQueue = new sqs.Queue(this, "delete-media-queue", {
-      visibilityTimeout: Duration.minutes(2),
+      visibilityTimeout: cdk.Duration.minutes(2),
       deadLetterQueue: {
         queue: dlq,
         maxReceiveCount: 5,
@@ -65,12 +60,12 @@ export class MpsStack extends Stack {
 
     // Holds all media before they have been converted and resized
     const rawBucket = new s3.Bucket(this, "media-raw", {
-      removalPolicy: RemovalPolicy.DESTROY,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
       lifecycleRules: [
         {
           enabled: true,
-          expiration: Duration.days(1),
+          expiration: cdk.Duration.days(1),
         },
       ],
       cors: [
@@ -89,9 +84,9 @@ export class MpsStack extends Stack {
 
     // Holds all media after they have been converted and resized
     const staticBucket = new s3.Bucket(this, "media-static", {
-      removalPolicy: RemovalPolicy.DESTROY,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
-      publicReadAccess: true,
+      // publicReadAccess: true,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
       accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
     });
@@ -102,12 +97,6 @@ export class MpsStack extends Stack {
       {
         domainName: DOMAIN,
       }
-    );
-
-    const certificate = certmngr.Certificate.fromCertificateArn(
-      this,
-      "kakapo-certificate",
-      certificateArn.valueAsString
     );
 
     const distribution = new cloudfront.Distribution(
@@ -143,8 +132,8 @@ export class MpsStack extends Stack {
       {
         partitionKey: { name: "MEDIA_ID", type: dynamodb.AttributeType.STRING },
         billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-        removalPolicy: RemovalPolicy.DESTROY,
-        replicationTimeout: Duration.hours(1),
+        removalPolicy: cdk.RemovalPolicy.DESTROY,
+        replicationTimeout: cdk.Duration.hours(1),
       }
     );
 
@@ -320,3 +309,5 @@ export class MpsStack extends Stack {
     staticBucket.grantDelete(deleteMediaFunction);
   }
 }
+
+export default MediaProcessingStack;

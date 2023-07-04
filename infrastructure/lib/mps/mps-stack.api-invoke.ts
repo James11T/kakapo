@@ -4,7 +4,7 @@ import {
   APIGatewayProxyEvent,
 } from "aws-lambda";
 import { HttpMethod } from "aws-cdk-lib/aws-events";
-import { assertEnv } from "./get-env";
+import { assertEnv } from "../utils/get-env";
 
 assertEnv(
   "RAW_BUCKET_NAME",

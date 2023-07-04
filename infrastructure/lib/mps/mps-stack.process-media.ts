@@ -1,6 +1,6 @@
 import { Context, S3Event, SQSEvent } from "aws-lambda";
 import { S3 } from "@aws-sdk/client-s3";
-import { getAssertiveEnv } from "./get-env";
+import { getAssertiveEnv } from "../utils/get-env";
 import sharp from "sharp";
 import { SQS } from "@aws-sdk/client-sqs";
 
