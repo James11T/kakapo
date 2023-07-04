@@ -1,0 +1,42 @@
+{
+  "autorun": true,
+  "autokill": true,
+  "terminals": [
+    {
+      "name": "GENERAL",
+      "description": "General terminal for Kakapo needs",
+      "icon": "console",
+      "focus": true,
+      "color": "terminal.ansiWhite"
+    },
+    {
+      "name": "API",
+      "description": "Terminal for Kakapo API",
+      "icon": "server",
+      "cwd": "./api",
+      "color": "terminal.ansiBrightRed"
+    },
+    {
+      "name": "UI",
+      "description": "Terminal for Kakapo UI",
+      "icon": "symbol-color",
+      "cwd": "./ui",
+      "split": "API",
+      "color": "terminal.ansiGreen"
+    },
+    {
+      "name": "INFASTRCUTURE",
+      "description": "Terminal for Kakapo CDK Infrastructure",
+      "icon": "combine",
+      "cwd": "./infrastructure",
+      "color": "terminal.ansiYellow"
+    },
+    {
+      "name": "DEBUG UI",
+      "description": "Kakapo debug and testing UI",
+      "icon": "test-view-icon",
+      "cwd": "./debugui",
+      "color": "terminal.ansiBlue"
+    }
+  ]
+}
