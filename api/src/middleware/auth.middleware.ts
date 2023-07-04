@@ -1,9 +1,9 @@
 import { bypassAuth } from "../config.js";
 import { asyncController } from "../controllers/base.controller.js";
-import { APIUnauthorizedError } from "../errors.js";
-import { decodeSignedToken } from "../services/tokens.service.js";
-import { getUser } from "../services/user.service.js";
-import type { JWTAccessToken } from "../types.js";
+import { APIBadRequestError, APINotFoundError, APIUnauthorizedError } from "../errors.js";
+import logger from "../logging.js";
+import * as cognitoService from "../services/cognito.service.js";
+import * as userService from "../services/user.service.js";
 import type { User } from "@prisma/client";
 import type { Request, Response, NextFunction } from "express";
 
@@ -16,27 +16,38 @@ const authenticate = asyncController(
 
     if (accessToken.startsWith("Bearer ")) accessToken = accessToken.slice(7); // If the auth starts with Bearer, remove it
 
-    let decodedToken: JWTAccessToken;
+    const awsUser = await cognitoService.getCognitoUser(accessToken);
+
     try {
-      decodedToken = decodeSignedToken<JWTAccessToken>(accessToken);
-    } catch {
-      return next(
-        new APIUnauthorizedError(
-          "INVALID_ACCESS_TOKEN",
-          "The provided access token was invalid or had expired."
-        )
-      );
+      const dbUser = await userService.getUser({ uuid: awsUser.uuid });
+
+      req.user = dbUser;
+    } catch (error) {
+      if (error instanceof APINotFoundError) {
+        logger.info(`Creating new DB user with uuid ${awsUser.uuid}`, { ID: "NEW_DB_USER" });
+
+        const dbUser = await userService.createUser(awsUser.uuid, awsUser.email);
+
+        req.user = dbUser;
+        return next();
+      }
+      return next(error);
     }
 
-    const user = await getUser({ uuid: decodedToken.sub });
-
-    req.user = user;
     next();
   }
 );
 
-function protect<T extends { user: User }>(req: Partial<T>): asserts req is T {
+function protect<T extends { user: User }>(
+  req: Partial<T>,
+  allowUninitiated = false
+): asserts req is T {
   if (!req.user) throw new APIUnauthorizedError();
+  if (!req.user.initiated && !allowUninitiated)
+    throw new APIBadRequestError(
+      "USER_NOT_INITIATED",
+      "You must initiate your profile before continuing."
+    );
 }
 
 export { authenticate, protect };

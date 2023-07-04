@@ -118,6 +118,7 @@ model User {
   about        String   @default("") @db.VarChar(2000)
   email        String   @unique @db.VarChar(255)
   registeredAt DateTime @map("registered_at")
+  initiated    Boolean  @default(false) @map("initiated")
 
   comments               Comment[]
   incomingFriendRequests FriendRequest[] @relation("userTo")

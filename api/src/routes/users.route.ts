@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
   queryUsers,
-  createUser,
   getUser,
   isUsernameAvailable,
   getFriends,
@@ -14,7 +13,6 @@ import {
 const usersRouter = Router();
 
 usersRouter.get("/", queryUsers); // Query users
-usersRouter.post("/", createUser); // Create user
 
 usersRouter.get("/:username", getUser); // Get user by username
 usersRouter.get("/:username/is-available", isUsernameAvailable); // Is username available

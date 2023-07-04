@@ -1,8 +1,7 @@
-import { APIConflictError, APIForbiddenError } from "../errors.js";
+import { APIForbiddenError } from "../errors.js";
 import { protect } from "../middleware/auth.middleware.js";
 import { friendRequestPublicSchema, publicUserFilterSchema } from "../schemas/users.schemas.js";
 import {
-  createUserSchema,
   getFriendRequestsSchema,
   getFriendsSchema,
   getUserSchema,
@@ -26,26 +25,6 @@ const queryUsers = asyncController(async (req: Request, res: Response, next: Nex
   const users = await userService.queryUsers(parsedRequest.query);
 
   return res.json(users.map((user) => filter(user, publicUserFilterSchema)));
-});
-
-// post /
-// Create user
-const createUser = asyncController(async (req: Request, res: Response, next: NextFunction) => {
-  const parsedRequest = await validate(createUserSchema, req);
-
-  const isUsernameAvailable = await userService.isUsernameAvailable(parsedRequest.body.username);
-  if (!isUsernameAvailable)
-    return next(
-      new APIConflictError("USERNAME_RESERVED", "The username provided is taken or reserved")
-    );
-
-  const user = await userService.createUser(
-    parsedRequest.body.username,
-    parsedRequest.body.email,
-    parsedRequest.body.password
-  );
-
-  return res.json({ uuid: user.uuid });
 });
 
 // get /:username
@@ -179,7 +158,6 @@ const deleteFriendRequest = asyncController(
 
 export {
   queryUsers,
-  createUser,
   getUser,
   isUsernameAvailable,
   getFriends,

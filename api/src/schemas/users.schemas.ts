@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { pagination, username, password } from "./generic.schemas.js";
+import { pagination } from "./generic.schemas.js";
 
 // get /
 // Query users
@@ -9,16 +9,6 @@ const queryUsersSchema = z.object({
       username: z.string(),
     })
     .merge(pagination),
-});
-
-// post /
-// Create user
-const createUserSchema = z.object({
-  body: z.object({
-    email: z.string().email(),
-    username,
-    password,
-  }),
 });
 
 // get /:username
@@ -102,7 +92,6 @@ const friendRequestPublicSchema = z.object({
 
 export {
   queryUsersSchema,
-  createUserSchema,
   getUserSchema,
   isUsernameAvailableSchema,
   getFriendsSchema,

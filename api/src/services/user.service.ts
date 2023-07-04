@@ -1,10 +1,9 @@
 import { DATA_CONSTANTS } from "../config.js";
 import prisma from "../database.js";
-import { APIBadRequestError, APIConflictError, APINotFoundError } from "../errors.js";
+import { APIBadRequestError, APINotFoundError } from "../errors.js";
 import { managePrismaError } from "../errors.js";
 import logger from "../logging.js";
 import { uuid } from "../utils/strings.js";
-import * as passwordService from "./passwords.service.js";
 import type { FriendshipStatus, Pagination, RequireKey, UUID, ID } from "../types.js";
 import type { FriendRequest, Friendship, User } from "@prisma/client";
 
@@ -123,11 +122,6 @@ const isUsernameAvailable = async (username: string): Promise<boolean> => {
   return user === null;
 };
 
-const isEmailInUse = async (email: string): Promise<boolean> => {
-  const user = await prisma.user.findUnique({ where: { email } });
-  return user !== null;
-};
-
 const getUserFriends = async (user: UniqueUser, options: Pagination): Promise<User[]> => {
   const userId = await getUserID(user);
 
@@ -188,21 +182,15 @@ const queryUsers = async (options: QueryOptions): Promise<User[]> => {
   return users;
 };
 
-const createUser = async (username: string, email: string, password: string) => {
-  const emailInUse = await isEmailInUse(email);
-
-  if (emailInUse)
-    throw new APIConflictError("EMAIL_RESERVED", "The email provided is already in use");
-
-  const passwordHash = await passwordService.hashPassword(password);
+const createUser = async (cognitoUUID: string, email: string) => {
+  const username = uuid();
 
   const user = await prisma.user.create({
     data: {
       username,
       email,
-      passwordHash,
       displayName: username,
-      uuid: uuid(),
+      uuid: cognitoUUID,
       registeredAt: new Date(),
     },
   });
@@ -319,7 +307,6 @@ export {
   getUserFriends,
   queryUsers,
   getUserID,
-  isEmailInUse,
   createUser,
   hydrateUser,
   removeUserFriendship,

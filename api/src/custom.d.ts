@@ -6,6 +6,7 @@ declare global {
       realIp: string;
       country: string;
       user: User | undefined;
+      userInitiated: boolean | undefined;
       id: string;
     }
   }
