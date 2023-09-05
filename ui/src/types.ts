@@ -1,20 +1,48 @@
-import type Color from "color";
+interface User {
+  uuid: string;
+  username: string;
+  displayName: string;
+  avatar: string;
+  about: string;
+  registeredAt: Date;
+}
 
-type ColorValue =
-  | "_primary"
-  | "_success"
-  | "_secondary"
-  | "_destructive"
-  | string
-  | Color;
+interface Media {
+  uuid: string;
+  url: string;
+  type: string;
+  index: number;
+  restricted: boolean;
+  blocked: boolean;
+}
 
-type SetStateBasedOnPrevious<T> = (previousValue: T) => T;
-type SetStateParameter<T> = T | SetStateBasedOnPrevious<T>;
-type SetStateAction<T> = (value: SetStateParameter<T>) => void;
+interface Post {
+  uuid: string;
+  caption: string;
+  postedAt: Date;
+  processed: boolean;
+  edited: boolean;
+  liked: boolean;
+  saved: boolean;
 
-export type {
-  ColorValue,
-  SetStateAction,
-  SetStateParameter,
-  SetStateBasedOnPrevious
+  author: User;
+  media: Media[];
+  likeCount: number;
+  commentCount: number;
+}
+
+interface UserPreference {
+  accountPrivacy: "PRIVATE" | "PUBLIC";
+  messagePrivacy: "MUTUALS" | "FOLLOWED" | "FOLLOWERS" | "OPEN";
+  dateOfBirth: number;
+}
+
+type KeysOfType<T, U> = {
+  [K in keyof T]: T[K] extends U ? K : never;
+}[keyof T];
+
+type PickKeysOfType<T, U> = {
+  [K in KeysOfType<T, U>]: T[K];
 };
+
+export type { User, Media, Post, UserPreference, KeysOfType, PickKeysOfType };
