@@ -5,50 +5,35 @@ import {
 } from "aws-lambda";
 import { getAssertiveEnv } from "../utils/get-env";
 import fetch from "node-fetch";
+import {
+  SecretsManagerClient,
+  GetSecretValueCommand,
+} from "@aws-sdk/client-secrets-manager";
+import { TenorResponse } from "./types";
 
-const { TENOR_API_KEY, TENOR_CLIENT_KEY } = getAssertiveEnv(
-  "TENOR_API_KEY",
-  "TENOR_CLIENT_KEY"
+const { TENOR_CLIENT_KEY, AWS_REGION } = getAssertiveEnv(
+  "TENOR_CLIENT_KEY",
+  "AWS_REGION"
 );
 
-interface MediaFormat {
-  url: string;
-  duration: number;
-  preview: string;
-  dims: [number, number];
-  size: number;
-}
+const client = new SecretsManagerClient({
+  region: AWS_REGION,
+});
 
-interface TenorResponse {
-  next: string;
-  results: {
-    id: string;
-    title: string;
-    media_formats: {
-      gif: MediaFormat;
-      tinygifpreview: MediaFormat;
-      gifpreview: MediaFormat;
-      nanogifpreview: MediaFormat;
-      tinygif: MediaFormat;
-      nanaomp4: MediaFormat;
-      tinywebm: MediaFormat;
-      tinymp4: MediaFormat;
-      mediumgif: MediaFormat;
-      nanogif: MediaFormat;
-      webm: MediaFormat;
-      mp4: MediaFormat;
-      nanowebm: MediaFormat;
-      loopedmp4: MediaFormat;
-    };
-    created: number;
-    content_description: string;
-    itemurl: string;
-    url: string;
-    tags: string[];
-    flags: string[];
-    hasaudio: boolean;
-  }[];
-}
+const getAWSSecret = async (secretId: string) => {
+  const getAPIKeyCommand = new GetSecretValueCommand({
+    SecretId: secretId,
+  });
+
+  const response = await client.send(getAPIKeyCommand);
+  const secretString = response.SecretString;
+
+  if (!secretString) throw new Error(`Secret ${secretId} not set`);
+
+  return secretString;
+};
+
+const headers = { "Access-Control-Allow-Origin": "*" };
 
 export const handler = async (
   event: APIGatewayProxyEvent,
@@ -57,11 +42,15 @@ export const handler = async (
   if (!event.pathParameters || !event.pathParameters["q"]) {
     return {
       statusCode: 400,
+      headers,
       body: JSON.stringify({ error: "Missing query parameter" }),
     };
   }
 
+  const TENOR_API_KEY = await getAWSSecret("TENOR_API_KEY");
   const searchTerm = encodeURIComponent(event.pathParameters["q"]);
+
+  console.log(`Searching Tenor for: ${searchTerm}`);
 
   const response = await fetch(
     `https://tenor.googleapis.com/v2/search?q=${searchTerm}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT_KEY}&limit=30`
@@ -71,11 +60,16 @@ export const handler = async (
     console.error(await response.text());
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({ error: "Failed to search GIFs" }),
     };
   }
 
   const data = (await response.json()) as TenorResponse;
 
-  return { statusCode: response.status, body: JSON.stringify(data.results) };
+  return {
+    statusCode: response.status,
+    headers,
+    body: JSON.stringify(data.results),
+  };
 };

@@ -11,20 +11,14 @@ class GIFStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const TENOR_API_KEY = secretsManager.Secret.fromSecretAttributes(
+    const tenorAPIKeySecret = secretsManager.Secret.fromSecretNameV2(
       this,
-      "tenor-api-key",
-      {
-        secretCompleteArn:
-          "arn:aws:secretsmanager:eu-west-2:653112935782:secret:TENOR_API_KEY-wG3CU9",
-      }
+      "kakapo-tenor-api-key",
+      "TENOR_API_KEY"
     );
 
-    console.log(TENOR_API_KEY.secretValue.toString());
-
-    const searchGIFs = new lambda.NodejsFunction(this, "search-gifs", {
+    const searchGIFsFunction = new lambda.NodejsFunction(this, "search-gifs", {
       environment: {
-        TENOR_API_KEY: TENOR_API_KEY.secretValue.unsafeUnwrap(),
         TENOR_CLIENT_KEY: "kakapo_gif",
       },
       runtime: Runtime.NODEJS_18_X,
@@ -41,8 +35,12 @@ class GIFStack extends cdk.Stack {
     });
 
     const queryResource = api.root.addResource("{q}");
-    const apiLambdaIntegration = new apiGateway.LambdaIntegration(searchGIFs);
+    const apiLambdaIntegration = new apiGateway.LambdaIntegration(
+      searchGIFsFunction
+    );
     queryResource.addMethod("GET", apiLambdaIntegration);
+
+    tenorAPIKeySecret.grantRead(searchGIFsFunction);
   }
 }
 
