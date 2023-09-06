@@ -11,6 +11,19 @@ import {
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import React from "react";
+
+interface NavItemProps extends React.PropsWithChildren {
+  href: string;
+}
+
+const NavItem = ({ href, children }: NavItemProps) => {
+  return (
+    <Link className="cursor-pointer hover:underline" to={href}>
+      {children}
+    </Link>
+  );
+};
 
 const App = () => {
   const sidebarOpen = useAppSelector((state) => state.ui.sidebarOpen);
@@ -42,32 +55,29 @@ const App = () => {
           ></label>
           <ul className="menu bg-base-100 text-base-content h-full w-56 gap-2 p-2">
             <li>
-              <Link className="cursor-pointer hover:underline" to="/">
+              <NavItem href="/">
                 <HomeIcon className="h-6" />
                 Home
-              </Link>
+              </NavItem>
             </li>
             <li>
-              <Link className="cursor-pointer hover:underline" to="/explore">
+              <NavItem href="/explore">
                 <MagnifyingGlassIcon className="h-6" />
                 Explore
-              </Link>
+              </NavItem>
             </li>
             <li>
-              <Link className="cursor-pointer hover:underline" to="/inbox">
+              <NavItem href="/inbox">
                 <InboxIcon className="h-6" />
                 Inbox
                 <div className="badge badge-error">+99</div>
-              </Link>
+              </NavItem>
             </li>
             <li className="mt-auto">
-              <Link
-                className="cursor-pointer hover:underline"
-                to="/preferences"
-              >
+              <NavItem href="/preferences">
                 <AdjustmentsHorizontalIcon className="h-6" />
                 Preferences
-              </Link>
+              </NavItem>
             </li>
           </ul>
         </div>
