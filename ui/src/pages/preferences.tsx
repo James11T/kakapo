@@ -1,6 +1,7 @@
 import PreferenceSelect from "../components/preferenceSelect";
 import PreferenceSwitch from "../components/preferenceSwitch";
 import PreferenceDate from "../components/preferenceDate";
+import GIFSearch from "../components/gifSearch";
 
 const PreferencesPage = () => {
   return (
@@ -45,6 +46,7 @@ const PreferencesPage = () => {
             luxury: "Gold",
           }}
         />
+        <GIFSearch onSelect={(gif) => console.log(gif)} />
       </div>
     </>
   );

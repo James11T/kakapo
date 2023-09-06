@@ -18,7 +18,6 @@ const uiSlice = createSlice({
       state.sidebarOpen = false;
     },
     toggleSidebar: (state) => {
-      console.log("Toggling sidebar");
       state.sidebarOpen = !state.sidebarOpen;
     },
     setPath: (state, action: PayloadAction<string[]>) => {

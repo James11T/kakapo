@@ -1,7 +1,8 @@
+import React from "react";
 import useTheme from "../hooks/useTheme";
 import PreferencesPage from "../pages/preferences";
 import Navbar from "./navbar";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { closeSidebar } from "../reducers/uiReducer";
 import {
@@ -11,7 +12,6 @@ import {
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-import React from "react";
 
 interface NavItemProps extends React.PropsWithChildren {
   href: string;
@@ -28,11 +28,16 @@ const NavItem = ({ href, children }: NavItemProps) => {
 const App = () => {
   const sidebarOpen = useAppSelector((state) => state.ui.sidebarOpen);
   const dispatch = useAppDispatch();
+  const location = useLocation();
 
   useTheme();
 
+  React.useEffect(() => {
+    dispatch(closeSidebar());
+  }, [dispatch, location]);
+
   return (
-    <BrowserRouter>
+    <>
       <Navbar />
       <div className="h-16"></div>
       <div className="drawer md:drawer-open">
@@ -82,7 +87,7 @@ const App = () => {
           </ul>
         </div>
       </div>
-    </BrowserRouter>
+    </>
   );
 };
 
