@@ -5,6 +5,8 @@ const initialState: UserPreference = {
   accountPrivacy: "PRIVATE",
   messagePrivacy: "MUTUALS",
   dateOfBirth: Number(new Date()),
+  sex: "OTHER",
+  theme: "automatic",
 };
 
 type SetPreferencePayload<TPreference extends keyof UserPreference> = {

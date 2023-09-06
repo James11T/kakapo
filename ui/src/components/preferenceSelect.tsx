@@ -28,21 +28,23 @@ const PreferenceSelect = <TPreference extends keyof UserPreference>({
 
   return (
     <div className="form-control w-full">
-      <label className="label pb-1">
-        <span className="label-text text-opacity-75">{label}</span>
-      </label>
-      <select
-        className="select select-bordered w-full"
-        value={value}
-        onChange={handleSelectChange}
-      >
-        <option disabled>Message Privacy</option>
-        {Object.entries<string>(labelMap).map(([key, value]) => (
-          <option key={key} value={key}>
-            {value}
+      <label className="label">
+        <span className="label-text">{label}</span>
+        <select
+          className="select select-sm select-bordered w-full max-w-[300px]"
+          value={value}
+          onChange={handleSelectChange}
+        >
+          <option disabled className="text-xs">
+            {label}
           </option>
-        ))}
-      </select>
+          {Object.entries<string>(labelMap).map(([key, value]) => (
+            <option key={key} value={key}>
+              {value}
+            </option>
+          ))}
+        </select>
+      </label>
     </div>
   );
 };

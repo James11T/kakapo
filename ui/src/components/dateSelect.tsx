@@ -1,4 +1,5 @@
 import React from "react";
+import cn from "../utils/cn";
 
 const daysInMonth = (month: number, year: number) =>
   new Date(year, month + 1, 0).getDate();
@@ -41,12 +42,20 @@ const mutateDate = (date: Date, component: DateComponent, value: number) => {
   }
 };
 
-interface DateSelectProps {
+interface DateSelectProps
+  extends Omit<React.HTMLProps<HTMLDivElement>, "value" | "onChange"> {
   value: Date;
+  minDate?: Date;
+  maxDate?: Date;
   onChange: (date: Date) => void;
 }
 
-const DateSelect = ({ value, onChange }: DateSelectProps) => {
+const DateSelect = ({
+  value,
+  onChange,
+  className,
+  ...divProps
+}: DateSelectProps) => {
   const dateComponentChangeHandler =
     (component: DateComponent) =>
     (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -66,9 +75,9 @@ const DateSelect = ({ value, onChange }: DateSelectProps) => {
   });
 
   return (
-    <div className="join">
+    <div className={cn("join", className)} {...divProps}>
       <select
-        className="select select-bordered join-item"
+        className="select select-sm select-bordered join-item"
         value={day}
         onChange={dateComponentChangeHandler("day")}
         name="day"
@@ -83,7 +92,7 @@ const DateSelect = ({ value, onChange }: DateSelectProps) => {
         ))}
       </select>
       <select
-        className="select select-bordered join-item"
+        className="select select-sm select-bordered join-item"
         value={month}
         onChange={dateComponentChangeHandler("month")}
         name="month"
@@ -98,7 +107,7 @@ const DateSelect = ({ value, onChange }: DateSelectProps) => {
         ))}
       </select>
       <select
-        className="select select-bordered join-item"
+        className="select select-sm select-bordered join-item"
         value={year}
         onChange={dateComponentChangeHandler("year")}
         name="year"

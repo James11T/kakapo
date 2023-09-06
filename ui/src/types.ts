@@ -35,6 +35,8 @@ interface UserPreference {
   accountPrivacy: "PRIVATE" | "PUBLIC";
   messagePrivacy: "MUTUALS" | "FOLLOWED" | "FOLLOWERS" | "OPEN";
   dateOfBirth: number;
+  sex: "MALE" | "FEMALE" | "OTHER";
+  theme: "light" | "dark" | "luxury" | "automatic";
 }
 
 type KeysOfType<T, U> = {
