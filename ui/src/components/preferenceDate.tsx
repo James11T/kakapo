@@ -1,3 +1,4 @@
+import React from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { setPreference } from "../reducers/preferencesReducer";
 import { UserPreference, KeysOfType } from "../types";
@@ -7,6 +8,12 @@ interface PreferenceSelectProps<TPreference extends keyof UserPreference> {
   preference: TPreference;
   label: string;
 }
+
+const minDate = new Date();
+minDate.setFullYear(minDate.getFullYear() - 100);
+
+const maxDate = new Date();
+
 const PreferenceDate = <
   TPreference extends KeysOfType<UserPreference, number>
 >({
@@ -18,6 +25,13 @@ const PreferenceDate = <
 
   const dateValue = new Date(date);
 
+  const handleDateChange = React.useCallback(
+    (date: Date) => {
+      dispatch(setPreference({ preference, value: Number(date) }));
+    },
+    [dispatch, preference]
+  );
+
   return (
     <div className="form-control">
       <label className="label cursor-pointer">
@@ -25,9 +39,9 @@ const PreferenceDate = <
         <DateSelect
           className="w-full max-w-[300px] [&>*]:flex-grow"
           value={dateValue}
-          onChange={(date) =>
-            dispatch(setPreference({ preference, value: Number(date) }))
-          }
+          onChange={handleDateChange}
+          minDate={minDate}
+          maxDate={maxDate}
         />
       </label>
     </div>
