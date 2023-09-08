@@ -9,7 +9,7 @@ import {
   SecretsManagerClient,
   GetSecretValueCommand,
 } from "@aws-sdk/client-secrets-manager";
-import { TenorResponse } from "./types";
+import { TenorResponse } from "./gifTypes";
 
 const { TENOR_CLIENT_KEY, AWS_REGION } = getAssertiveEnv(
   "TENOR_CLIENT_KEY",

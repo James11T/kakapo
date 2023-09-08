@@ -4,7 +4,7 @@ import * as cdk from "aws-cdk-lib";
 import MediaProcessingStack from "../lib/mps/mps-stack";
 import AuthStack from "../lib/auth/auth-stack";
 import ConstructionStack from "../lib/under-construction/construction-stack";
-import GIFStack from "../lib/gif/gif-stack";
+import APISStack from "../lib/apis/apis-stack";
 
 const app = new cdk.App();
 
@@ -23,4 +23,4 @@ const construction = new ConstructionStack(app, "kakapo-under-construction", {
   env,
 });
 
-const gif = new GIFStack(app, "kakapo-gif-stack");
+const api = new APISStack(app, "kakapo-apis-stack");
