@@ -37,7 +37,7 @@ const PreferenceDate = <
       <label className="label cursor-pointer">
         <span className="label-text">{label}</span>
         <DateSelect
-          className="w-full max-w-[300px] [&>*]:flex-grow"
+          className="w-full max-w-[250px] sm:max-w-[300px] [&>*]:flex-grow"
           value={dateValue}
           onChange={handleDateChange}
           minDate={minDate}

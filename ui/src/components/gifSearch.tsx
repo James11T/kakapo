@@ -23,6 +23,7 @@ const VirtualGIFList = ({ gifs, onGIFClick }: VirtualGIFListProps) => {
     <Virtuoso
       className="!h-96"
       data={gifs}
+      computeItemKey={(_, gif) => gif.id}
       itemContent={(_, gif) => {
         const isFavorite = Boolean(
           favoriteGIFs.find((favGif) => favGif.id === gif.id)

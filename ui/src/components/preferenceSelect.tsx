@@ -31,7 +31,7 @@ const PreferenceSelect = <TPreference extends keyof UserPreference>({
       <label className="label">
         <span className="label-text">{label}</span>
         <select
-          className="select select-sm select-bordered w-full max-w-[300px]"
+          className="select select-sm select-bordered w-full max-w-[250px] sm:max-w-[300px]"
           value={value}
           onChange={handleSelectChange}
         >

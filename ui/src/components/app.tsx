@@ -1,5 +1,9 @@
 import React from "react";
 import useTheme from "../hooks/useTheme";
+import HomePage from "../pages/home";
+import ExplorePage from "../pages/explore";
+import ChatListPage from "../pages/chatList";
+import ChatPage from "../pages/chat";
 import PreferencesPage from "../pages/preferences";
 import Navbar from "./navbar";
 import { Routes, Route, useLocation } from "react-router-dom";
@@ -10,8 +14,10 @@ import {
   MagnifyingGlassIcon,
   InboxIcon,
   AdjustmentsHorizontalIcon,
+  ChatBubbleLeftIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import useTitle from "../hooks/useTitle";
 
 interface NavItemProps extends React.PropsWithChildren {
   href: string;
@@ -31,6 +37,7 @@ const App = () => {
   const location = useLocation();
 
   useTheme();
+  useTitle();
 
   React.useEffect(() => {
     dispatch(closeSidebar());
@@ -48,17 +55,21 @@ const App = () => {
           readOnly
           checked={sidebarOpen}
         />
-        <div className="drawer-content px-4 md:ml-56">
+        <div className="drawer-content px-2 md:ml-80">
           <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/chats" element={<ChatListPage />} />
+            <Route path="/chat/:username" element={<ChatPage />} />
             <Route path="/preferences" element={<PreferencesPage />} />
           </Routes>
         </div>
-        <div className="drawer-side !fixed bottom-0 top-16 h-auto">
+        <div className="drawer-side !fixed bottom-0 top-16 z-50 h-auto">
           <label
             className="drawer-overlay"
             onClick={() => dispatch(closeSidebar())}
           ></label>
-          <ul className="menu bg-base-100 text-base-content h-full w-56 gap-2 p-2">
+          <ul className="menu bg-base-100 text-base-content h-full w-80 gap-2 p-2">
             <li>
               <NavItem href="/">
                 <HomeIcon className="h-6" />
@@ -69,6 +80,13 @@ const App = () => {
               <NavItem href="/explore">
                 <MagnifyingGlassIcon className="h-6" />
                 Explore
+              </NavItem>
+            </li>
+            <li>
+              <NavItem href="/chats">
+                <ChatBubbleLeftIcon className="h-6" />
+                Chats
+                <div className="badge badge-error">+99</div>
               </NavItem>
             </li>
             <li>

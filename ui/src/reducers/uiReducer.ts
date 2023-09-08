@@ -2,10 +2,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UIState {
   sidebarOpen: boolean;
-  path: string[];
+  title: string | undefined;
+  notifications: number;
 }
 
-const initialState: UIState = { sidebarOpen: false, path: [] };
+const initialState: UIState = {
+  sidebarOpen: false,
+  title: undefined,
+  notifications: 0,
+};
 
 const uiSlice = createSlice({
   name: "ui",
@@ -20,16 +25,26 @@ const uiSlice = createSlice({
     toggleSidebar: (state) => {
       state.sidebarOpen = !state.sidebarOpen;
     },
-    setPath: (state, action: PayloadAction<string[]>) => {
-      state.path = action.payload;
+    setTitle: (state, action: PayloadAction<UIState["title"]>) => {
+      state.title = action.payload;
     },
-    clearPath: (state) => {
-      state.path = [];
+    clearTitle: (state) => {
+      state.title = undefined;
     },
-    appendPath: (state, action: PayloadAction<string | string[]>) => {
-      state.path = state.path.concat(
-        Array.isArray(action.payload) ? action.payload : [action.payload]
-      );
+    setNotifications: (
+      state,
+      action: PayloadAction<UIState["notifications"]>
+    ) => {
+      state.notifications = Math.max(action.payload, 0);
+    },
+    clearNotifications: (state) => {
+      state.notifications = 0;
+    },
+    incrementNotifications: (state) => {
+      state.notifications = Math.max(state.notifications + 1, 0);
+    },
+    decrementNotifications: (state) => {
+      state.notifications = Math.max(state.notifications - 1, 0);
     },
   },
 });
@@ -39,7 +54,10 @@ export const {
   openSidebar,
   closeSidebar,
   toggleSidebar,
-  setPath,
-  clearPath,
-  appendPath,
+  setTitle,
+  clearTitle,
+  setNotifications,
+  clearNotifications,
+  incrementNotifications,
+  decrementNotifications,
 } = uiSlice.actions;

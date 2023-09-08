@@ -2,7 +2,7 @@ interface User {
   uuid: string;
   username: string;
   displayName: string;
-  avatar: string;
+  avatar?: string;
   about: string;
   registeredAt: Date;
 }
@@ -36,15 +36,15 @@ interface UserPreference {
   messagePrivacy: "MUTUALS" | "FOLLOWED" | "FOLLOWERS" | "OPEN";
   dateOfBirth: number;
   sex: "MALE" | "FEMALE" | "OTHER";
-  theme: "light" | "dark" | "luxury" | "automatic";
+  theme: "light" | "business" | "luxury" | "automatic" | "black" | "coffee";
 }
 
-type KeysOfType<T, U> = {
-  [K in keyof T]: T[K] extends U ? K : never;
-}[keyof T];
+type KeysOfType<TObject, TType> = {
+  [TKey in keyof TObject]: TObject[TKey] extends TType ? TKey : never;
+}[keyof TObject];
 
-type PickKeysOfType<T, U> = {
-  [K in KeysOfType<T, U>]: T[K];
+type PickKeysOfType<TObject, TType> = {
+  [TKey in KeysOfType<TObject, TType>]: TObject[TKey];
 };
 
 interface MediaFormat {
@@ -94,6 +94,8 @@ interface GIF {
   height: number;
 }
 
+type Size = "sm" | "md" | "lg" | "xl";
+
 export type {
   User,
   Media,
@@ -103,4 +105,5 @@ export type {
   PickKeysOfType,
   GIFResponse,
   GIF,
+  Size,
 };
