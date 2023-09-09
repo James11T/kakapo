@@ -1,7 +1,8 @@
 import * as cdk from "aws-cdk-lib";
 import { aws_apigateway as apiGateway } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import GIF_API from "./gif-api";
+import GIF_API from "./gif/gif-api";
+import onlineAPI from "./online/online-api";
 
 class APISStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -16,7 +17,11 @@ class APISStack extends cdk.Stack {
       },
     });
 
-    const gifAPI = new GIF_API(this, "kakapo-gif-api", {
+    new GIF_API(this, "kakapo-gif-api", {
+      apiGatewayInstance: api,
+    });
+
+    new onlineAPI(this, "kakapo-online-api", {
       apiGatewayInstance: api,
     });
   }

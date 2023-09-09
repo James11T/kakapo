@@ -3,7 +3,7 @@ import {
   APIGatewayProxyResult,
   APIGatewayProxyEvent,
 } from "aws-lambda";
-import { getAssertiveEnv } from "../utils/get-env";
+import { getAssertiveEnv } from "../../utils/get-env";
 import fetch from "node-fetch";
 import {
   SecretsManagerClient,
