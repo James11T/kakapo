@@ -4,7 +4,7 @@ import { Message, User } from "../types";
 import Avatar from "../components/avatar";
 import getNamePlaceholder from "../utils/name";
 import cn from "../utils/cn";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { ChevronLeftIcon, PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import React from "react";
 
 const messages: Message[] = [
@@ -166,15 +166,16 @@ const ChatPage = () => {
       <div className="bg-white p-2">
         <form onSubmit={handleSendMessage}>
           <label htmlFor="chat-input" hidden></label>
-          <div className="join w-full">
+          <div className="flex w-full gap-2">
             <input
               type="text"
               name="chat-input"
               id="chat-input"
-              className="input input-bordered join-item flex-grow"
+              className="input input-bordered flex-grow"
               placeholder="Start typing here to send a message"
             />
-            <button type="button" className="btn join-item">
+            <button type="button" className="btn btn-primary">
+              <PaperAirplaneIcon className="h-5 w-5" />
               Send
             </button>
           </div>
