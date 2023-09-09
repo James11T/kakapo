@@ -1,7 +1,6 @@
 import PreferenceSelect from "../components/preferenceSelect";
 import PreferenceSwitch from "../components/preferenceSwitch";
 import PreferenceDate from "../components/preferenceDate";
-import GIFSearch from "../components/gifSearch";
 import usePageTitle from "../hooks/usePageTitle";
 
 const PreferencesPage = () => {
@@ -50,7 +49,6 @@ const PreferencesPage = () => {
           coffee: "Coffee",
         }}
       />
-      <GIFSearch onSelect={(gif) => console.log(gif)} />
     </div>
   );
 };
