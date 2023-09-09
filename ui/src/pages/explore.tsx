@@ -6,6 +6,7 @@ import { setExploreQuery } from "../reducers/uiReducer";
 
 const ExplorePage = () => {
   usePageTitle("Explore");
+
   const exploreQuery = useAppSelector((state) => state.ui.exploreQuery);
   const dispatch = useAppDispatch();
 

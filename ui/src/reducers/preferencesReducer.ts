@@ -16,7 +16,7 @@ type SetPreferencePayload<TPreference extends keyof UserPreference> = {
 
 const preferencesSlice = createSlice({
   name: "preferences",
-  initialState: initialState,
+  initialState,
   reducers: {
     setPreference: <TPreference extends keyof UserPreference>(
       state: UserPreference,

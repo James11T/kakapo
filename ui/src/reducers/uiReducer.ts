@@ -16,7 +16,7 @@ const initialState: UIState = {
 
 const uiSlice = createSlice({
   name: "ui",
-  initialState: initialState,
+  initialState,
   reducers: {
     openSidebar: (state) => {
       state.sidebarOpen = true;
@@ -48,7 +48,10 @@ const uiSlice = createSlice({
     decrementNotifications: (state) => {
       state.notifications = Math.max(state.notifications - 1, 0);
     },
-    setExploreQuery: (state, action: PayloadAction<string>) => {
+    setExploreQuery: (
+      state,
+      action: PayloadAction<UIState["exploreQuery"]>
+    ) => {
       state.exploreQuery = action.payload;
     },
   },

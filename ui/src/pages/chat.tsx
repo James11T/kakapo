@@ -16,8 +16,7 @@ const messages: Message[] = [
       registeredAt: new Date(),
       displayName: "Big Bob",
     },
-    content:
-      "Hmmmmmmmmmm, hmmmmmm, dave the femboy, aaaauuuggggggggg yyyyy uuhhh",
+    content: "message",
     sentAt: new Date(),
   },
   {
@@ -28,8 +27,7 @@ const messages: Message[] = [
       registeredAt: new Date(),
       displayName: "Alice Gobbles",
     },
-    content:
-      "Hmmmmmmmmmm, hmmmmmm, dave the femboy, aaaauuuggggggggg yyyyy uuhhh",
+    content: "message",
     sentAt: new Date(),
   },
   {
@@ -40,8 +38,7 @@ const messages: Message[] = [
       registeredAt: new Date(),
       displayName: "Alice Gobbles",
     },
-    content:
-      "Hmmmmmmmmmm, hmmmmmm, dave the femboy, aaaauuuggggggggg yyyyy uuhhh",
+    content: "message",
     sentAt: new Date(),
   },
   {
@@ -52,8 +49,7 @@ const messages: Message[] = [
       registeredAt: new Date(),
       displayName: "Big Bob",
     },
-    content:
-      "Hmmmmmmmmmm, hmmmmmm, dave the femboy, aaaauuuggggggggg yyyyy uuhhh",
+    content: "message",
     sentAt: new Date(),
   },
   {
@@ -64,8 +60,7 @@ const messages: Message[] = [
       registeredAt: new Date(),
       displayName: "Big Bob",
     },
-    content:
-      "Hmmmmmmmmmm, hmmmmmm, dave the femboy, aaaauuuggggggggg yyyyy uuhhh",
+    content: "message",
     sentAt: new Date(),
   },
   {
@@ -76,8 +71,7 @@ const messages: Message[] = [
       registeredAt: new Date(),
       displayName: "Alice Gobbles",
     },
-    content:
-      "Hmmmmmmmmmm, hmmmmmm, dave the femboy, aaaauuuggggggggg yyyyy uuhhh",
+    content: "message",
     sentAt: new Date(),
   },
   {
@@ -88,8 +82,7 @@ const messages: Message[] = [
       registeredAt: new Date(),
       displayName: "Big Bob",
     },
-    content:
-      "Hmmmmmmmmmm, hmmmmmm, dave the femboy, aaaauuuggggggggg yyyyy uuhhh",
+    content: "message",
     sentAt: new Date(),
   },
   {
@@ -100,8 +93,7 @@ const messages: Message[] = [
       registeredAt: new Date(),
       displayName: "Big Bob",
     },
-    content:
-      "Hmmmmmmmmmm, hmmmmmm, dave the femboy, aaaauuuggggggggg yyyyy uuhhh",
+    content: "message",
     sentAt: new Date(),
   },
 ];

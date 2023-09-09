@@ -9,7 +9,7 @@ const initialState: GIFSliceSate = { favorites: [] };
 
 const gifSlice = createSlice({
   name: "gifs",
-  initialState: initialState,
+  initialState,
   reducers: {
     addFavorite: (state, action: PayloadAction<GIF>) => {
       state.favorites.push(action.payload);
