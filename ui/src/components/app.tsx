@@ -21,12 +21,18 @@ import useTitle from "../hooks/useTitle";
 
 interface NavItemProps extends React.PropsWithChildren {
   href: string;
+  notifications?: number;
 }
 
-const NavItem = ({ href, children }: NavItemProps) => {
+const NavItem = ({ href, notifications, children }: NavItemProps) => {
   return (
     <Link className="cursor-pointer hover:underline" to={href}>
       {children}
+      {notifications && (
+        <div className="badge badge-error font-semibold">
+          {notifications > 99 ? "99+" : notifications}
+        </div>
+      )}
     </Link>
   );
 };
@@ -83,17 +89,15 @@ const App = () => {
               </NavItem>
             </li>
             <li>
-              <NavItem href="/chats">
+              <NavItem href="/chats" notifications={6}>
                 <ChatBubbleLeftIcon className="h-6" />
                 Chats
-                <div className="badge badge-error">+99</div>
               </NavItem>
             </li>
             <li>
-              <NavItem href="/inbox">
+              <NavItem href="/inbox" notifications={5}>
                 <InboxIcon className="h-6" />
                 Inbox
-                <div className="badge badge-error">+99</div>
               </NavItem>
             </li>
             <li className="mt-auto">
