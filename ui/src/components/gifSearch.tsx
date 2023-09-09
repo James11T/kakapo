@@ -31,7 +31,7 @@ const VirtualGIFList = ({ gifs, onGIFClick }: VirtualGIFListProps) => {
 
         return (
           <div
-            className="select-gif-overlay mb-2 after:opacity-0 hover:after:opacity-90 active:after:opacity-100"
+            className="relative mb-2 after:opacity-0 hover:after:opacity-90 active:after:opacity-100"
             role="button"
           >
             <video
