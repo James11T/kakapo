@@ -4,12 +4,14 @@ interface UIState {
   sidebarOpen: boolean;
   title: string | undefined;
   notifications: number;
+  exploreQuery: string;
 }
 
 const initialState: UIState = {
   sidebarOpen: false,
   title: undefined,
   notifications: 0,
+  exploreQuery: "",
 };
 
 const uiSlice = createSlice({
@@ -46,6 +48,9 @@ const uiSlice = createSlice({
     decrementNotifications: (state) => {
       state.notifications = Math.max(state.notifications - 1, 0);
     },
+    setExploreQuery: (state, action: PayloadAction<string>) => {
+      state.exploreQuery = action.payload;
+    },
   },
 });
 
@@ -60,4 +65,5 @@ export const {
   clearNotifications,
   incrementNotifications,
   decrementNotifications,
+  setExploreQuery,
 } = uiSlice.actions;

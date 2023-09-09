@@ -4,6 +4,7 @@ import { GIF } from "../types";
 type GIFSliceSate = {
   favorites: GIF[];
 };
+
 const initialState: GIFSliceSate = { favorites: [] };
 
 const gifSlice = createSlice({
