@@ -1,15 +1,23 @@
 import cn from "../utils/cn";
 import { Size } from "../types";
+import React from "react";
 
-type AvatarProps = {
+interface AvatarProps extends React.ComponentPropsWithoutRef<"div"> {
   online?: boolean;
   size?: Size;
   placeholder?: string;
   icon?: string;
-};
+}
 
-const Avatar = ({ icon, placeholder, online, size = "md" }: AvatarProps) => {
-  const isPlaceholder = Boolean(placeholder);
+const Avatar = ({
+  icon,
+  placeholder,
+  online,
+  size = "md",
+  className,
+  ...divProps
+}: AvatarProps) => {
+  const isPlaceholder = icon === undefined;
 
   const sizeClasses = cn({
     "w-20": size === "xl",
@@ -30,8 +38,10 @@ const Avatar = ({ icon, placeholder, online, size = "md" }: AvatarProps) => {
       className={cn(
         "avatar",
         isPlaceholder && "placeholder",
-        online !== undefined && (online ? "online" : "offline")
+        online !== undefined && (online ? "online" : "offline"),
+        className
       )}
+      {...divProps}
     >
       {isPlaceholder ? (
         <div

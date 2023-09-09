@@ -22,11 +22,13 @@ const InboxEntry = ({
       className="hover:bg-base-200 flex w-full space-x-2 rounded-md p-2 text-left"
       to={`/chat/${username}`}
     >
-      <Avatar
-        icon={icon}
-        placeholder={getNamePlaceholder(name)}
-        online={online}
-      />
+      <div className="flex flex-col justify-center">
+        <Avatar
+          icon={icon}
+          placeholder={getNamePlaceholder(name)}
+          online={online}
+        />
+      </div>
       <div className="flex flex-col justify-center">
         <div className="text-lg font-semibold">{name}</div>
         <div className="text-base-content text-opacity-75">

@@ -7,6 +7,12 @@ interface User {
   registeredAt: Date;
 }
 
+interface Message {
+  author: User;
+  content: string;
+  sentAt: Date;
+}
+
 interface Media {
   uuid: string;
   url: string;
@@ -98,6 +104,7 @@ type Size = "sm" | "md" | "lg" | "xl";
 
 export type {
   User,
+  Message,
   Media,
   Post,
   UserPreference,
