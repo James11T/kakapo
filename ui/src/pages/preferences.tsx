@@ -43,10 +43,8 @@ const PreferencesPage = () => {
         labelMap={{
           automatic: "Automatic",
           light: "Light",
-          business: "Dark",
+          dark: "Dark",
           luxury: "Gold",
-          black: "Black",
-          coffee: "Coffee",
         }}
       />
     </div>

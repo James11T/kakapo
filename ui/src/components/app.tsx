@@ -18,17 +18,27 @@ import {
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import useTitle from "../hooks/useTitle";
+import SignInPage from "../pages/signIn";
+import cn from "../utils/cn";
+import useMediaQueries from "../hooks/useMediaQueries";
 
-interface NavItemProps extends React.PropsWithChildren {
+interface NavItemProps extends React.HTMLProps<HTMLAnchorElement> {
   href: string;
   notifications?: number;
+  children?: React.ReactNode;
 }
 
-const NavItem = ({ href, notifications, children }: NavItemProps) => {
+const NavItem = ({ href, disabled, notifications, children }: NavItemProps) => {
   return (
-    <Link className="cursor-pointer hover:underline" to={href}>
+    <Link
+      className={cn(
+        "cursor-pointer hover:underline",
+        disabled && "btn-disabled text-base-content text-opacity-50"
+      )}
+      to={href}
+    >
       {children}
-      {notifications && (
+      {notifications && !disabled && (
         <div className="badge badge-error font-semibold">
           {notifications > 99 ? "99+" : notifications}
         </div>
@@ -39,11 +49,13 @@ const NavItem = ({ href, notifications, children }: NavItemProps) => {
 
 const App = () => {
   const sidebarOpen = useAppSelector((state) => state.ui.sidebarOpen);
+  const user = useAppSelector((state) => state.user.value);
   const dispatch = useAppDispatch();
   const location = useLocation();
 
   useTheme();
   useTitle();
+  useMediaQueries();
 
   React.useEffect(() => {
     dispatch(closeSidebar());
@@ -68,6 +80,7 @@ const App = () => {
             <Route path="/chats" element={<ChatListPage />} />
             <Route path="/chat/:username" element={<ChatPage />} />
             <Route path="/preferences" element={<PreferencesPage />} />
+            <Route path="/sign-in" element={<SignInPage />} />
           </Routes>
         </div>
         <div className="drawer-side !fixed bottom-0 top-16 z-50 h-auto">
@@ -89,13 +102,13 @@ const App = () => {
               </NavItem>
             </li>
             <li>
-              <NavItem href="/chats" notifications={6}>
+              <NavItem href="/chats" notifications={6} disabled={!user}>
                 <ChatBubbleLeftIcon className="h-6" />
                 Chats
               </NavItem>
             </li>
             <li>
-              <NavItem href="/inbox" notifications={5}>
+              <NavItem href="/inbox" notifications={5} disabled={!user}>
                 <InboxIcon className="h-6" />
                 Inbox
               </NavItem>

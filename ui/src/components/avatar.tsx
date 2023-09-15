@@ -20,9 +20,9 @@ const Avatar = ({
   const isPlaceholder = icon === undefined;
 
   const sizeClasses = cn({
-    "w-20": size === "xl",
-    "w-16": size === "lg",
-    "w-12": size === "md",
+    "w-14": size === "xl",
+    "w-12": size === "lg",
+    "w-10": size === "md",
     "w-8": size === "sm",
   });
 

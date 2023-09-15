@@ -3,6 +3,8 @@ import userReducer from "./reducers/userReducer";
 import preferencesReducer from "./reducers/preferencesReducer";
 import uiReducer from "./reducers/uiReducer";
 import gidReducer from "./reducers/gifReducer";
+import chatReducer from "./reducers/chatReducer";
+import mediaQueryReducer from "./reducers/mediaQueryReducer";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +12,8 @@ const store = configureStore({
     preferences: preferencesReducer,
     ui: uiReducer,
     gifs: gidReducer,
+    chat: chatReducer,
+    mediaQueries: mediaQueryReducer,
   },
 });
 

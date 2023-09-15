@@ -27,10 +27,11 @@ const InboxEntry = ({
           icon={icon}
           placeholder={getNamePlaceholder(name)}
           online={online}
+          size="md"
         />
       </div>
       <div className="flex flex-col justify-center">
-        <div className="text-lg font-semibold">{name}</div>
+        <div className="text-lg font-semibold leading-4">{name}</div>
         <div className="text-base-content text-opacity-75">
           {messagePreview}
         </div>

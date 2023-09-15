@@ -42,7 +42,7 @@ interface UserPreference {
   messagePrivacy: "MUTUALS" | "FOLLOWED" | "FOLLOWERS" | "OPEN";
   dateOfBirth: number;
   sex: "MALE" | "FEMALE" | "OTHER";
-  theme: "light" | "business" | "luxury" | "automatic" | "black" | "coffee";
+  theme: "light" | "dark" | "luxury" | "automatic";
 }
 
 type KeysOfType<TObject, TType> = {

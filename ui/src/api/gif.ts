@@ -14,7 +14,7 @@ const GIFResponseResultToGIF = (gif: GIFResponse[number]): GIF => ({
   height: gif.media_formats.mp4.dims[1],
 });
 
-const searchGIFs = (query: string) =>
+const searchGIFs = (query: string): Promise<GIF[]> =>
   APIFetch.get<GIFResponse>(`${VITE_GIF_API_URL}/${query}`, {
     credentials: undefined,
   }).then((data) => data.map(GIFResponseResultToGIF));

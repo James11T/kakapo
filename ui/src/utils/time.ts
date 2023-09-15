@@ -11,4 +11,6 @@ const getDateString = (time: Date) =>
 const getDateTimeString = (time: Date) =>
   `${getTimeString(time)} ${getDateString(time)}`;
 
-export { getTimeString, getDateString, getDateTimeString };
+const sleep = (ms: number) => new Promise((res) => window.setTimeout(res, ms));
+
+export { getTimeString, getDateString, getDateTimeString, sleep };

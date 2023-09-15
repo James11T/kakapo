@@ -1,6 +1,4 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { searchGIFs } from "../api/gif";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { GIF } from "../types";
@@ -9,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { addFavorite, removeFavorite } from "../reducers/gifReducer";
 import useDebounce from "../hooks/useDebounce";
 import cn from "../utils/cn";
+import useGIFSearch from "../hooks/useGIFSearch";
 
 interface VirtualGIFListProps {
   gifs: GIF[];
@@ -71,13 +70,7 @@ interface GIFSearchProps {
 const GIFSearch = ({ searchTerm, onGIFClick }: GIFSearchProps) => {
   const keySearchTerm = searchTerm.replace(/ /g, "+");
 
-  const query = useQuery<GIF[], Error>({
-    queryKey: ["GIFs", keySearchTerm],
-    queryFn: () => searchGIFs(keySearchTerm),
-    enabled: Boolean(keySearchTerm),
-    staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 5,
-  });
+  const query = useGIFSearch(keySearchTerm);
 
   return (
     <>
