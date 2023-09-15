@@ -12,6 +12,7 @@
     "qrcode",
     "testuser",
     "TOTP",
-    "unmarshall"
+    "unmarshall",
+    "gifs"
   ]
 }

@@ -1,6 +1,6 @@
 import { DATA_CONSTANTS } from "../config.js";
 import prisma from "../database.js";
-import { APIBadRequestError, APINotFoundError } from "../errors.js";
+import { APIBadRequestError, APIConflictError, APINotFoundError } from "../errors.js";
 import { managePrismaError } from "../errors.js";
 import logger from "../logging.js";
 import { uuid } from "../utils/strings.js";
@@ -299,6 +299,17 @@ const createFriendRequest = async (from: UniqueUser, to: UniqueUser) => {
   return newFriendRequest;
 };
 
+const initiateUser = async (user: UniqueUser, username: string) => {
+  const usernameAvailable = await isUsernameAvailable(username);
+
+  if (!usernameAvailable)
+    throw new APIConflictError("USERNAME_RESERVED", "The given username was taken or reserved");
+
+  const newUser = await prisma.user.update({ where: user, data: { username } });
+
+  return newUser;
+};
+
 export {
   getUser,
   getUserFriendRequests,
@@ -314,5 +325,6 @@ export {
   getFriendRequest,
   deleteFriendRequest,
   createFriendRequest,
+  initiateUser,
 };
 export type { UniqueUser };

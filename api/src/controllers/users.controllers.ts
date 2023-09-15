@@ -6,6 +6,7 @@ import {
   getFriendsSchema,
   getUserSchema,
   isUsernameAvailableSchema,
+  initiateUserSchema,
   queryUsersSchema,
   removeFriendSchema,
   sendFriendRequestSchema,
@@ -48,6 +49,24 @@ const isUsernameAvailable = asyncController(
     return res.json({ available });
   }
 );
+
+// post /:uuid/initiate
+// Initiate a user
+const initiateUser = asyncController(async (req: Request, res: Response, next: NextFunction) => {
+  protect(req, true);
+  const parsedRequest = await validate(initiateUserSchema, req);
+
+  const dbUser = await userService.getUser({ uuid: parsedRequest.params.uuid });
+
+  if (dbUser.id !== req.user.id)
+    return next(
+      new APIForbiddenError("FORBIDDEN", "You do not have permission to initiate this user")
+    );
+
+  const newUser = await userService.initiateUser(dbUser, parsedRequest.body.username);
+
+  return res.json(filter(newUser, publicUserFilterSchema));
+});
 
 // get /:username/friends
 // Get users friends
@@ -160,6 +179,7 @@ export {
   queryUsers,
   getUser,
   isUsernameAvailable,
+  initiateUser,
   getFriends,
   removeFriend,
   getFriendRequests,

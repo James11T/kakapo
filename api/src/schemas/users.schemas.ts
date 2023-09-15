@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { pagination } from "./generic.schemas.js";
+import { pagination, username } from "./generic.schemas.js";
 
 // get /
 // Query users
@@ -23,6 +23,17 @@ const getUserSchema = z.object({
 // Is username available
 const isUsernameAvailableSchema = z.object({
   params: z.object({ username: z.string() }),
+});
+
+// post /:uuid/initiate
+// Initiate a user
+const initiateUserSchema = z.object({
+  params: z.object({
+    uuid: z.string(),
+  }),
+  body: z.object({
+    username,
+  }),
 });
 
 // get /:username/friends
@@ -94,6 +105,7 @@ export {
   queryUsersSchema,
   getUserSchema,
   isUsernameAvailableSchema,
+  initiateUserSchema,
   getFriendsSchema,
   removeFriendSchema,
   getFriendRequestsSchema,

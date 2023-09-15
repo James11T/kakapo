@@ -3,6 +3,7 @@ import {
   queryUsers,
   getUser,
   isUsernameAvailable,
+  initiateUser,
   getFriends,
   removeFriend,
   getFriendRequests,
@@ -16,6 +17,8 @@ usersRouter.get("/", queryUsers); // Query users
 
 usersRouter.get("/:username", getUser); // Get user by username
 usersRouter.get("/:username/is-available", isUsernameAvailable); // Is username available
+
+usersRouter.post("/:uuid/initiate", initiateUser); // Initiate user by uuid
 
 usersRouter.get("/:username/friends", getFriends); // Get users friends
 usersRouter.delete("/:username/friends/:friendUsername", removeFriend); // Remove a friend frm a user

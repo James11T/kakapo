@@ -80,6 +80,13 @@ class APIParameterError extends APIBadRequestError {
   }
 }
 
+/**
+ * Translate prisma not found error into custom error
+ * Other errors are thrown
+ *
+ * @param error A prisma error
+ * @param notFoundError API not found error
+ */
 const managePrismaError = (error: any, notFoundError: any) => {
   if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025")
     throw notFoundError;
