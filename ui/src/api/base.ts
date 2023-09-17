@@ -1,3 +1,5 @@
+import { toQueryParameters } from "../utils/queryParameters";
+
 const serializeBody = (
   body: string | object | undefined
 ): string | undefined => {
@@ -16,13 +18,23 @@ const serializeBody = (
 
 const APIFetch = async <TResponse>(
   url: string,
-  config?: Omit<RequestInit, "body"> & {
+  config?: Omit<RequestInit, "body" | "url"> & {
     body?: string | object;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    query?: Record<string, any>;
   }
 ): Promise<TResponse> => {
   let response: Response;
+  let builtURL;
+
+  if (config?.query) {
+    builtURL = `${url}?${toQueryParameters(config.query)}`;
+  } else {
+    builtURL = url;
+  }
+
   try {
-    response = await fetch(url, {
+    response = await fetch(builtURL, {
       credentials: "include", // Include credentials by default
       ...config,
       headers: {
