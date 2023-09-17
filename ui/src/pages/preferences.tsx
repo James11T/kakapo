@@ -7,7 +7,7 @@ const PreferencesPage = () => {
   usePageTitle("Preferences");
 
   return (
-    <div className="mx-auto max-w-[1000px]">
+    <div className="mx-auto max-w-[1000px] px-2">
       <div className="divider mt-1">PRIVACY</div>
       <PreferenceSwitch
         preference="accountPrivacy"

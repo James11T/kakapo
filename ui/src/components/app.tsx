@@ -73,7 +73,7 @@ const App = () => {
           readOnly
           checked={sidebarOpen}
         />
-        <div className="drawer-content px-2 md:ml-80">
+        <div className="drawer-content md:ml-80">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/explore" element={<ExplorePage />} />
@@ -83,7 +83,7 @@ const App = () => {
             <Route path="/sign-in" element={<SignInPage />} />
           </Routes>
         </div>
-        <div className="drawer-side !fixed bottom-0 top-16 z-50 h-auto">
+        <div className="drawer-side border-r-base-200 !fixed bottom-0 top-16 z-50 h-auto border-r-[1px]">
           <label
             className="drawer-overlay"
             onClick={() => dispatch(closeSidebar())}

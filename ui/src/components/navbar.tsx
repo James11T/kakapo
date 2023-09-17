@@ -19,7 +19,7 @@ const Navbar = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="navbar bg-base-100 fixed top-0 z-50">
+    <div className="navbar bg-base-100 border-b-base-200 fixed top-0 z-50 border-b-[1px]">
       <div className="flex-none md:hidden">
         <button
           className="btn btn-square btn-ghost"

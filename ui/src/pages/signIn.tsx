@@ -49,7 +49,7 @@ const SignInPage = () => {
           Sign In
         </button>
       </form>
-      <div className="divider">OR</div>
+      <div className="divider my-6">OR</div>
       <div className="flex flex-grow basis-full flex-col gap-2">
         <button className="btn justify-start">
           <GoogleIcon className="h-5 w-5" />
